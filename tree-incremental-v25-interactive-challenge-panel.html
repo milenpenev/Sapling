@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sapling v1.2 — Balanced Late Sap Tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1310;
+    --bg-panel:#101c16;
+    --bg-panel-2:#0d1713;
+    --line:#1f3229;
+    --bark:#7a5636;
+    --bark-dim:#3c2f22;
+    --leaf:#7CFFB2;
+    --leaf-dim:#2f5b45;
+    --gold:#E8B54D;
+    --text:#EAEFE9;
+    --text-dim:#8fa398;
+    --locked:#243329;
+    --danger:#e0725f;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, #16261d 0%, transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 16px 60px;
+  }
+  .wrap{width:100%;max-width:980px;}
+
+  /* header */
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-bottom:20px;
+  }
+  .title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:34px;
+    letter-spacing:-0.01em;
+    color:var(--text);
+  }
+  .title .dot{color:var(--leaf);}
+  .subtitle{
+    font-size:13px;
+    color:var(--text-dim);
+    margin-top:4px;
+    letter-spacing:0.02em;
+  }
+
+  /* stat bar */
+  .stats{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .stat{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 14px;
+    min-width:108px;
+  }
+  .stat .label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);}
+  .stat .value{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--gold);margin-top:2px;}
+  .stat .value.leafcol{color:var(--leaf);}
+
+  /* main panel */
+  .panel{
+    background:linear-gradient(180deg,var(--bg-panel) 0%, var(--bg-panel-2) 100%);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:8px;
+    position:relative;
+    overflow:hidden;
+  }
+  .panel::before{
+    content:'';
+    position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 100%, rgba(124,255,178,0.06), transparent 55%);
+    pointer-events:none;
+  }
+
+  svg.tree{width:100%;height:auto;display:block;}
+  .branch-path{
+    fill:none;
+    stroke:var(--bark-dim);
+    stroke-width:5;
+    stroke-linecap:round;
+    transition:stroke 0.4s ease;
+  }
+  .branch-path.grown{ stroke:var(--bark); }
+
+  .node-circle{
+    fill:var(--locked);
+    stroke:var(--line);
+    stroke-width:2;
+    transition:fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+  }
+  .node.available .node-circle{
+    fill:#152a20;
+    stroke:var(--leaf-dim);
+    cursor:pointer;
+  }
+  .node.available .node-circle{ animation: pulse 2.2s ease-in-out infinite; }
+  .node.purchased .node-circle{
+    fill:#173324;
+    stroke:var(--leaf);
+    filter:drop-shadow(0 0 6px rgba(124,255,178,0.35));
+  }
+  .node.locked .node-circle{ opacity:0.55; }
+  @keyframes pulse{
+    0%,100%{ filter:drop-shadow(0 0 0px rgba(124,255,178,0)); }
+    50%{ filter:drop-shadow(0 0 9px rgba(124,255,178,0.55)); }
+  }
+  .node-icon{ font-size:22px; text-anchor:middle; pointer-events:none; user-select:none; }
+  .node-label{
+    font-family:'Inter',sans-serif;
+    font-size:11px;
+    font-weight:600;
+    text-anchor:middle;
+    fill:var(--text-dim);
+    pointer-events:none;
+    user-select:none;
+  }
+  .node.purchased .node-label{ fill:var(--text); }
+  .node.available .node-label{ fill:var(--leaf); }
+  .node-cost{
+    font-family:'Inter',sans-serif;
+    font-size:10px;
+    text-anchor:middle;
+    fill:var(--gold);
+    pointer-events:none;
+    user-select:none;
+  }
+  .node[data-clickable="true"]:hover .node-circle{ stroke-width:3; }
+
+  /* click-to-gather */
+  .gather-row{
+    display:flex;
+    justify-content:center;
+    margin:0 0 18px;
+  }
+  .gather-btn{
+    font-family:'Fraunces',serif;
+    font-size:16px;
+    font-weight:600;
+    color:var(--bg);
+    background:linear-gradient(180deg,#98ffc4,var(--leaf));
+    border:none;
+    border-radius:999px;
+    padding:14px 34px;
+    cursor:pointer;
+    box-shadow:0 4px 0 #3e9a6c, 0 8px 18px rgba(0,0,0,0.35);
+    transition:transform 0.08s ease, box-shadow 0.08s ease;
+  }
+  .gather-btn:active{
+    transform:translateY(3px);
+    box-shadow:0 1px 0 #3e9a6c, 0 4px 10px rgba(0,0,0,0.35);
+  }
+
+  /* footer / controls */
+  .footer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:16px;
+    font-size:12px;
+    color:var(--text-dim);
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    border-radius:8px;
+    padding:6px 12px;
+    font-size:12px;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .reset-btn:hover{ border-color:var(--danger); color:var(--danger); }
+
+  /* tooltip */
+  .tooltip{
+    position:fixed;
+    background:#0f1b15;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    max-width:220px;
+    font-size:12px;
+    line-height:1.4;
+    pointer-events:none;
+    z-index:50;
+    opacity:0;
+    transition:opacity 0.12s ease;
+    box-shadow:0 8px 20px rgba(0,0,0,0.45);
+  }
+  .tooltip.show{opacity:1;}
+  .tooltip .t-name{font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--leaf);margin-bottom:3px;}
+  .tooltip .t-desc{color:var(--text-dim);margin-bottom:6px;}
+  .tooltip .t-cost{color:var(--gold);font-weight:600;}
+  .tooltip .t-state{color:var(--text-dim);font-style:italic;}
+
+  /* toast */
+  .toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%) translateY(10px);
+    background:#0f1b15;
+    border:1px solid var(--leaf-dim);
+    color:var(--text);
+    padding:10px 18px;
+    border-radius:10px;
+    font-size:13px;
+    opacity:0;
+    transition:opacity 0.3s ease, transform 0.3s ease;
+    z-index:60;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .auto-buy-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025)}
+  .auto-buy-bar div{display:flex;flex-direction:column;gap:3px}.auto-buy-bar span{font-size:12px;color:var(--text-dim)}
+  #auto-buy-toggle.active{border-color:var(--leaf);color:var(--leaf);background:rgba(124,255,178,.08)}
+
+  /* prestige */
+  .prestige-btn{
+    background:linear-gradient(180deg,#ffd978,var(--gold));
+    border:none;color:#211708;border-radius:8px;padding:7px 14px;
+    font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  }
+  .prestige-btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.35);}
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(3,8,6,.76);display:none;
+    align-items:center;justify-content:center;padding:18px;z-index:100;
+  }
+  .modal-backdrop.show{display:flex;}
+  .modal{
+    width:min(460px,100%);background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2));
+    border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.55);
+  }
+  .modal h2{margin:0 0 6px;font-family:'Fraunces',serif;font-size:26px;}
+  .modal p{color:var(--text-dim);font-size:13px;line-height:1.55;margin:0 0 16px;}
+  .prestige-preview{border:1px solid var(--line);border-radius:12px;padding:14px;margin:14px 0;background:rgba(255,255,255,.02);}
+  .preview-row{display:flex;justify-content:space-between;gap:16px;padding:6px 0;font-size:13px;}
+  .preview-row strong{color:var(--gold);}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+  .modal-actions button{border-radius:9px;padding:9px 14px;font:600 13px 'Inter',sans-serif;cursor:pointer;}
+  .cancel-btn{background:none;border:1px solid var(--line);color:var(--text-dim);}
+  .confirm-prestige{background:linear-gradient(180deg,#ffd978,var(--gold));border:none;color:#211708;}
+  .confirm-prestige:disabled{opacity:.45;cursor:not-allowed;}
+  .import-textarea{width:100%;min-height:150px;resize:vertical;background:#09120e;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:12px/1.5 monospace;outline:none;}
+  .import-textarea:focus{border-color:var(--leaf-dim);box-shadow:0 0 0 3px rgba(124,255,178,.08);}
+  .primary-btn{background:linear-gradient(180deg,#98ffc4,var(--leaf));border:none;color:#0b1310;}
+
+  .top-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 0 18px;}
+  .tab-nav{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap;}
+  .tab-btn{background:var(--bg-panel);border:1px solid var(--line);color:var(--text-dim);border-radius:9px;padding:9px 14px;font:600 13px 'Inter',sans-serif;cursor:pointer;}
+  .tab-btn.active{color:var(--leaf);border-color:var(--leaf-dim);background:#152a20;}
+  .page{display:none;}
+  .page.active{display:block;}
+  .essence-page{background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2));border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
+  .essence-header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+  .essence-header h2{font:600 28px 'Fraunces',serif;margin:0 0 5px;}
+  .essence-header p{margin:0;color:var(--text-dim);font-size:13px;max-width:620px;line-height:1.5;}
+  .essence-balance{border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:150px;text-align:right;}
+  .essence-balance span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);}
+  .essence-balance strong{font:600 22px 'Fraunces',serif;color:var(--gold);}
+  .essence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+  .essence-upgrade{border:1px solid var(--line);border-radius:12px;padding:15px;background:rgba(255,255,255,.018);display:flex;flex-direction:column;gap:7px;min-height:150px;}
+  .essence-upgrade.locked{opacity:.55;}
+  .essence-upgrade.purchased{border-color:var(--leaf-dim);background:rgba(124,255,178,.055);}
+  .essence-upgrade h3{font:600 18px 'Fraunces',serif;margin:0;color:var(--leaf);}
+  .essence-upgrade p{margin:0;color:var(--text-dim);font-size:12px;line-height:1.45;flex:1;}
+  .essence-upgrade .requirement{font-size:11px;color:var(--text-dim);}
+  .essence-buy{border:none;border-radius:8px;padding:8px 11px;background:linear-gradient(180deg,#ffd978,var(--gold));color:#211708;font:700 12px 'Inter',sans-serif;cursor:pointer;}
+  .essence-buy:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.3);}
+
+  .challenge-page{background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2));border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
+  .challenge-header{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px;}
+  .challenge-header h2{font:600 28px 'Fraunces',serif;margin:0 0 5px;}
+  .challenge-header p{margin:0;color:var(--text-dim);font-size:13px;line-height:1.5;max-width:650px;}
+  .challenge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+  .challenge-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:rgba(255,255,255,.018);display:flex;flex-direction:column;gap:9px;min-height:210px;}
+  .challenge-card.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,181,77,.08) inset;}
+  .challenge-card.completed{border-color:var(--leaf-dim);background:rgba(124,255,178,.05);}
+  .challenge-card.locked{opacity:.58;border-style:dashed;filter:saturate(.65);}
+  .challenge-card.locked h3{color:var(--text-dim);}
+  .challenge-card h3{font:600 19px 'Fraunces',serif;margin:0;color:var(--gold);}
+  .challenge-card p{font-size:12px;color:var(--text-dim);line-height:1.5;margin:0;}
+  .challenge-meta{font-size:12px;border-top:1px solid var(--line);padding-top:8px;display:grid;gap:5px;}
+  .challenge-actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;}
+  .challenge-btn{border:none;border-radius:8px;padding:9px 12px;background:linear-gradient(180deg,#ffd978,var(--gold));color:#211708;font:700 12px 'Inter',sans-serif;cursor:pointer;}
+  .challenge-btn.secondary{background:none;border:1px solid var(--line);color:var(--text-dim);}
+  .challenge-btn:disabled{opacity:.45;cursor:not-allowed;}
+  .active-challenge-banner{display:none;margin:0 0 14px;border:1px solid var(--gold);border-radius:10px;padding:10px 14px;background:rgba(232,181,77,.07);font-size:12px;}
+  .active-challenge-banner.show{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;}
+
+
+  /* achievements */
+  .achievement-page{padding:18px}.achievement-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.achievement-summary>div{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:10px;padding:12px}.achievement-summary span{display:block;color:var(--text-dim);font-size:11px;text-transform:uppercase;letter-spacing:.07em}.achievement-summary strong{display:block;margin-top:5px;font-family:'Fraunces',serif;font-size:22px;color:var(--gold)}.achievement-progress{height:10px;border:1px solid var(--line);border-radius:999px;background:#08120d;overflow:hidden;margin:8px 0 18px}.achievement-progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--leaf-dim),var(--leaf));transition:width .35s ease}.achievement-category{margin:18px 0 8px;font-family:'Fraunces',serif;font-size:18px}.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.achievement-card{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;background:rgba(255,255,255,.018);opacity:.62}.achievement-card.unlocked{opacity:1;border-color:#416b55;background:linear-gradient(135deg,rgba(124,255,178,.09),rgba(232,181,77,.035))}.achievement-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:9px;background:#0b1711;border:1px solid var(--line);font-size:20px}.achievement-card.unlocked .achievement-icon{border-color:var(--leaf-dim);box-shadow:0 0 12px rgba(124,255,178,.14)}.achievement-card h3{font-size:13px;margin:0 0 3px}.achievement-card p{font-size:11px;color:var(--text-dim);margin:0 0 5px;line-height:1.35}.achievement-reward{font-size:10px;color:var(--gold)}.achievement-popup{position:fixed;right:18px;top:18px;width:min(340px,calc(100vw - 36px));z-index:200;background:rgba(9,20,14,.96);border:1px solid var(--leaf-dim);border-radius:12px;padding:13px 15px;box-shadow:0 16px 42px rgba(0,0,0,.5);transform:translateX(120%);opacity:0;transition:.3s ease}.achievement-popup.show{transform:translateX(0);opacity:1}.achievement-popup small{color:var(--gold);text-transform:uppercase;letter-spacing:.08em}.achievement-popup strong{display:block;margin-top:5px;font-family:'Fraunces',serif;font-size:18px}.achievement-popup span{display:block;color:var(--text-dim);font-size:12px;margin-top:3px}
+  @media(max-width:700px){.achievement-grid{grid-template-columns:1fr}.achievement-summary{grid-template-columns:1fr}}
+
+  @media (max-width:600px){
+    .title{font-size:26px;}
+    .stat{min-width:90px;padding:6px 10px;}
+    .essence-grid,.challenge-grid{grid-template-columns:1fr;}
+  }
+
+  /* v0.9 dashboard layout */
+  body{display:block;padding:0;background:radial-gradient(circle at 50% -10%,#183527 0,#07110d 52%,#040906 100%);overflow-x:hidden;}
+  .game-shell{width:100%;max-width:1700px;margin:0 auto;padding:10px;}
+  .command-bar{display:grid;grid-template-columns:auto minmax(520px,1fr) auto;align-items:center;gap:14px;margin:0 0 10px;padding:10px 12px;background:rgba(8,18,13,.94);border:1px solid #18392b;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}
+  .brand-block{min-width:145px}.title{font-size:28px}.subtitle{font-size:11px}.resource-strip{display:grid;grid-template-columns:repeat(4,minmax(105px,1fr));border:1px solid #173427;border-radius:8px;overflow:hidden}.resource-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-right:1px solid #173427;min-height:64px;background:rgba(255,255,255,.015)}.resource-item:last-child{border-right:0}.resource-icon{font-size:25px}.resource-item div{display:flex;flex-direction:column;min-width:0}.resource-item small{color:#8fa398;font-size:10px;text-transform:uppercase;letter-spacing:.06em}.resource-item strong{font:600 20px 'Fraunces',serif;color:#e8b54d;white-space:nowrap}.resource-item em{font-style:normal;color:#6f8e7d;font-size:10px;white-space:nowrap}.sap-resource strong,.sap-resource em{color:#7cffb2}.essence-resource strong{color:#8bb9ff}.world-resource strong{color:#d9a0ff}
+  .command-actions{display:flex;gap:8px;align-items:stretch}.action-stack{display:flex;flex-direction:column;gap:4px;min-width:185px}.action-stack>button{width:100%;flex:1}.action-next{display:block;min-height:28px;padding:4px 7px;border:1px solid #243f33;border-radius:6px;background:#08120d;color:#8fa398;font-size:9px;line-height:1.25;text-align:center}.action-next strong{color:#e8b54d;font-weight:600}.gather-btn,.prestige-btn,.ascend-top-btn,.icon-btn{border-radius:7px;min-height:58px;padding:8px 14px;font:600 13px 'Inter',sans-serif;box-shadow:none}.gather-btn{display:flex;flex-direction:column;justify-content:center;min-width:145px}.gather-btn span{font-size:11px;font-weight:500;margin-top:3px}.prestige-btn{min-width:175px}.ascend-top-btn{border:1px solid #315243;background:#101a15;color:#9bb0a5;cursor:pointer}.icon-btn{min-width:48px;background:#101a15;color:#d4ded8;border:1px solid #294237;font-size:20px;cursor:pointer}.icon-btn:hover,.ascend-top-btn:hover{border-color:#7cffb2;color:#7cffb2}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:12px;align-items:start}.main-stage{min-width:0;background:rgba(7,16,11,.75);border:1px solid #19382b;border-radius:10px;overflow:hidden}.tab-nav{margin:0;padding:0 14px;border-bottom:1px solid #19382b;background:rgba(10,22,16,.94);gap:0}.tab-btn{border:0;border-radius:0;background:none;padding:15px 18px;border-bottom:2px solid transparent}.tab-btn.active{background:linear-gradient(180deg,rgba(124,255,178,.08),transparent);border-color:transparent;border-bottom-color:#7cffb2}.mini-open.tab-btn{padding:4px 9px;border:1px solid currentColor;border-radius:6px;font-size:10px}
+  .panel,.essence-page,.challenge-page{border:0;border-radius:0;background:linear-gradient(180deg,#08150f,#07110d);min-height:700px}.tree-panel{padding:0;overflow:auto;position:relative}.tree-watermark{position:absolute;inset:15% 20%;display:grid;place-items:center;font-size:420px;filter:grayscale(1);opacity:.025;pointer-events:none}.tree{min-width:850px;position:relative;z-index:1}.node-circle{r:24}.node-icon{font-size:21px}.node-label{font-size:11px}.node-cost{font-size:10px}.branch-path{stroke-width:4}
+  .stage-footer{display:flex;justify-content:space-between;padding:9px 12px;color:#71877b;font-size:11px;border-top:1px solid #19382b;background:#08120d}
+  .side-dashboard{display:grid;gap:12px;position:sticky;top:96px}.dashboard-card{border:1px solid #243f33;border-radius:9px;background:linear-gradient(180deg,rgba(16,29,22,.97),rgba(8,16,12,.97));overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18)}.dashboard-title{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;font:600 17px 'Fraunces',serif;border-bottom:1px solid #243f33}.dashboard-card p{margin:0;padding:10px 14px 0;color:#8fa398;font-size:11px}.essence-card{border-color:#244c6c}.essence-card .dashboard-title{color:#83b8ff;background:rgba(37,102,158,.09)}.challenge-card-side{border-color:#633322}.challenge-card-side .dashboard-title{color:#ff7d61;background:rgba(128,55,31,.1)}.world-card{border-color:#49316a}.world-card .dashboard-title{color:#b897ff;background:rgba(85,47,132,.11)}.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px}.mini-stats span{border:1px solid #243f33;border-radius:7px;padding:8px;color:#8fa398;font-size:10px;text-transform:uppercase}.mini-stats strong{display:block;color:#e8b54d;font:600 18px 'Fraunces',serif;margin-top:3px}.mini-upgrade-list{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 14px 14px}.mini-upgrade-list span{border:1px solid #244c6c;border-radius:7px;padding:8px;font-size:10px;text-align:center;color:#b9d6f5}.challenge-dots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:12px 14px 8px}.challenge-dot{aspect-ratio:1;border:1px solid #573829;border-radius:8px;display:grid;place-items:center;font-size:20px;opacity:.55;cursor:pointer;position:relative;background:rgba(255,255,255,.018);transition:transform .14s ease,opacity .14s ease,border-color .14s ease,box-shadow .14s ease,background .14s ease}.challenge-dot:hover{transform:translateY(-2px);opacity:.9;border-color:#ff9a7e}.challenge-dot.locked{opacity:.25;cursor:not-allowed;filter:grayscale(1)}.challenge-dot.active{opacity:1;border-color:var(--gold);background:rgba(232,181,77,.12);box-shadow:0 0 14px rgba(232,181,77,.2)}.challenge-dot.active::after{content:'';position:absolute;right:4px;top:4px;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}.challenge-dot.ready{opacity:1;border-color:var(--leaf);background:rgba(124,255,178,.16);box-shadow:0 0 18px rgba(124,255,178,.38);animation:challengeReadyPulse 1.3s ease-in-out infinite}.challenge-dot.ready::after{content:'✓';position:absolute;right:3px;top:1px;color:var(--leaf);font-size:11px;font-weight:800}.challenge-dot.complete{opacity:1;border-color:#4b8266;background:rgba(124,255,178,.07);box-shadow:0 0 10px rgba(124,255,178,.12)}@keyframes challengeReadyPulse{0%,100%{box-shadow:0 0 10px rgba(124,255,178,.22)}50%{box-shadow:0 0 23px rgba(124,255,178,.58)}}.side-progress{display:flex;justify-content:space-between;padding:0 14px 14px;color:#8fa398;font-size:11px}.side-progress strong{color:#ff9a7e}.world-lock-note{margin:0 14px 14px;border:1px solid #49316a;border-radius:7px;padding:10px;text-align:center;color:#ae94dc;font-size:11px}
+  .essence-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.challenge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.world-page-panel .essence-upgrade{border-color:#49316a}
+  @media(max-width:1250px){.command-bar{grid-template-columns:1fr}.brand-block{display:none}.command-actions{justify-content:center}.workspace{grid-template-columns:1fr}.side-dashboard{position:static;grid-template-columns:repeat(3,1fr)}.resource-strip{grid-template-columns:repeat(4,1fr)}}
+  @media(max-width:850px){.game-shell{padding:4px}.resource-strip{grid-template-columns:repeat(2,1fr)}.command-actions{flex-wrap:wrap}.gather-btn,.action-stack{flex:1;min-width:160px}.prestige-btn,.ascend-top-btn{min-width:0}.workspace{gap:6px}.side-dashboard{grid-template-columns:1fr}.essence-grid,.challenge-grid{grid-template-columns:1fr}.tab-btn{padding:12px 9px;font-size:11px}}
+
+  /* offline loading screen */
+  .loading-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(2,8,5,.34);backdrop-filter:blur(2px);transition:opacity .45s ease,visibility .45s ease;}
+  .loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .loading-card{width:min(680px,100%);border:1px solid rgba(124,255,178,.38);border-radius:18px;padding:28px;background:rgba(9,22,15,.80);box-shadow:0 30px 90px rgba(0,0,0,.45);}
+  .loading-logo{font:700 38px 'Fraunces',serif;text-align:center}.loading-logo span{color:var(--leaf)}
+  .loading-subtitle{text-align:center;color:var(--text-dim);font-size:12px;margin:5px 0 22px;}
+  .loading-status{display:flex;justify-content:space-between;gap:14px;color:var(--text-dim);font-size:12px;margin-bottom:8px}.loading-status strong{color:var(--text)}
+  .loading-bar{height:10px;border:1px solid #234333;border-radius:999px;overflow:hidden;background:#050c08}.loading-bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#3e9a6c,#7cffb2);transition:width .3s ease;}
+  .offline-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.offline-reward{border:1px solid #243f33;border-radius:10px;padding:12px;text-align:center;background:rgba(255,255,255,.018)}.offline-reward small{display:block;color:var(--text-dim);font-size:10px;text-transform:uppercase}.offline-reward strong{display:block;margin-top:5px;font:600 21px 'Fraunces',serif;color:var(--gold)}.offline-reward.sap strong{color:var(--leaf)}.offline-reward.essence strong{color:#8bb9ff}.offline-reward.world strong{color:#d9a0ff}
+  .loading-note{margin:15px 0 0;color:#71877b;font-size:10px;line-height:1.45;text-align:center}.loading-continue{display:none;width:100%;margin-top:18px;border:0;border-radius:9px;padding:12px;background:linear-gradient(180deg,#98ffc4,#7cffb2);color:#07110d;font-weight:700;cursor:pointer}.loading-continue.show{display:block}
+  .return-overlay{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(2,8,5,.24);backdrop-filter:blur(1px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s ease;}
+  .return-overlay.show{opacity:1;visibility:visible;pointer-events:auto;}
+  .return-card{width:min(680px,94vw);border:1px solid rgba(124,255,178,.35);border-radius:18px;padding:22px;background:rgba(9,22,15,.82);box-shadow:0 24px 80px rgba(0,0,0,.45);}
+  .return-title{font:600 27px 'Fraunces',serif;text-align:center}.return-title span{color:var(--leaf)}
+  .return-time{text-align:center;color:var(--text-dim);margin:6px 0 16px}.return-time strong{color:var(--text)}
+  .return-overlay .offline-summary{margin-top:0}.return-overlay .offline-reward{background:rgba(0,0,0,.18)}
+  .return-progress{height:7px;border-radius:999px;background:#13231b;overflow:hidden;margin-top:16px}.return-progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--leaf),var(--gold));transition:width .08s linear}
+  .return-note{text-align:center;color:var(--text-dim);font-size:12px;margin:10px 0 0}
+  .return-continue{display:none;width:100%;margin-top:16px;border:0;border-radius:9px;padding:12px;background:linear-gradient(180deg,#98ffc4,#7cffb2);color:#07110d;font-weight:700;cursor:pointer}.return-continue.show{display:block}
+  .reward-flow{display:flex!important;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;font-size:18px!important}.reward-flow .before{opacity:.72}.reward-flow .arrow{color:var(--text-dim);font-size:14px}.reward-flow .after{font-size:22px}.reward-flow .gain{font-size:12px;color:var(--gold);width:100%;margin-top:2px}.harvest-badge{text-align:center;margin:10px auto 0;width:max-content;max-width:100%;padding:5px 10px;border:1px solid rgba(232,181,77,.35);border-radius:999px;color:var(--gold);font-size:11px;background:rgba(232,181,77,.08)}
+  @media(max-width:600px){.offline-summary{grid-template-columns:1fr}.loading-card{padding:20px}.loading-logo{font-size:30px}}
+
+</style>
+</head>
+<body>
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-card">
+    <div class="loading-logo">Sapling<span>.</span></div>
+    <div class="loading-subtitle">Restoring the forest and calculating offline growth</div>
+    <div class="loading-status"><span id="loading-step">Reading save…</span><strong id="offline-time-label">Offline: 0s</strong></div>
+    <div class="loading-bar"><span id="loading-progress"></span></div>
+    <div class="offline-summary">
+      <div class="offline-reward sap"><small>Offline Sap</small><strong class="reward-flow" id="offline-sap-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
+      <div class="offline-reward essence"><small>Offline Essence</small><strong class="reward-flow" id="offline-essence-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
+      <div class="offline-reward world"><small>Offline World Seeds</small><strong class="reward-flow" id="offline-world-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
+    </div>
+    <div class="harvest-badge" id="loading-harvest-badge">Fresh growth</div><p class="loading-note" id="loading-note">Offline Sap is granted at full passive rate. Previously unlocked reset currencies receive a reduced 20% / 10% conversion from newly reached offline thresholds, without double-counting your next reset.</p>
+    <button class="loading-continue" id="loading-continue">Collect and enter</button>
+  </div>
+</div>
+
+<div class="return-overlay" id="return-overlay" aria-live="polite">
+  <div class="return-card">
+    <div class="return-title">Welcome <span>back</span></div>
+    <div class="return-time">Tab inactive for <strong id="return-offline-time">0s</strong></div>
+    <div class="offline-summary">
+      <div class="offline-reward sap"><small>Sap gained</small><strong class="reward-flow" id="return-sap-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
+      <div class="offline-reward essence"><small>Essence gained</small><strong class="reward-flow" id="return-essence-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
+      <div class="offline-reward world"><small>World Seeds gained</small><strong class="reward-flow" id="return-world-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
+    </div>
+    <div class="harvest-badge" id="return-harvest-badge">Fresh growth</div><div class="return-progress"><div id="return-progress-bar"></div></div>
+    <p class="return-note" id="return-note">Applying offline progress…</p>
+    <button class="return-continue" id="return-continue">Collect and continue</button>
+  </div>
+</div>
+
+<div class="game-shell">
+  <header class="command-bar">
+    <div class="brand-block">
+      <div class="title">Sapling<span class="dot">.</span></div>
+      <div class="subtitle">from seed to world tree</div>
+    </div>
+    <div class="resource-strip">
+      <div class="resource-item sap-resource"><span class="resource-icon">💧</span><div><small>Sap</small><strong id="stat-sap">0</strong><em id="stat-rate">0/s</em></div></div>
+      <div class="resource-item"><span class="resource-icon">🖐️</span><div><small>Sap / Click</small><strong id="stat-click">1</strong><em>manual harvest</em></div></div>
+      <div class="resource-item essence-resource"><span class="resource-icon">💠</span><div><small>Tree Essence</small><strong id="stat-essence">0</strong><em>+5% each earned</em></div></div>
+      <div class="resource-item world-resource"><span class="resource-icon">🌰</span><div><small>World Seeds</small><strong id="stat-world-seeds">0</strong><em>highest layer</em></div></div>
+    </div>
+    <div class="command-actions">
+      <button class="gather-btn" id="gather-btn">Gather Sap <span id="gather-amount">+1</span></button>
+      <div class="action-stack">
+        <button class="prestige-btn" id="prestige-btn">🌳 Prestige: locked</button>
+        <span class="action-next" id="prestige-top-next">Next Essence: calculating…</span>
+      </div>
+      <div class="action-stack">
+        <button class="ascend-top-btn" id="ascend-top-btn">🌍 Ascend</button>
+        <span class="action-next" id="ascend-top-next">Next World Seed: calculating…</span>
+      </div>
+      <button class="icon-btn" onclick="exportSave()" title="Export save">💾</button>
+      <button class="icon-btn" id="import-save-btn" title="Import save">⬆️</button>
+      <button class="icon-btn" id="reset-btn" title="Reset save">⚙️</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <main class="main-stage">
+      <nav class="tab-nav">
+        <button class="tab-btn active" data-page="tree-page">🌱 Sap Tree</button>
+        <button class="tab-btn" data-page="essence-page">💠 Essence Grove</button>
+        <button class="tab-btn" data-page="challenge-page">⚔️ Challenges</button>
+        <button class="tab-btn" data-page="world-page">🌍 World Tree</button>
+        <button class="tab-btn" data-page="achievement-page">🏆 Achievements</button>
+      </nav>
+
+      <section class="page active" id="tree-page">
+        <div class="panel tree-panel">
+          <div class="tree-watermark">🌳</div>
+          <svg class="tree" id="tree-svg" viewBox="0 0 900 1320" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </section>
+
+      <section class="page" id="essence-page">
+        <div class="essence-page">
+          <div class="essence-header"><div><h2>Essence Grove</h2><p>Spend Tree Essence on permanent upgrades that survive prestige.</p></div><div class="essence-balance"><span>Available Essence</span><strong id="essence-page-balance">0</strong></div></div>
+          <div class="auto-buy-bar" id="auto-buy-bar"><div><strong>Automatic Growth</strong><span id="auto-buy-status">Locked — purchase Root Reflexes</span></div><button class="reset-btn" id="auto-buy-toggle" disabled>Auto-buy: OFF</button></div>
+          <div class="essence-grid" id="essence-grid"></div>
+        </div>
+      </section>
+
+      <section class="page" id="challenge-page">
+        <div class="challenge-page"><div class="challenge-header"><div><h2>Trials of the Grove</h2><p>Restart a run under restrictions and earn permanent rewards.</p></div></div><div class="active-challenge-banner" id="active-challenge-banner"></div><div class="challenge-grid" id="challenge-grid"></div></div>
+      </section>
+
+      <section class="page" id="world-page">
+        <div class="essence-page world-page-panel"><div class="essence-header"><div><h2>World Tree</h2><p>Ascension now requires 1,500 available Tree Essence. World bonuses are intentionally gradual rather than explosive.</p></div><div class="essence-balance"><span>World Seeds</span><strong id="world-seed-balance">0</strong></div></div><div class="auto-buy-bar"><div><strong>World Ascension</strong><span id="ascension-status">Reach 1,500 available Tree Essence to earn your first World Seed.</span><span id="ascension-next-point">Next World Seed: 1,500 available Essence required.</span></div><button class="prestige-btn" id="ascend-btn">🌍 Ascend: +0 World Seeds</button></div><div class="essence-grid" id="world-upgrade-grid"></div></div>
+      </section>
+
+
+      <section class="page" id="achievement-page">
+        <div class="achievement-page">
+          <div class="essence-header"><div><h2>Achievements</h2><p>Permanent milestones that reward long-term progress across every layer.</p></div><div class="essence-balance"><span>Completed</span><strong id="achievement-page-count">0 / 40</strong></div></div>
+          <div class="achievement-summary"><div><span>Unlocked</span><strong id="achievement-unlocked">0</strong></div><div><span>Completion</span><strong id="achievement-percent">0%</strong></div><div><span>Total bonus</span><strong id="achievement-bonus">×1.00</strong></div></div>
+          <div class="achievement-progress"><div id="achievement-progress-fill"></div></div>
+          <div id="achievement-list"></div>
+        </div>
+      </section>
+
+      <footer class="stage-footer"><span id="footer-note">Hover an upgrade to inspect it. Click a glowing node to buy it.</span><span>v0.10.0</span></footer>
+    </main>
+
+    <aside class="side-dashboard">
+      <section class="dashboard-card essence-card">
+        <div class="dashboard-title"><span>💠 Essence Grove</span><button class="mini-open tab-btn" data-page="essence-page">Open</button></div>
+        <p>Permanent upgrades and automation.</p>
+        <div class="mini-stats"><span>Available<strong id="side-essence">0</strong></span><span>Prestige gain<strong id="side-essence-gain">0</strong></span></div>
+        <div class="mini-upgrade-list"><span>🌳 Ancient Memory</span><span>🧠 Deep Instinct</span><span>⏱️ Root Reflexes</span><span>🌸 Essence Bloom</span></div>
+      </section>
+      <section class="dashboard-card challenge-card-side">
+        <div class="dashboard-title"><span>⚔️ Challenges</span><button class="mini-open tab-btn" data-page="challenge-page">Open</button></div>
+        <p>Permanent rewards from restricted runs.</p>
+        <div class="challenge-dots" id="side-challenge-dots"></div>
+        <div class="side-progress"><span>Completed</span><strong id="side-challenges">0 / 8</strong></div>
+      </section>
+      <section class="dashboard-card world-card">
+        <div class="dashboard-title"><span>🌍 World Tree</span><button class="mini-open tab-btn" data-page="world-page">Open</button></div>
+        <p>Ascend at 1,000 total Essence. Early World upgrades are now moderate.</p>
+        <div class="mini-stats"><span>Seeds<strong id="side-world-seeds">0</strong></span><span>Ascend gain<strong id="side-world-gain">0</strong></span></div>
+        <div class="world-lock-note" id="side-world-status">Locked until 1,500 available Essence</div>
+      </section>
+
+      <section class="dashboard-card">
+        <div class="dashboard-title"><span>🏆 Achievements</span><button class="mini-open tab-btn" data-page="achievement-page">Open</button></div>
+        <p>Milestones with permanent account-wide bonuses.</p>
+        <div class="mini-stats"><span>Completed<strong id="side-achievements">0 / 40</strong></span><span>Prod bonus<strong id="side-achievement-bonus">×1.00</strong></span></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="t-name"></div>
+  <div class="t-desc"></div>
+  <div class="t-cost"></div>
+  <div class="t-state"></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="achievement-popup" id="achievement-popup"><small>Achievement unlocked</small><strong></strong><span></span></div>
+
+<div class="modal-backdrop" id="prestige-modal" role="dialog" aria-modal="true" aria-labelledby="prestige-title">
+  <div class="modal">
+    <h2 id="prestige-title">Awaken the tree</h2>
+    <p>Prestiging resets your current sap and normal tree upgrades. Tree Essence, lifetime sap and prestige count are permanent.</p>
+    <div class="prestige-preview">
+      <div class="preview-row"><span>Sap earned this run</span><strong id="prestige-run-sap">0</strong></div>
+      <div class="preview-row"><span>Tree Essence gained</span><strong id="prestige-gain">+0</strong></div>
+      <div class="preview-row"><span>Sap needed for next Essence point</span><strong id="prestige-next-point">0</strong></div>
+      <div class="preview-row"><span>Production bonus after prestige</span><strong id="prestige-bonus">+0%</strong></div>
+      <div class="preview-row"><span>Total prestiges</span><strong id="prestige-count">0</strong></div>
+    </div>
+    <p>You need at least 100,000,000 sap earned in the current run to gain your first Tree Essence.</p>
+    <div class="modal-actions">
+      <button class="cancel-btn" id="prestige-cancel">Cancel</button>
+      <button class="confirm-prestige" id="prestige-confirm">Prestige now</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="import-modal" role="dialog" aria-modal="true" aria-labelledby="import-title">
+  <div class="modal">
+    <h2 id="import-title">Import save</h2>
+    <p>Paste a Sapling export string below. Importing replaces the current progress immediately.</p>
+    <textarea class="import-textarea" id="import-save-text" placeholder="Paste your Base64 save here..."></textarea>
+    <div class="modal-actions">
+      <button class="cancel-btn" id="import-cancel">Cancel</button>
+      <button class="primary-btn" id="import-confirm">Import save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div class="modal">
+    <h2 id="settings-title">Settings</h2>
+    <p>Choose how the game behaves while the page is closed.</p>
+    <div class="prestige-preview">
+      <div class="preview-row"><span>Offline sap gain</span><button class="reset-btn" id="offline-gain-toggle">Offline gain: ON</button></div>
+      <div class="preview-row"><span>Offline progress cap</span><strong>8 hours</strong></div>
+    </div>
+    <p id="offline-gain-note">When enabled, passive sap production is calculated when you return.</p>
+    <div class="modal-actions">
+      <button class="cancel-btn" id="settings-close">Close</button>
+      <button class="reset-btn" id="settings-reset">Reset save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   SAPLING — a tree-shaped incremental game
+   -------------------------------------------------------------------------
+   This is a starting foundation, built to be extended:
+
+   - NODES: the entire upgrade tree is data. Add a node anywhere by giving
+     it an id, a parent id (or null for the root), a cost, an (x,y) position
+     in the 900x700 SVG canvas, and an `effect`.
+   - Effects currently supported: prod_add, prod_mult, click_mult.
+     Add new effect types by extending `recalcTotals()`.
+   - Persistence uses window.storage (personal, not shared) so progress
+     carries across sessions. Offline time is credited on load, capped.
+   - Not yet implemented (natural next steps): prestige/reset layer,
+     repeatable buyables, multiple resources, challenges. The data
+     structure here is meant to make those additions straightforward —
+     e.g. a prestige layer could simply be a second NODES-like tree that
+     unlocks once total sap crosses a threshold, with its own currency.
+   ========================================================================= */
+
+  const SAVE_KEY = 'sapling-save-v4';
+  const PRESTIGE_BASE = 75000000;
+  const PRESTIGE_EXPONENT = 0.27;
+  const PRESTIGE_SOFTCAP_START = 10;
+  const PRESTIGE_SOFTCAP_POWER = 0.52;
+  const ESSENCE_BONUS_PER = 0.05;
+  const ASCENSION_BASE = 1500;
+
+  const NODES = [
+    { id:'seed', name:'Seed', desc:'A dormant seed. Gather sap by hand to begin.', cost:0, parent:null, x:450, y:50, icon:'🌰', effect:null },
+    { id:'firstsprout', name:'First Sprout', desc:'+0.2 sap/sec. Your first automatic production.', cost:8, parent:'seed', x:300, y:150, icon:'🌱', effect:{type:'prod_add',value:0.2} },
+    { id:'softleaves', name:'Soft Leaves', desc:'+50% sap per gather.', cost:10, parent:'seed', x:600, y:150, icon:'🍃', effect:{type:'click_mult',value:1.5} },
+    { id:'taproot', name:'Taproot', desc:'+0.8 sap/sec.', cost:20, parent:'firstsprout', x:190, y:250, icon:'🌿', effect:{type:'prod_add',value:0.8} },
+    { id:'youngbark', name:'Young Bark', desc:'+1.5 sap/sec.', cost:45, parent:'firstsprout', x:390, y:250, icon:'🪵', effect:{type:'prod_add',value:1.5} },
+    { id:'morningdew', name:'Morning Dew', desc:'+1 sap per gather.', cost:28, parent:'softleaves', x:510, y:250, icon:'💧', effect:{type:'click_add',value:1} },
+    { id:'sunreach', name:'Sun-Reach', desc:'x2 sap per gather.', cost:55, parent:'softleaves', x:710, y:250, icon:'☀️', effect:{type:'click_mult',value:2} },
+    { id:'deeproots', name:'Deep Roots', desc:'+5 sap/sec.', cost:100, parent:'taproot', x:110, y:365, icon:'🌿', effect:{type:'prod_add',value:5} },
+    { id:'mycelium', name:'Mycelium Web', desc:'+30% sap/sec.', cost:140, parent:'youngbark', x:330, y:365, icon:'🍄', effect:{type:'prod_mult',value:1.3} },
+    { id:'newgrowth', name:'New Growth', desc:'+4 sap/sec.', cost:110, parent:'morningdew', x:570, y:365, icon:'🌱', effect:{type:'prod_add',value:4} },
+    { id:'photosynth', name:'Photosynthesis', desc:'x2 sap/sec.', cost:190, parent:'sunreach', x:790, y:365, icon:'🍃', effect:{type:'prod_mult',value:2} },
+    { id:'heartwood', name:'Heartwood', desc:'+25 sap/sec.', cost:500, parent:'deeproots', x:100, y:490, icon:'🪵', effect:{type:'prod_add',value:25} },
+    { id:'rootnetwork', name:'Root Network', desc:'+60% sap/sec.', cost:700, parent:'mycelium', x:320, y:490, icon:'🕸️', effect:{type:'prod_mult',value:1.6} },
+    { id:'fruitbuds', name:'Fruit Buds', desc:'+5 sap per gather.', cost:650, parent:'newgrowth', x:580, y:490, icon:'🍏', effect:{type:'click_add',value:5} },
+    { id:'canopy', name:'Canopy', desc:'x2 sap/sec.', cost:900, parent:'photosynth', x:800, y:490, icon:'🌳', effect:{type:'prod_mult',value:2} },
+    { id:'ancientbark', name:'Ancient Bark', desc:'+150 sap/sec.', cost:2500, parent:'heartwood', x:100, y:615, icon:'🪵', effect:{type:'prod_add',value:150} },
+    { id:'fungalheart', name:'Fungal Heart', desc:'x2.5 sap/sec.', cost:6000, parent:'rootnetwork', x:320, y:615, icon:'🍄', effect:{type:'prod_mult',value:2.5} },
+    { id:'goldenfruit', name:'Golden Fruit', desc:'+30 sap per gather.', cost:5000, parent:'fruitbuds', x:580, y:615, icon:'🍎', effect:{type:'click_add',value:30} },
+    { id:'blossom', name:'World Blossom', desc:'x3 sap/sec.', cost:8000, parent:'canopy', x:800, y:615, icon:'🌸', effect:{type:'prod_mult',value:3} },
+    { id:'eldercore', name:'Elder Core', desc:'+500 sap/sec.', cost:25000, parent:'ancientbark', x:150, y:750, icon:'🪵', effect:{type:'prod_add',value:500} },
+    { id:'worldroots', name:'World Roots', desc:'x4 sap/sec.', cost:60000, parent:'fungalheart', x:370, y:750, icon:'🌍', effect:{type:'prod_mult',value:4} },
+    { id:'sunfruit', name:'Sun Fruit', desc:'x5 sap per gather.', cost:45000, parent:'goldenfruit', x:530, y:750, icon:'🍊', effect:{type:'click_mult',value:5} },
+    { id:'skycanopy', name:'Sky Canopy', desc:'x5 sap/sec.', cost:100000, parent:'blossom', x:750, y:750, icon:'☁️', effect:{type:'prod_mult',value:5} },
+    { id:'worldtree', name:'World Tree', desc:'x4 all sap production.', cost:900000, parent:'worldroots', x:450, y:855, icon:'🌲', effect:{type:'prod_mult',value:4} },
+    { id:'starbark', name:'Star Bark', desc:'+8,000 sap/sec.', cost:3500000, parent:'eldercore', x:90, y:845, icon:'✨', effect:{type:'prod_add',value:8000} },
+    { id:'planetroots', name:'Planet Roots', desc:'x3 sap/sec.', cost:12000000, parent:'worldtree', x:290, y:965, icon:'🪐', effect:{type:'prod_mult',value:3} },
+    { id:'celestialfruit', name:'Celestial Fruit', desc:'+500 sap per gather.', cost:8000000, parent:'sunfruit', x:610, y:845, icon:'🌟', effect:{type:'click_add',value:500} },
+    { id:'eternalcanopy', name:'Eternal Canopy', desc:'x4 sap/sec.', cost:30000000, parent:'skycanopy', x:820, y:845, icon:'🌌', effect:{type:'prod_mult',value:4} },
+    { id:'gaiaheart', name:'Gaia Heart', desc:'x5 all sap production.', cost:500000000, parent:'planetroots', x:390, y:1090, icon:'💚', effect:{type:'prod_mult',value:5} },
+    { id:'infinitebloom', name:'Infinite Bloom', desc:'x8 all sap production.', cost:12000000000, parent:'gaiaheart', x:560, y:1215, icon:'💠', effect:{type:'prod_mult',value:8} },
+  ];
+
+  const nodeById = Object.fromEntries(NODES.map(n => [n.id, n]));
+  const ESSENCE_UPGRADES = [
+    {id:'ancient_memory',name:'Ancient Memory',desc:'Double all passive sap production permanently.',cost:2,requires:null,effect:{type:'global_prod_mult',value:2}},
+    {id:'sure_hands',name:'Sure Hands',desc:'Double sap gained from manual gathering.',cost:4,requires:null,effect:{type:'global_click_mult',value:2}},
+    {id:'fertile_echo',name:'Fertile Echo',desc:'Triple all passive sap production.',cost:12,requires:'ancient_memory',effect:{type:'global_prod_mult',value:3}},
+    {id:'eternal_seed',name:'Eternal Seed',desc:'Start every prestige with First Sprout already grown.',cost:15,requires:'ancient_memory',effect:{type:'start_upgrade',value:'firstsprout'}},
+    {id:'root_reflexes',name:'Root Reflexes',desc:'Unlock automatic purchasing of affordable normal tree upgrades.',cost:22,requires:'eternal_seed',effect:{type:'auto_buy',value:true}},
+    {id:'deep_instinct',name:'Deep Instinct',desc:'Gain 20% more Tree Essence from every prestige.',cost:28,requires:'fertile_echo',effect:{type:'essence_gain_mult',value:1.2}},
+    {id:'swift_sap',name:'Swift Sap',desc:'Auto-buy checks twice as often.',cost:35,requires:'root_reflexes',effect:{type:'auto_buy_speed',value:0.5}},
+    {id:'ancestral_discount',name:'Ancestral Discount',desc:'All normal tree upgrades cost 15% less.',cost:45,requires:'root_reflexes',effect:{type:'sap_cost_mult',value:0.85}},
+    {id:'remembered_roots',name:'Remembered Roots',desc:'Start every prestige with Taproot already grown.',cost:55,requires:'eternal_seed',effect:{type:'start_upgrade',value:'taproot'}},
+    {id:'spirit_harvest',name:'Spirit Harvest',desc:'Multiply manual gathering by 5.',cost:65,requires:'sure_hands',effect:{type:'global_click_mult',value:5}},
+    {id:'living_rhythm',name:'Living Rhythm',desc:'Auto-buy can purchase up to five upgrades per check.',cost:80,requires:'swift_sap',effect:{type:'auto_buy_batch',value:5}},
+    {id:'world_soul',name:'World Soul',desc:'Multiply all passive sap production by 10.',cost:100,requires:'deep_instinct',effect:{type:'global_prod_mult',value:10}},
+    {id:'ancient_economy',name:'Ancient Economy',desc:'All normal tree upgrades cost another 20% less.',cost:140,requires:'ancestral_discount',effect:{type:'sap_cost_mult',value:0.8}},
+    {id:'timeless_growth',name:'Timeless Growth',desc:'Multiply all passive sap production by 25.',cost:220,requires:'world_soul',effect:{type:'global_prod_mult',value:25}},
+    {id:'essence_bloom',name:'Essence Bloom',desc:'Gain 50% more Tree Essence from every prestige.',cost:280,requires:'world_soul',effect:{type:'essence_gain_mult',value:1.5}},
+    {id:'primordial_reserve',name:'Primordial Reserve',desc:'Multiply passive sap production by 100.',cost:450,requires:'timeless_growth',effect:{type:'global_prod_mult',value:100}},
+    {id:'perfect_rhythm',name:'Perfect Rhythm',desc:'Auto-buy checks five times faster.',cost:600,requires:'living_rhythm',effect:{type:'auto_buy_speed',value:0.2}},
+    {id:'ancestral_abundance',name:'Ancestral Abundance',desc:'Gain twice as much Tree Essence from prestige.',cost:850,requires:'essence_bloom',effect:{type:'essence_gain_mult',value:2}},
+    {id:'eternal_harvest',name:'Eternal Harvest',desc:'Multiply manual gathering by 100.',cost:1100,requires:'spirit_harvest',effect:{type:'global_click_mult',value:100}},
+    {id:'grove_mastery',name:'Grove Mastery',desc:'All normal tree upgrades cost another 35% less.',cost:1400,requires:'ancient_economy',effect:{type:'sap_cost_mult',value:0.65}},
+  ];  const essenceUpgradeById = Object.fromEntries(ESSENCE_UPGRADES.map(u => [u.id,u]));
+
+  const WORLD_UPGRADES = [
+    {id:'world_memory',name:'World Memory',desc:'Multiply all Sap production by 5.',cost:1,requires:null,effect:{type:'world_prod_mult',value:5}},
+    {id:'essence_river',name:'Essence River',desc:'Gain 25% more Tree Essence from prestige.',cost:2,requires:null,effect:{type:'world_essence_mult',value:1.25}},
+    {id:'seed_reserve',name:'Seed Reserve',desc:'Begin each ascension with 5 Tree Essence.',cost:4,requires:'world_memory',effect:{type:'start_essence',value:5}},
+    {id:'world_reflex',name:'World Reflex',desc:'Auto-buy remains unlocked after ascension.',cost:6,requires:'world_memory',effect:{type:'world_auto_buy',value:true}},
+    {id:'ancient_world',name:'Ancient World',desc:'Multiply all Sap production by another 8.',cost:12,requires:'essence_river',effect:{type:'world_prod_mult',value:8}},
+    {id:'deep_world_roots',name:'Deep World Roots',desc:'Gain another 50% more Tree Essence.',cost:20,requires:'ancient_world',effect:{type:'world_essence_mult',value:1.5}},
+    {id:'seed_constellation',name:'Seed Constellation',desc:'Gain 50% more World Seeds from ascension.',cost:35,requires:'deep_world_roots',effect:{type:'world_seed_mult',value:1.5}},
+    {id:'world_canopy',name:'World Canopy',desc:'Multiply all Sap production by 25.',cost:60,requires:'seed_constellation',effect:{type:'world_prod_mult',value:25}},
+    {id:'cosmic_germination',name:'Cosmic Germination',desc:'Gain twice as many World Seeds.',cost:120,requires:'world_canopy',effect:{type:'world_seed_mult',value:2}},
+  ];
+  const worldUpgradeById=Object.fromEntries(WORLD_UPGRADES.map(u=>[u.id,u]));
+
+  const CHALLENGES = [
+    {id:'barren_soil',name:'Barren Soil',desc:'Passive production is reduced to 1% and manual gathering to 25%.',goal:250000000,reward:'Permanent x1.75 passive production.',effect:{prodMult:0.01,clickMult:0.25},rewardEffect:{prodMult:1.75}},
+    {id:'silent_hands',name:'Silent Hands',desc:'Manual gathering is disabled and passive production is reduced to 3%.',goal:1000000000,reward:'Permanent x1.5 passive production and x2 manual gathering.',effect:{disableClick:true,prodMult:0.03},rewardEffect:{prodMult:1.5,clickMult:2}},
+    {id:'costly_growth',name:'Costly Growth',desc:'Sap Tree upgrades cost 25 times more and production is reduced to 10%.',goal:5000000000,reward:'Permanent 8% cheaper Sap Tree upgrades.',effect:{costMult:25,prodMult:0.1},rewardEffect:{costMult:0.92}},
+    {id:'fading_memory',name:'Fading Memory',desc:'Essence production bonuses, the permanent Essence production bonus and auto-buy are disabled. Passive production is reduced to 5%.',goal:25000000000,reward:'Permanent x2.5 passive production.',effect:{disableEssenceProd:true,disablePrestigeBonus:true,disableAutoBuy:true,prodMult:0.05},rewardEffect:{prodMult:2.5}},
+    {id:'worldless',layer:'world',name:'Worldless Growth',desc:'All World Tree effects are disabled and total production is reduced to 2%.',goal:1e15,reward:'Permanent x3 Sap production.',effect:{disableWorldUpgrades:true,prodMult:0.02},rewardEffect:{prodMult:3}},
+    {id:'thin_essence',layer:'world',name:'Withered Spirit',desc:'All Essence upgrade effects are disabled, the permanent Essence production bonus is removed and manual gathering is reduced to 10%.',goal:5e15,reward:'Permanent +35% Tree Essence gain.',effect:{disableEssenceUpgrades:true,disablePrestigeBonus:true,clickMult:0.1},rewardEffect:{essenceGainMult:1.35}},
+    {id:'sealed_reflexes',layer:'world',name:'Sealed Reflexes',desc:'Auto-buy is disabled, passive production is reduced to 1% and manual gathering to 10%.',goal:2e16,reward:'Permanent x6 manual gathering.',effect:{disableAutoBuy:true,prodMult:0.01,clickMult:0.1},rewardEffect:{clickMult:6}},
+    {id:'distant_world',layer:'world',name:'Distant World',desc:'Sap Tree upgrades cost 100 times more, World Tree effects are disabled and production is reduced to 5%.',goal:1e17,reward:'Permanent x1.5 World Seed gain.',effect:{costMult:100,disableWorldUpgrades:true,prodMult:0.05},rewardEffect:{worldSeedMult:1.5}},
+  ];
+  const challengeById = Object.fromEntries(CHALLENGES.map(c=>[c.id,c]));
+
+  const ACHIEVEMENTS = [
+    {id:'sap_1',category:'Sap',icon:'💧',name:'First Drop',desc:'Earn 10 lifetime Sap.',check:()=>state.lifetimeSap>=10,reward:{prod:1.01}},
+    {id:'sap_2',category:'Sap',icon:'💧',name:'Handful of Sap',desc:'Earn 1,000 lifetime Sap.',check:()=>state.lifetimeSap>=1e3,reward:{prod:1.01}},
+    {id:'sap_3',category:'Sap',icon:'🌿',name:'Flowing Roots',desc:'Earn 100,000 lifetime Sap.',check:()=>state.lifetimeSap>=1e5,reward:{prod:1.01}},
+    {id:'sap_4',category:'Sap',icon:'🌿',name:'Green Current',desc:'Earn 10 million lifetime Sap.',check:()=>state.lifetimeSap>=1e7,reward:{prod:1.015}},
+    {id:'sap_5',category:'Sap',icon:'🌳',name:'River of Life',desc:'Earn 1 billion lifetime Sap.',check:()=>state.lifetimeSap>=1e9,reward:{prod:1.015}},
+    {id:'sap_6',category:'Sap',icon:'🌳',name:'Sap Ocean',desc:'Earn 1 trillion lifetime Sap.',check:()=>state.lifetimeSap>=1e12,reward:{prod:1.02}},
+    {id:'sap_7',category:'Sap',icon:'🌌',name:'Planetary Circulation',desc:'Earn 1 quadrillion lifetime Sap.',check:()=>state.lifetimeSap>=1e15,reward:{prod:1.02}},
+
+    {id:'prod_1',category:'Production',icon:'⚙️',name:'Automatic Growth',desc:'Reach 1 Sap per second.',check:()=>currentRate()>=1,reward:{prod:1.01}},
+    {id:'prod_2',category:'Production',icon:'⚙️',name:'Steady Drip',desc:'Reach 100 Sap per second.',check:()=>currentRate()>=100,reward:{prod:1.015}},
+    {id:'prod_3',category:'Production',icon:'⚡',name:'Root Engine',desc:'Reach 10,000 Sap per second.',check:()=>currentRate()>=1e4,reward:{prod:1.015}},
+    {id:'prod_4',category:'Production',icon:'⚡',name:'Living Factory',desc:'Reach 1 million Sap per second.',check:()=>currentRate()>=1e6,reward:{prod:1.02}},
+    {id:'prod_5',category:'Production',icon:'☀️',name:'Solar Canopy',desc:'Reach 1 billion Sap per second.',check:()=>currentRate()>=1e9,reward:{prod:1.02}},
+    {id:'prod_6',category:'Production',icon:'🌠',name:'Cosmic Photosynthesis',desc:'Reach 1 trillion Sap per second.',check:()=>currentRate()>=1e12,reward:{prod:1.03}},
+
+    {id:'tree_1',category:'Sap Tree',icon:'🌱',name:'First Sprout',desc:'Purchase your first Sap Tree upgrade.',check:()=>Object.keys(state.purchased||{}).length>=2,reward:{click:1.02}},
+    {id:'tree_2',category:'Sap Tree',icon:'🍃',name:'Branching Out',desc:'Own 5 Sap Tree nodes at once.',check:()=>Object.keys(state.purchased||{}).length>=5,reward:{prod:1.015}},
+    {id:'tree_3',category:'Sap Tree',icon:'🌲',name:'Young Tree',desc:'Own 10 Sap Tree nodes at once.',check:()=>Object.keys(state.purchased||{}).length>=10,reward:{prod:1.02}},
+    {id:'tree_4',category:'Sap Tree',icon:'🌳',name:'Ancient Structure',desc:'Own 20 Sap Tree nodes at once.',check:()=>Object.keys(state.purchased||{}).length>=20,reward:{prod:1.025}},
+    {id:'tree_5',category:'Sap Tree',icon:'💚',name:'Gaia Heart',desc:'Purchase Gaia Heart.',check:()=>!!state.purchased?.gaiaheart,reward:{prod:1.03}},
+    {id:'tree_6',category:'Sap Tree',icon:'🌸',name:'Infinite Bloom',desc:'Purchase Infinite Bloom.',check:()=>!!state.purchased?.infinitebloom,reward:{prod:1.04}},
+    {id:'tree_7',category:'Sap Tree',icon:'👑',name:'Perfect Canopy',desc:'Own every Sap Tree node in one run.',check:()=>NODES.every(n=>state.purchased?.[n.id]),reward:{prod:1.05}},
+
+    {id:'click_1',category:'Gathering',icon:'👆',name:'Helping Hand',desc:'Gather Sap manually 25 times.',check:()=>state.stats.totalClicks>=25,reward:{click:1.03}},
+    {id:'click_2',category:'Gathering',icon:'✋',name:'Persistent Gardener',desc:'Gather Sap manually 250 times.',check:()=>state.stats.totalClicks>=250,reward:{click:1.04}},
+    {id:'click_3',category:'Gathering',icon:'💪',name:'Calloused Hands',desc:'Gather Sap manually 2,500 times.',check:()=>state.stats.totalClicks>=2500,reward:{click:1.05}},
+
+    {id:'prestige_1',category:'Prestige',icon:'💠',name:'Awakening',desc:'Prestige for the first time.',check:()=>state.prestiges>=1||state.totalEssence>=1,reward:{essence:1.02}},
+    {id:'prestige_2',category:'Prestige',icon:'💠',name:'Essence Collector',desc:'Earn 10 total Tree Essence.',check:()=>state.totalEssence>=10,reward:{essence:1.02}},
+    {id:'prestige_3',category:'Prestige',icon:'🔷',name:'Essence Hoard',desc:'Earn 100 total Tree Essence.',check:()=>state.totalEssence>=100,reward:{essence:1.03}},
+    {id:'prestige_4',category:'Prestige',icon:'🔮',name:'Ancient Spirit',desc:'Earn 1,000 total Tree Essence.',check:()=>state.totalEssence>=1000,reward:{essence:1.04}},
+    {id:'prestige_5',category:'Prestige',icon:'♻️',name:'Cycle of Growth',desc:'Complete 10 prestiges.',check:()=>state.prestiges>=10,reward:{prod:1.03}},
+    {id:'prestige_6',category:'Prestige',icon:'🌀',name:'Endless Awakening',desc:'Complete 50 prestiges.',check:()=>state.prestiges>=50,reward:{essence:1.05}},
+
+    {id:'essup_1',category:'Essence Grove',icon:'🧠',name:'Ancient Knowledge',desc:'Purchase your first Essence upgrade.',check:()=>Object.keys(state.essenceUpgrades||{}).length>=1,reward:{prod:1.02}},
+    {id:'essup_2',category:'Essence Grove',icon:'🌿',name:'Permanent Roots',desc:'Purchase 5 Essence upgrades.',check:()=>Object.keys(state.essenceUpgrades||{}).length>=5,reward:{essence:1.03}},
+    {id:'essup_3',category:'Essence Grove',icon:'🏛️',name:'Grove Mastery',desc:'Purchase every Essence upgrade.',check:()=>ESSENCE_UPGRADES.every(u=>state.essenceUpgrades?.[u.id]),reward:{essence:1.06}},
+
+    {id:'challenge_1',category:'Challenges',icon:'⚔️',name:'Trial by Soil',desc:'Complete any challenge.',check:()=>Object.values(state.completedChallenges||{}).filter(Boolean).length>=1,reward:{prod:1.02}},
+    {id:'challenge_2',category:'Challenges',icon:'🛡️',name:'Grove Champion',desc:'Complete all four Grove challenges.',check:()=>CHALLENGES.filter(c=>c.layer!=='world').every(c=>state.completedChallenges?.[c.id]),reward:{essence:1.05}},
+    {id:'challenge_3',category:'Challenges',icon:'🌍',name:'World Challenger',desc:'Complete all four World challenges.',check:()=>CHALLENGES.filter(c=>c.layer==='world').every(c=>state.completedChallenges?.[c.id]),reward:{world:1.05}},
+    {id:'challenge_4',category:'Challenges',icon:'🏆',name:'Unbroken',desc:'Complete every challenge.',check:()=>CHALLENGES.every(c=>state.completedChallenges?.[c.id]),reward:{prod:1.08,world:1.05}},
+
+    {id:'world_1',category:'World Tree',icon:'🌰',name:'World Seed',desc:'Ascend for the first time.',check:()=>state.totalWorldSeeds>=1,reward:{world:1.02}},
+    {id:'world_2',category:'World Tree',icon:'🌍',name:'New World',desc:'Earn 10 total World Seeds.',check:()=>state.totalWorldSeeds>=10,reward:{world:1.03}},
+    {id:'world_3',category:'World Tree',icon:'🪐',name:'World Architect',desc:'Purchase your first World upgrade.',check:()=>Object.keys(state.worldUpgrades||{}).length>=1,reward:{prod:1.03}},
+    {id:'world_4',category:'World Tree',icon:'🌌',name:'Cosmic Arborist',desc:'Purchase every World upgrade.',check:()=>WORLD_UPGRADES.every(u=>state.worldUpgrades?.[u.id]),reward:{world:1.08,prod:1.05}},
+  ];
+  const achievementById=Object.fromEntries(ACHIEVEMENTS.map(a=>[a.id,a]));
+  function achievementRewardText(r){const parts=[];if(r.prod)parts.push('×'+r.prod.toFixed(2)+' production');if(r.click)parts.push('×'+r.click.toFixed(2)+' gathering');if(r.essence)parts.push('×'+r.essence.toFixed(2)+' Essence gain');if(r.world)parts.push('×'+r.world.toFixed(2)+' World Seed gain');return parts.join(' • ')}
+  function achievementBonuses(){let prod=1,click=1,essence=1,world=1;for(const id of Object.keys(state.achievements||{})){const r=achievementById[id]?.reward||{};prod*=r.prod||1;click*=r.click||1;essence*=r.essence||1;world*=r.world||1}return{prod,click,essence,world}}
+  let achievementPopupTimer;
+  function showAchievementPopup(a){const el=document.getElementById('achievement-popup');if(!el)return;el.querySelector('strong').textContent=a.icon+' '+a.name;el.querySelector('span').textContent=achievementRewardText(a.reward);el.classList.add('show');clearTimeout(achievementPopupTimer);achievementPopupTimer=setTimeout(()=>el.classList.remove('show'),4200)}
+  function checkAchievements(){state.achievements=state.achievements||{};let changed=false;for(const a of ACHIEVEMENTS){if(state.achievements[a.id])continue;let ok=false;try{ok=!!a.check()}catch(e){}if(ok){state.achievements[a.id]=Date.now();changed=true;showAchievementPopup(a)}}if(changed){renderAchievements();recalcTotals();save()}}
+  function renderAchievements(){const root=document.getElementById('achievement-list');if(!root)return;const unlocked=Object.keys(state.achievements||{}).length;document.getElementById('achievement-page-count').textContent=unlocked+' / '+ACHIEVEMENTS.length;document.getElementById('achievement-unlocked').textContent=unlocked;document.getElementById('achievement-percent').textContent=Math.floor(unlocked/ACHIEVEMENTS.length*100)+'%';document.getElementById('achievement-progress-fill').style.width=(unlocked/ACHIEVEMENTS.length*100)+'%';const b=achievementBonuses();document.getElementById('achievement-bonus').textContent='×'+b.prod.toFixed(2);root.innerHTML='';for(const category of [...new Set(ACHIEVEMENTS.map(a=>a.category))]){const h=document.createElement('h3');h.className='achievement-category';h.textContent=category;root.appendChild(h);const grid=document.createElement('div');grid.className='achievement-grid';for(const a of ACHIEVEMENTS.filter(x=>x.category===category)){const unlockedNow=!!state.achievements?.[a.id];const card=document.createElement('article');card.className='achievement-card'+(unlockedNow?' unlocked':'');card.innerHTML=`<div class="achievement-icon">${unlockedNow?a.icon:'🔒'}</div><div><h3>${a.name}</h3><p>${a.desc}</p><div class="achievement-reward">${unlockedNow?'Unlocked • ':'Reward: '}${achievementRewardText(a.reward)}</div></div>`;grid.appendChild(card)}root.appendChild(grid)}}
+
+
+  let state = {
+    version: 10,
+    sap: 0,
+    essence: 0,
+    totalEssence: 0,
+    runSap: 0,
+    lifetimeSap: 0,
+    prestiges: 0,
+    purchased: { seed: true },
+    essenceUpgrades: {},
+    worldSeeds: 0,
+    totalWorldSeeds: 0,
+    worldUpgrades: {},
+    autoBuyEnabled: false,
+    activeChallenge: null,
+    completedChallenges: {},
+    achievements: {},
+    stats: { totalClicks:0 },
+    offlinePrestigeDebt: 0,
+    offlineAscendDebt: 0,
+    lastUpdate: Date.now(),
+  };
+
+  let totals = { prodAdd:0, prodMult:1, clickAdd:0, clickMult:1, essenceProdMult:1, essenceClickMult:1, essenceGainMult:1, sapCostMult:1, autoBuyUnlocked:false, autoBuyInterval:1, autoBuyBatch:1, worldProdMult:1, worldEssenceMult:1, worldSeedMult:1, worldAutoBuy:false };
+
+  function recalcTotals(){
+    let prodAdd = 0;   // no passive production until First Sprout is purchased
+    let prodMult = 1;
+    let clickAdd = 0;
+    let clickMult = 1;
+    for(const n of NODES){
+      if(!state.purchased[n.id] || !n.effect) continue;
+      if(n.effect.type === 'prod_add')   prodAdd  += n.effect.value;
+      if(n.effect.type === 'prod_mult')  prodMult *= n.effect.value;
+      if(n.effect.type === 'click_add')  clickAdd += n.effect.value;
+      if(n.effect.type === 'click_mult') clickMult*= n.effect.value;
+    }
+    let essenceProdMult=1, essenceClickMult=1, essenceGainMult=1, sapCostMult=1, autoBuyUnlocked=false, autoBuyInterval=1, autoBuyBatch=1;
+    for(const u of ESSENCE_UPGRADES){
+      if(!state.essenceUpgrades[u.id] || !u.effect) continue;
+      if(u.effect.type==='global_prod_mult') essenceProdMult*=u.effect.value;
+      if(u.effect.type==='global_click_mult') essenceClickMult*=u.effect.value;
+      if(u.effect.type==='essence_gain_mult') essenceGainMult*=u.effect.value;
+      if(u.effect.type==='sap_cost_mult') sapCostMult*=u.effect.value;
+      if(u.effect.type==='auto_buy') autoBuyUnlocked=true;
+      if(u.effect.type==='auto_buy_speed') autoBuyInterval*=u.effect.value;
+      if(u.effect.type==='auto_buy_batch') autoBuyBatch=Math.max(autoBuyBatch,u.effect.value);
+    }
+    let worldProdMult=1, worldEssenceMult=1, worldSeedMult=1, worldAutoBuy=false, startEssence=0;
+    const c=activeChallenge();
+    if(!c?.effect?.disableWorldUpgrades){
+      for(const u of WORLD_UPGRADES){
+        if(!state.worldUpgrades?.[u.id]) continue;
+        if(u.effect.type==='world_prod_mult') worldProdMult*=u.effect.value;
+        if(u.effect.type==='world_essence_mult') worldEssenceMult*=u.effect.value;
+        if(u.effect.type==='world_seed_mult') worldSeedMult*=u.effect.value;
+        if(u.effect.type==='world_auto_buy') worldAutoBuy=true;
+        if(u.effect.type==='start_essence') startEssence=Math.max(startEssence,u.effect.value);
+      }
+    }
+    autoBuyUnlocked = autoBuyUnlocked || worldAutoBuy;
+    if(c?.effect?.disableAutoBuy) autoBuyUnlocked=false;
+    if(!autoBuyUnlocked) state.autoBuyEnabled=false;
+    totals = { prodAdd, prodMult, clickAdd, clickMult, essenceProdMult, essenceClickMult, essenceGainMult, sapCostMult, autoBuyUnlocked, autoBuyInterval, autoBuyBatch, worldProdMult, worldEssenceMult, worldSeedMult, worldAutoBuy, startEssence };
+    updateAutoBuyUI();
+  }
+
+  function challengeRewardTotals(){
+    let prodMult=1, clickMult=1, costMult=1, essenceGainMult=1, worldSeedMult=1;
+    for(const c of CHALLENGES){
+      if(!state.completedChallenges?.[c.id]) continue;
+      prodMult*=c.rewardEffect?.prodMult||1;
+      clickMult*=c.rewardEffect?.clickMult||1;
+      costMult*=c.rewardEffect?.costMult||1;
+      essenceGainMult*=c.rewardEffect?.essenceGainMult||1;
+      worldSeedMult*=c.rewardEffect?.worldSeedMult||1;
+    }
+    return {prodMult,clickMult,costMult,essenceGainMult,worldSeedMult};
+  }
+  function activeChallenge(){ return state.activeChallenge ? challengeById[state.activeChallenge] : null; }
+
+  function prestigeMultiplier(){ return 1 + state.totalEssence * ESSENCE_BONUS_PER; }
+  function currentRate(){
+    const rewards=challengeRewardTotals();
+    const c=activeChallenge();
+    const essenceMult=c?.effect?.disableEssenceProd ? 1 : totals.essenceProdMult;
+    const permanentPrestigeMult = c?.effect?.disablePrestigeBonus ? 1 : prestigeMultiplier();
+    return totals.prodAdd * totals.prodMult * essenceMult * permanentPrestigeMult * rewards.prodMult * totals.worldProdMult * (c?.effect?.prodMult||1) * achievementBonuses().prod;
+  }
+  function currentClickGain(){
+    const c=activeChallenge();
+    if(c?.effect?.disableClick) return 0;
+    const essenceClick = c?.effect?.disableEssenceUpgrades ? 1 : totals.essenceClickMult;
+    return (1 + totals.clickAdd) * totals.clickMult * essenceClick * challengeRewardTotals().clickMult * (c?.effect?.clickMult||1) * achievementBonuses().click;
+  }
+
+
+  function addSap(amount){
+    if(!Number.isFinite(amount) || amount <= 0) return;
+    state.sap += amount;
+    state.runSap += amount;
+    state.lifetimeSap += amount;
+  }
+
+  function prestigeGrossAt(runSap){
+    const rawBase = Math.pow(Math.max(0, runSap) / PRESTIGE_BASE, PRESTIGE_EXPONENT);
+    const multiplied = rawBase * totals.essenceGainMult * totals.worldEssenceMult * challengeRewardTotals().essenceGainMult * (activeChallenge()?.effect?.essenceGainMult||1) * achievementBonuses().essence;
+    const softened = multiplied > PRESTIGE_SOFTCAP_START
+      ? PRESTIGE_SOFTCAP_START * Math.pow(multiplied / PRESTIGE_SOFTCAP_START, PRESTIGE_SOFTCAP_POWER)
+      : multiplied;
+    return Math.floor(softened);
+  }
+  function prestigeGain(){
+    return Math.max(0, prestigeGrossAt(state.runSap) - (Number(state.offlinePrestigeDebt)||0));
+  }
+
+  function findMinimumResourceForGain(targetGain, gainAtResource, currentResource){
+    if(targetGain <= 0) return 0;
+    let low = 0;
+    let high = Math.max(1, currentResource || 1);
+    let guard = 0;
+    while(gainAtResource(high) < targetGain && guard < 220){
+      high *= 2;
+      guard++;
+    }
+    if(!Number.isFinite(high) || guard >= 220) return Infinity;
+    for(let i=0;i<100;i++){
+      const mid=(low+high)/2;
+      if(gainAtResource(mid) >= targetGain) high=mid;
+      else low=mid;
+    }
+    return Math.ceil(high);
+  }
+
+  function prestigeGainAt(runSap){
+    return Math.max(0, prestigeGrossAt(runSap) - (Number(state.offlinePrestigeDebt)||0));
+  }
+
+  function sapRequiredForNextEssence(){
+    const nextGain = prestigeGain() + 1;
+    return findMinimumResourceForGain(nextGain, prestigeGainAt, state.runSap);
+  }
+
+  function prestige(){
+    if(state.activeChallenge){ showToast('Finish or exit the active challenge before prestiging.'); return; }
+    const gain = prestigeGain();
+    if(gain < 1) return;
+    state.essence += gain;
+    state.totalEssence += gain;
+    state.offlinePrestigeDebt = 0;
+    state.prestiges += 1;
+    state.sap = 0;
+    state.runSap = 0;
+    state.purchased = getPrestigeStartingPurchases();
+    state.lastUpdate = Date.now();
+    recalcTotals();
+    buildSvg();
+    updateNodeStates();
+    updateStats();
+    closePrestigeModal();
+    showToast(`The tree awakened — gained ${fmt(gain)} Tree Essence.`);
+    save();
+  }
+
+  function getPrestigeStartingPurchases(){
+    const purchased={seed:true};
+    for(const u of ESSENCE_UPGRADES){
+      if(state.essenceUpgrades[u.id] && u.effect?.type==='start_upgrade') purchased[u.effect.value]=true;
+    }
+    return purchased;
+  }
+
+  function canBuyEssenceUpgrade(u){
+    return !state.essenceUpgrades[u.id] && (!u.requires || state.essenceUpgrades[u.requires]) && state.essence>=u.cost;
+  }
+  function buyEssenceUpgrade(id){
+    const u=essenceUpgradeById[id];
+    if(!u || !canBuyEssenceUpgrade(u)) return;
+    state.essence-=u.cost;
+    state.essenceUpgrades[id]=true;
+    recalcTotals(); renderEssenceUpgrades(); updateStats(); save();
+    showToast(`Purchased ${u.name}.`);
+  }
+  function renderEssenceUpgrades(){
+    const grid=document.getElementById('essence-grid');
+    if(!grid) return;
+    document.getElementById('essence-page-balance').textContent=fmt(state.essence);
+    updateAutoBuyUI();
+    grid.innerHTML='';
+    for(const u of ESSENCE_UPGRADES){
+      const bought=!!state.essenceUpgrades[u.id];
+      const unlocked=!u.requires || state.essenceUpgrades[u.requires];
+      const card=document.createElement('article');
+      card.className='essence-upgrade'+(bought?' purchased':(!unlocked?' locked':''));
+      const req=u.requires?`Requires: ${essenceUpgradeById[u.requires].name}`:'Available immediately';
+      card.innerHTML=`<h3>${u.name}</h3><p>${u.desc}</p><div class="requirement">${bought?'Purchased':req}</div><button class="essence-buy" ${bought||!canBuyEssenceUpgrade(u)?'disabled':''}>${bought?'Owned':`${u.cost} Essence`}</button>`;
+      card.querySelector('button').addEventListener('click',()=>buyEssenceUpgrade(u.id));
+      grid.appendChild(card);
+    }
+  }
+
+  function ascensionGrossAt(availableEssence){
+    return Math.floor(Math.sqrt(Math.max(0,availableEssence)/ASCENSION_BASE) * totals.worldSeedMult * challengeRewardTotals().worldSeedMult * achievementBonuses().world);
+  }
+  function ascensionGain(){
+    return Math.max(0, ascensionGrossAt(state.essence) - (Number(state.offlineAscendDebt)||0));
+  }
+
+  function ascensionGainAt(totalEssence){
+    return Math.max(0, ascensionGrossAt(totalEssence) - (Number(state.offlineAscendDebt)||0));
+  }
+  function essenceRequiredForNextWorldSeed(){
+    const nextGain = ascensionGain() + 1;
+    return findMinimumResourceForGain(nextGain, ascensionGainAt, state.essence);
+  }
+  function ascend(){
+    const gain=ascensionGain();
+    if(gain<1 || state.activeChallenge){ showToast('You need at least 1,500 available Tree Essence and no active challenge.'); return; }
+    if(!confirm(`Ascend for ${gain} World Seeds? This resets Sap, Tree Essence, Essence upgrades and lower-layer challenges.`)) return;
+    state.worldSeeds+=gain; state.totalWorldSeeds+=gain;
+    state.offlineAscendDebt=0; state.offlinePrestigeDebt=0;
+    state.sap=0; state.runSap=0; state.essence=totals.startEssence||0; state.totalEssence=state.essence; state.prestiges=0;
+    state.purchased={seed:true}; state.essenceUpgrades={}; state.autoBuyEnabled=false; state.activeChallenge=null;
+    state.completedChallenges=Object.fromEntries(Object.entries(state.completedChallenges||{}).filter(([id])=>challengeById[id]?.layer==='world'));
+    recalcTotals(); buildSvg(); updateNodeStates(); updateStats(); save(); showToast(`Ascended — gained ${gain} World Seeds.`);
+  }
+  function canBuyWorldUpgrade(u){ return !state.worldUpgrades?.[u.id] && (!u.requires||state.worldUpgrades?.[u.requires]) && state.worldSeeds>=u.cost; }
+  function buyWorldUpgrade(id){ const u=worldUpgradeById[id]; if(!u||!canBuyWorldUpgrade(u))return; state.worldSeeds-=u.cost; state.worldUpgrades[id]=true; recalcTotals(); renderWorldLayer(); updateStats(); save(); showToast(`Purchased ${u.name}.`); }
+  function renderWorldLayer(){
+    const grid=document.getElementById('world-upgrade-grid'); if(!grid)return;
+    document.getElementById('world-seed-balance').textContent=fmt(state.worldSeeds);
+    const gain=ascensionGain(), btn=document.getElementById('ascend-btn');
+    btn.textContent=`🌍 Ascend: +${fmt(gain)} World Seeds`; btn.disabled=gain<1||!!state.activeChallenge;
+    document.getElementById('ascension-status').textContent=`Available Essence: ${fmt(state.essence)} / ${fmt(ASCENSION_BASE)} minimum • Current gain: ${fmt(gain)}`;
+    const nextWorldSeedRequirement=essenceRequiredForNextWorldSeed();
+    const nextWorldSeedEl=document.getElementById('ascension-next-point');
+    if(nextWorldSeedEl) nextWorldSeedEl.textContent=`Next World Seed: ${fmt(nextWorldSeedRequirement)} available Essence required (${fmt(Math.max(0,nextWorldSeedRequirement-state.essence))} more)`;
+    grid.innerHTML='';
+    for(const u of WORLD_UPGRADES){ const bought=!!state.worldUpgrades?.[u.id], unlocked=!u.requires||state.worldUpgrades?.[u.requires]; const card=document.createElement('article'); card.className='essence-upgrade'+(bought?' purchased':(!unlocked?' locked':'')); card.innerHTML=`<h3>${u.name}</h3><p>${u.desc}</p><div class="requirement">${bought?'Purchased':u.requires?'Requires: '+worldUpgradeById[u.requires].name:'Available immediately'}</div><button class="essence-buy" ${bought||!canBuyWorldUpgrade(u)?'disabled':''}>${bought?'Owned':u.cost+' World Seeds'}</button>`; card.querySelector('button').addEventListener('click',()=>buyWorldUpgrade(u.id)); grid.appendChild(card); }
+  }
+
+  function fmt(n){
+    if(n < 1000) return n.toFixed(n < 10 ? 1 : 0);
+    const units = ['K','M','B','T','Qa','Qi'];
+    let u = -1;
+    while(n >= 1000 && u < units.length - 1){ n /= 1000; u++; }
+    return n.toFixed(2) + units[u];
+  }
+
+  function nodeCost(node){ const c=activeChallenge(); return Math.max(0, Math.ceil(node.cost * totals.sapCostMult * challengeRewardTotals().costMult * (c?.effect?.costMult||1))); }
+  function isPurchasable(node){
+    if(state.purchased[node.id]) return false;
+    if(node.parent && !state.purchased[node.parent]) return false;
+    return state.sap >= nodeCost(node);
+  }
+  function isUnlocked(node){
+    return state.purchased[node.id] || !node.parent || state.purchased[node.parent];
+  }
+
+  /* ---------- rendering ---------- */
+  const svg = document.getElementById('tree-svg');
+
+  function curvePath(p, c){
+    const midY = (p.y + c.y) / 2;
+    return `M ${p.x} ${p.y} C ${p.x} ${midY}, ${c.x} ${midY}, ${c.x} ${c.y}`;
+  }
+
+  function buildSvg(){
+    svg.innerHTML = '';
+    const branchLayer = document.createElementNS(svg.namespaceURI,'g');
+    const nodeLayer = document.createElementNS(svg.namespaceURI,'g');
+
+    for(const n of NODES){
+      if(!n.parent) continue;
+      const p = nodeById[n.parent];
+      const path = document.createElementNS(svg.namespaceURI,'path');
+      path.setAttribute('d', curvePath(p, n));
+      path.setAttribute('class','branch-path');
+      path.dataset.for = n.id;
+      branchLayer.appendChild(path);
+    }
+
+    for(const n of NODES){
+      const g = document.createElementNS(svg.namespaceURI,'g');
+      g.setAttribute('class','node');
+      g.dataset.id = n.id;
+      g.setAttribute('transform', `translate(${n.x},${n.y})`);
+
+      const circle = document.createElementNS(svg.namespaceURI,'circle');
+      circle.setAttribute('class','node-circle');
+      circle.setAttribute('r', n.id === 'seed' ? 30 : 26);
+      g.appendChild(circle);
+
+      const icon = document.createElementNS(svg.namespaceURI,'text');
+      icon.setAttribute('class','node-icon');
+      icon.setAttribute('y', 7);
+      icon.textContent = n.icon;
+      g.appendChild(icon);
+
+      const label = document.createElementNS(svg.namespaceURI,'text');
+      label.setAttribute('class','node-label');
+      label.setAttribute('y', n.id === 'seed' ? 50 : 46);
+      label.textContent = n.name;
+      g.appendChild(label);
+
+      if(n.cost > 0){
+        const cost = document.createElementNS(svg.namespaceURI,'text');
+        cost.setAttribute('class','node-cost');
+        cost.setAttribute('y', n.id === 'seed' ? 64 : 60);
+        cost.textContent = fmt(nodeCost(n)) + ' sap';
+        g.appendChild(cost);
+      }
+
+      g.addEventListener('click', () => tryPurchase(n.id));
+      g.addEventListener('mousemove', (e) => showTooltip(e, n));
+      g.addEventListener('mouseleave', hideTooltip);
+
+      nodeLayer.appendChild(g);
+    }
+
+    svg.appendChild(branchLayer);
+    svg.appendChild(nodeLayer);
+  }
+
+  function updateNodeStates(){
+    for(const n of NODES){
+      const g = svg.querySelector(`.node[data-id="${n.id}"]`);
+      if(!g) continue;
+      const purchased = !!state.purchased[n.id];
+      const purchasable = isPurchasable(n);
+      const unlocked = isUnlocked(n);
+      g.classList.toggle('purchased', purchased);
+      g.classList.toggle('available', purchasable);
+      g.classList.toggle('locked', !purchased && !unlocked);
+      g.dataset.clickable = purchasable ? 'true' : 'false';
+
+      const costText=g.querySelector('.node-cost');
+      if(costText && n.cost>0) costText.textContent=fmt(nodeCost(n))+' sap';
+
+      const path = svg.querySelector(`path[data-for="${n.id}"]`);
+      if(path) path.classList.toggle('grown', purchased);
+    }
+  }
+
+  let autoBuyAccumulator = 0;
+  function updateAutoBuyUI(){
+    const toggle=document.getElementById('auto-buy-toggle');
+    const status=document.getElementById('auto-buy-status');
+    if(!toggle || !status) return;
+    toggle.disabled=!totals.autoBuyUnlocked;
+    toggle.classList.toggle('active',totals.autoBuyUnlocked && state.autoBuyEnabled);
+    toggle.textContent=`Auto-buy: ${state.autoBuyEnabled?'ON':'OFF'}`;
+    status.textContent=totals.autoBuyUnlocked
+      ? `${state.autoBuyEnabled?'Active':'Paused'} — every ${totals.autoBuyInterval.toFixed(2)}s, up to ${totals.autoBuyBatch} purchase${totals.autoBuyBatch===1?'':'s'}`
+      : 'Locked — purchase Root Reflexes';
+  }
+  function runAutoBuy(){
+    if(!totals.autoBuyUnlocked || !state.autoBuyEnabled) return;
+    let bought=0;
+    while(bought < totals.autoBuyBatch){
+      const available=NODES.filter(n=>n.cost>0 && isPurchasable(n)).sort((a,b)=>nodeCost(a)-nodeCost(b));
+      if(!available.length) break;
+      const n=available[0];
+      state.sap-=nodeCost(n); state.purchased[n.id]=true; bought++;
+      recalcTotals();
+    }
+    if(bought){ updateNodeStates(); updateStats(); save(); }
+  }
+
+  /* ---------- interactions ---------- */
+  function tryPurchase(id){
+    const n = nodeById[id];
+    if(!isPurchasable(n)) return;
+    state.sap -= nodeCost(n);
+    state.purchased[id] = true;
+    recalcTotals();
+    updateNodeStates();
+    updateStats();
+    showToast(`Grew ${n.name} — ${n.desc}`);
+    save();
+  }
+
+  document.getElementById('gather-btn').addEventListener('click', () => {
+    state.stats=state.stats||{totalClicks:0}; state.stats.totalClicks=(state.stats.totalClicks||0)+1;
+    addSap(currentClickGain());
+    updateStats();
+    updateNodeStates();
+  });
+
+  document.getElementById('ascend-btn').addEventListener('click',ascend);
+  document.getElementById('ascend-top-btn').addEventListener('click',ascend);
+
+  document.getElementById('auto-buy-toggle').addEventListener('click',()=>{
+    if(!totals.autoBuyUnlocked) return;
+    state.autoBuyEnabled=!state.autoBuyEnabled;
+    updateAutoBuyUI(); save();
+  });
+
+  const settingsModal = document.getElementById('settings-modal');
+  function ensureSettings(){
+    state.settings = Object.assign({ offlineGain:true }, state.settings || {});
+  }
+  function updateSettingsUI(){
+    ensureSettings();
+    const toggle=document.getElementById('offline-gain-toggle');
+    const note=document.getElementById('offline-gain-note');
+    if(toggle) toggle.textContent=`Offline gain: ${state.settings.offlineGain ? 'ON' : 'OFF'}`;
+    if(note) note.textContent=state.settings.offlineGain
+      ? 'When enabled, passive sap production is calculated when you return.'
+      : 'Offline production is disabled. No sap will be gained while the game is closed.';
+  }
+  function openSettings(){ updateSettingsUI(); settingsModal.classList.add('show'); }
+  function closeSettings(){ settingsModal.classList.remove('show'); }
+  document.getElementById('reset-btn').addEventListener('click', openSettings);
+  document.getElementById('settings-close').addEventListener('click', closeSettings);
+  settingsModal.addEventListener('click',e=>{ if(e.target===settingsModal) closeSettings(); });
+  document.getElementById('offline-gain-toggle').addEventListener('click',()=>{
+    ensureSettings();
+    state.settings.offlineGain=!state.settings.offlineGain;
+    updateSettingsUI();
+    save();
+    showToast(`Offline gain ${state.settings.offlineGain ? 'enabled' : 'disabled'}.`);
+  });
+  document.getElementById('settings-reset').addEventListener('click', async () => {
+    if(!confirm('Reset your save? This clears all progress.')) return;
+    state = { version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true}, lastUpdate: Date.now() };
+    recalcTotals();
+    buildSvg();
+    updateNodeStates();
+    renderEssenceUpgrades();
+    updateStats();
+    updateSettingsUI();
+    closeSettings();
+    await storageDelete();
+  });
+
+
+  /* ---------- challenges ---------- */
+  function resetCurrentRun(){
+    state.sap=0; state.runSap=0; state.purchased=getPrestigeStartingPurchases();
+    recalcTotals(); buildSvg(); updateNodeStates(); updateStats();
+  }
+  function startChallenge(id){
+    const c=challengeById[id];
+    if(!c || state.completedChallenges?.[id]) return;
+    if(c.layer==='world' && state.totalWorldSeeds<1){
+      showToast('World challenges unlock after your first Ascension.');
+      return;
+    }
+    if(state.activeChallenge && !confirm('Replace the current challenge and restart the run?')) return;
+    state.activeChallenge=id;
+    resetCurrentRun(); renderChallenges(); save();
+    showToast(`Challenge started: ${c.name}.`);
+  }
+  function exitChallenge(){
+    if(!state.activeChallenge) return;
+    if(!confirm('Exit the challenge? Current run progress will reset.')) return;
+    state.activeChallenge=null; resetCurrentRun(); renderChallenges(); save(); showToast('Challenge exited.');
+  }
+  function completeChallenge(){
+    const c=activeChallenge();
+    if(!c || state.runSap<c.goal) return;
+    state.completedChallenges=state.completedChallenges||{};
+    state.completedChallenges[c.id]=true;
+    state.activeChallenge=null;
+    resetCurrentRun(); renderChallenges(); save();
+    showToast(`Challenge completed: ${c.name}. Permanent reward unlocked.`);
+  }
+  function renderChallenges(){
+    const grid=document.getElementById('challenge-grid');
+    const banner=document.getElementById('active-challenge-banner');
+    if(!grid||!banner) return;
+    const active=activeChallenge();
+    banner.classList.toggle('show',!!active);
+    banner.innerHTML=active ? `<span><strong>${active.name}</strong> — ${fmt(state.runSap)} / ${fmt(active.goal)} sap</span><div><button class="challenge-btn" id="complete-challenge" ${state.runSap<active.goal?'disabled':''}>Claim reward</button> <button class="challenge-btn secondary" id="exit-challenge">Exit</button></div>` : '';
+    if(active){
+      banner.querySelector('#complete-challenge').addEventListener('click',completeChallenge);
+      banner.querySelector('#exit-challenge').addEventListener('click',exitChallenge);
+    }
+    grid.innerHTML='';
+    for(const c of CHALLENGES){
+      const locked=c.layer==='world' && state.totalWorldSeeds<1;
+      const completed=!!state.completedChallenges?.[c.id];
+      const isActive=state.activeChallenge===c.id;
+      const card=document.createElement('article');
+      card.className='challenge-card'+(completed?' completed':'')+(isActive?' active':'')+(locked?' locked':'');
+      card.dataset.challenge=c.id;
+      const layerLabel=c.layer==='world' ? '<span><strong>Layer:</strong> World Tree challenge</span>' : '<span><strong>Layer:</strong> Sap / Essence challenge</span>';
+      const lockLabel=locked ? '<span><strong>Unlock:</strong> Complete your first Ascension</span>' : '';
+      const buttonText=completed?'Completed':isActive?'Active':locked?'Locked':'Start challenge';
+      card.innerHTML=`<h3>${c.name}</h3><p>${c.desc}</p><div class="challenge-meta">${layerLabel}<span><strong>Goal:</strong> Earn ${fmt(c.goal)} sap in one run</span><span><strong>Restriction:</strong> ${c.desc}</span><span><strong>Reward:</strong> ${c.reward}</span>${lockLabel}</div><div class="challenge-actions"><button class="challenge-btn" ${completed||isActive||locked?'disabled':''}>${buttonText}</button></div>`;
+      card.querySelector('button').addEventListener('click',()=>startChallenge(c.id));
+      grid.appendChild(card);
+    }
+  }
+
+
+  function openChallengeFromSide(id){
+    const c=challengeById[id];
+    if(!c) return;
+    const locked=c.layer==='world' && state.totalWorldSeeds<1;
+    if(locked){
+      showToast('World challenges unlock after your first Ascension.');
+      return;
+    }
+    if(state.completedChallenges?.[id]){
+      document.querySelector('.tab-btn[data-page="challenge-page"]')?.click();
+    }else if(state.activeChallenge===id && state.runSap>=c.goal){
+      completeChallenge();
+      return;
+    }else if(state.activeChallenge===id){
+      document.querySelector('.tab-btn[data-page="challenge-page"]')?.click();
+    }else{
+      startChallenge(id);
+      document.querySelector('.tab-btn[data-page="challenge-page"]')?.click();
+    }
+    requestAnimationFrame(()=>{
+      const card=document.querySelector(`.challenge-card[data-challenge="${id}"]`);
+      if(card){ card.scrollIntoView({behavior:'smooth',block:'center'}); }
+    });
+  }
+
+
+  /* ---------- page navigation ---------- */
+  document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b===btn));
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===btn.dataset.page));
+    if(btn.dataset.page==='essence-page') renderEssenceUpgrades();
+    if(btn.dataset.page==='challenge-page') renderChallenges();
+    if(btn.dataset.page==='achievement-page') renderAchievements();
+    if(btn.dataset.page==='world-page') renderWorldLayer();
+  }));
+
+  /* ---------- prestige ---------- */
+  const prestigeModal = document.getElementById('prestige-modal');
+  const prestigeButton = document.getElementById('prestige-btn');
+  const prestigeConfirm = document.getElementById('prestige-confirm');
+
+  function updatePrestigePreview(){
+    const gain = prestigeGain();
+    document.getElementById('prestige-run-sap').textContent = fmt(state.runSap);
+    document.getElementById('prestige-gain').textContent = `+${fmt(gain)}`;
+    const nextEssenceRequirement=sapRequiredForNextEssence();
+    const prestigeRemaining=Math.max(0,nextEssenceRequirement-state.runSap);
+    document.getElementById('prestige-next-point').textContent = `${fmt(nextEssenceRequirement)} total run sap (${fmt(prestigeRemaining)} more)`;
+    const prestigeTopNext=document.getElementById('prestige-top-next');
+    if(prestigeTopNext) prestigeTopNext.innerHTML=`Next Essence: <strong>${fmt(nextEssenceRequirement)}</strong> run sap • ${fmt(prestigeRemaining)} remaining`;
+    document.getElementById('prestige-bonus').textContent = `+${Math.round((state.totalEssence + gain) * ESSENCE_BONUS_PER * 100)}%`;
+    document.getElementById('prestige-count').textContent = state.prestiges;
+    prestigeButton.textContent = gain > 0 ? `🌳 Prestige: +${fmt(gain)} Essence` : `🌳 Prestige at ${fmt(PRESTIGE_BASE)} sap`;
+    prestigeButton.disabled = gain < 1 || !!state.activeChallenge;
+    prestigeConfirm.disabled = gain < 1 || !!state.activeChallenge;
+  }
+  function openPrestigeModal(){ updatePrestigePreview(); prestigeModal.classList.add('show'); }
+  function closePrestigeModal(){ prestigeModal.classList.remove('show'); }
+  prestigeButton.addEventListener('click', openPrestigeModal);
+  document.getElementById('prestige-cancel').addEventListener('click', closePrestigeModal);
+  prestigeConfirm.addEventListener('click', prestige);
+  prestigeModal.addEventListener('click', e => { if(e.target === prestigeModal) closePrestigeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closePrestigeModal(); closeImportModal(); } });
+
+  /* ---------- import save ---------- */
+  const importModal = document.getElementById('import-modal');
+  const importText = document.getElementById('import-save-text');
+
+  function openImportModal(){
+    importText.value = '';
+    importModal.classList.add('show');
+    setTimeout(() => importText.focus(), 0);
+  }
+  function closeImportModal(){ importModal.classList.remove('show'); }
+
+  function decodeSaveString(encoded){
+    const clean = encoded.trim();
+    if(!clean) throw new Error('Paste a save string first.');
+    const json = decodeURIComponent(escape(atob(clean)));
+    const loaded = JSON.parse(json);
+    if(!loaded || typeof loaded !== 'object') throw new Error('The save does not contain valid game data.');
+    if(!Number.isFinite(Number(loaded.sap)) || !loaded.purchased) throw new Error('The save is missing required fields.');
+    return loaded;
+  }
+
+  async function importSave(){
+    try{
+      const loaded = decodeSaveString(importText.value);
+      state = Object.assign({ version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true}, lastUpdate:Date.now() }, loaded);
+      state.version = 9;
+      state.sap = Math.max(0, Number(state.sap) || 0);
+      state.essence = Math.max(0, Number(state.essence) || 0);
+      state.totalEssence = Math.max(state.essence, Number(state.totalEssence) || 0);
+      state.runSap = Math.max(0, Number(state.runSap) || 0);
+      state.lifetimeSap = Math.max(state.runSap, Number(state.lifetimeSap) || 0);
+      state.prestiges = Math.max(0, Math.floor(Number(state.prestiges) || 0));
+      state.purchased = Object.assign({seed:true}, state.purchased || {});
+      state.essenceUpgrades = Object.assign({}, state.essenceUpgrades || {});
+      state.worldSeeds=Math.max(0,Number(state.worldSeeds)||0); state.totalWorldSeeds=Math.max(state.worldSeeds,Number(state.totalWorldSeeds)||0); state.worldUpgrades=Object.assign({},state.worldUpgrades||{});
+      state.autoBuyEnabled = !!state.autoBuyEnabled;
+      state.activeChallenge = challengeById[state.activeChallenge] ? state.activeChallenge : null;
+      state.completedChallenges = Object.assign({}, state.completedChallenges || {});
+      state.achievements = Object.assign({}, state.achievements || {});
+      state.stats = Object.assign({totalClicks:0}, state.stats || {});
+      state.lastUpdate = Date.now();
+      recalcTotals();
+      buildSvg();
+      updateNodeStates();
+      updateStats();
+      closeImportModal();
+      await saveImmediately();
+      showToast('Save imported successfully.');
+    }catch(error){
+      showToast(`Import failed: ${error.message}`);
+    }
+  }
+
+  document.getElementById('import-save-btn').addEventListener('click', openImportModal);
+  document.getElementById('import-cancel').addEventListener('click', closeImportModal);
+  document.getElementById('import-confirm').addEventListener('click', importSave);
+  importModal.addEventListener('click', e => { if(e.target === importModal) closeImportModal(); });
+
+  /* ---------- tooltip ---------- */
+  const tooltip = document.getElementById('tooltip');
+  function showTooltip(e, n){
+    tooltip.querySelector('.t-name').textContent = n.name;
+    tooltip.querySelector('.t-desc').textContent = n.desc;
+    const purchased = !!state.purchased[n.id];
+    const unlocked = isUnlocked(n);
+    tooltip.querySelector('.t-cost').textContent = n.cost > 0 ? `Cost: ${fmt(nodeCost(n))} sap` : '';
+    let stateText = '';
+    if(purchased) stateText = 'Grown';
+    else if(!unlocked) stateText = 'Grow the branch before it first';
+    else if(state.sap < nodeCost(n)) stateText = 'Not enough sap yet';
+    else stateText = 'Ready to grow';
+    tooltip.querySelector('.t-state').textContent = stateText;
+
+    tooltip.style.left = (e.clientX + 14) + 'px';
+    tooltip.style.top = (e.clientY + 14) + 'px';
+    tooltip.classList.add('show');
+  }
+  function hideTooltip(){ tooltip.classList.remove('show'); }
+
+  /* ---------- toast ---------- */
+  let toastTimer;
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  /* ---------- stats ---------- */
+  function updateStats(){
+    document.getElementById('stat-sap').textContent = fmt(state.sap);
+    document.getElementById('stat-rate').textContent = fmt(currentRate()) + '/s';
+    document.getElementById('stat-click').textContent = fmt(currentClickGain());
+    document.getElementById('stat-essence').textContent = fmt(state.essence);
+    document.getElementById('stat-world-seeds').textContent = fmt(state.worldSeeds||0);
+    const gatherAmount=document.getElementById('gather-amount'); if(gatherAmount) gatherAmount.textContent='+'+fmt(currentClickGain());
+    const sideEss=document.getElementById('side-essence'); if(sideEss) sideEss.textContent=fmt(state.essence);
+    const sideEssenceGain=document.getElementById('side-essence-gain'); if(sideEssenceGain) sideEssenceGain.textContent='+'+fmt(prestigeGain());
+    const sideSeeds=document.getElementById('side-world-seeds'); if(sideSeeds) sideSeeds.textContent=fmt(state.worldSeeds||0);
+    const sideGain=document.getElementById('side-world-gain'); if(sideGain) sideGain.textContent=fmt(ascensionGain());
+    const sideStatus=document.getElementById('side-world-status'); if(sideStatus) sideStatus.textContent=state.essence>=ASCENSION_BASE?'Ascension available based on available Essence':'Locked until '+fmt(ASCENSION_BASE)+' available Essence';
+    const achievementCount=Object.keys(state.achievements||{}).length; const sideAchievements=document.getElementById('side-achievements'); if(sideAchievements) sideAchievements.textContent=achievementCount+' / '+ACHIEVEMENTS.length; const sideAchievementBonus=document.getElementById('side-achievement-bonus'); if(sideAchievementBonus) sideAchievementBonus.textContent='×'+achievementBonuses().prod.toFixed(2);
+    const completed=Object.values(state.completedChallenges||{}).filter(Boolean).length;
+    const sideChallenges=document.getElementById('side-challenges'); if(sideChallenges) sideChallenges.textContent=completed+' / '+CHALLENGES.length;
+    const dots=document.getElementById('side-challenge-dots');
+    if(dots && !dots.children.length){
+      CHALLENGES.forEach((c,i)=>{
+        const d=document.createElement('button');
+        d.type='button';
+        d.className='challenge-dot';
+        d.dataset.challenge=c.id;
+        d.textContent=['🪵','🏹','💰','🧠','🌍','💧','⏱️','🪐'][i]||'⚔️';
+        d.addEventListener('click',()=>openChallengeFromSide(c.id));
+        dots.appendChild(d);
+      });
+    }
+    if(dots) dots.querySelectorAll('.challenge-dot').forEach(d=>{
+      const id=d.dataset.challenge;
+      const c=challengeById[id];
+      const completed=!!state.completedChallenges?.[id];
+      const active=state.activeChallenge===id;
+      const ready=active && state.runSap>=c.goal;
+      const locked=c.layer==='world' && state.totalWorldSeeds<1;
+      d.classList.toggle('complete',completed);
+      d.classList.toggle('active',active&&!ready);
+      d.classList.toggle('ready',ready);
+      d.classList.toggle('locked',locked);
+      d.disabled=locked;
+      d.title=locked ? `${c.name} — unlock after first Ascension` : completed ? `${c.name} — completed` : ready ? `${c.name} — click to claim reward` : active ? `${c.name} — active (${fmt(state.runSap)} / ${fmt(c.goal)} sap)` : `${c.name} — click to start`;
+      d.setAttribute('aria-label',d.title);
+    });
+    const topAscend=document.getElementById('ascend-top-btn'); if(topAscend){topAscend.textContent='🌍 Ascend +'+fmt(ascensionGain());topAscend.disabled=ascensionGain()<1||!!state.activeChallenge;}
+    const nextWorldRequirement=essenceRequiredForNextWorldSeed();
+    const worldRemaining=Math.max(0,nextWorldRequirement-state.essence);
+    const ascendTopNext=document.getElementById('ascend-top-next');
+    if(ascendTopNext) ascendTopNext.innerHTML=`Next World Seed: <strong>${fmt(nextWorldRequirement)}</strong> available Essence • ${fmt(worldRemaining)} remaining`;
+    renderEssenceUpgrades();
+    renderChallenges();
+    renderWorldLayer();
+    updatePrestigePreview();
+    renderAchievements();
+  }
+
+  /* ---------- game loop ---------- */
+  let lastTick = performance.now();
+  let achievementCheckAccumulator=0;
+  function loop(now){
+    const dt = (now - lastTick) / 1000;
+    lastTick = now;
+    addSap(currentRate() * dt);
+    autoBuyAccumulator += dt;
+    achievementCheckAccumulator += dt;
+    if(achievementCheckAccumulator>=0.75){achievementCheckAccumulator=0;checkAchievements();}
+    if(autoBuyAccumulator >= totals.autoBuyInterval){ autoBuyAccumulator=0; runAutoBuy(); }
+    updateStats();
+    updateNodeStates();
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- storage compatibility ---------- */
+  async function storageGet(){
+    try{
+      if(window.storage && typeof window.storage.get === 'function'){
+        const timeout = new Promise(resolve => setTimeout(() => resolve(null), 1200));
+        const result = await Promise.race([window.storage.get(SAVE_KEY, false), timeout]);
+        if(result && result.value) return result.value;
+      }
+    }catch(e){ console.warn('window.storage read failed', e); }
+    try{ return localStorage.getItem(SAVE_KEY); }catch(e){ return null; }
+  }
+  async function storageSet(value){
+    let stored = false;
+    try{
+      if(window.storage && typeof window.storage.set === 'function'){
+        const timeout = new Promise(resolve => setTimeout(() => resolve(false), 1200));
+        const result = await Promise.race([window.storage.set(SAVE_KEY, value, false).then(()=>true).catch(()=>false), timeout]);
+        stored = !!result;
+      }
+    }catch(e){ console.warn('window.storage write failed', e); }
+    try{ localStorage.setItem(SAVE_KEY, value); stored = true; }catch(e){}
+    return stored;
+  }
+  async function storageDelete(){
+    try{ if(window.storage && typeof window.storage.delete === 'function') await window.storage.delete(SAVE_KEY); }catch(e){}
+    try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  }
+
+  /* ---------- persistence ---------- */
+  let saveTimer;
+  async function saveImmediately(){
+    state.lastUpdate = Date.now();
+    try{ await storageSet(JSON.stringify(state)); }
+    catch(e){ console.error('Save failed', e); }
+  }
+  function save(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      state.lastUpdate = Date.now();
+      try{
+        await storageSet(JSON.stringify(state));
+      }catch(e){ console.error('Save failed', e); }
+    }, 400);
+  }
+
+  function formatDuration(seconds){
+    seconds=Math.max(0,Math.floor(seconds));
+    const h=Math.floor(seconds/3600), m=Math.floor((seconds%3600)/60), s=seconds%60;
+    if(h>0) return `${h}h ${m}m ${s}s`;
+    if(m>0) return `${m}m ${s}s`;
+    return `${s}s`;
+  }
+  function setLoading(step,progress){
+    const stepEl=document.getElementById('loading-step');
+    const bar=document.getElementById('loading-progress');
+    if(stepEl) stepEl.textContent=step;
+    if(bar) bar.style.width=`${Math.max(0,Math.min(100,progress))}%`;
+  }
+  function setRewardFlow(id,before,gain){
+    const el=document.getElementById(id); if(!el) return;
+    const after=before+gain;
+    el.querySelector('.before').textContent=fmt(before);
+    el.querySelector('.after').textContent=fmt(after);
+    el.querySelector('.gain').textContent=`(+${fmt(gain)})`;
+  }
+  function harvestLabel(seconds){
+    if(seconds>=6*3600) return '🌲 Legendary harvest!';
+    if(seconds>=3600) return '🌳 Excellent growth!';
+    if(seconds>=10*60) return '⭐ Great harvest!';
+    return '🌱 Fresh growth';
+  }
+  let pendingStartupRewards={seconds:0,sap:0,essence:0,seeds:0};
+  function setOfflineSummary(seconds,sap,essence,seeds){
+    document.getElementById('offline-time-label').textContent=`Offline: ${formatDuration(seconds)}`;
+    setRewardFlow('offline-sap-reward',state.sap,sap);
+    setRewardFlow('offline-essence-reward',state.essence,essence);
+    setRewardFlow('offline-world-reward',state.worldSeeds,seeds);
+    const badge=document.getElementById('loading-harvest-badge'); if(badge) badge.textContent=harvestLabel(seconds);
+  }
+  async function animateRewardCollection(rewards, ids, progressId, noteId){
+    const duration=1250, start=performance.now();
+    const startSap=state.sap, startRun=state.runSap, startLife=state.lifetimeSap;
+    const startEss=state.essence, startTotalEss=state.totalEssence;
+    const startSeeds=state.worldSeeds, startTotalSeeds=state.totalWorldSeeds;
+    return new Promise(resolve=>{
+      function frame(now){
+        const t=Math.min(1,(now-start)/duration), eased=1-Math.pow(1-t,3);
+        const sapNow=rewards.sap*eased, essNow=Math.floor(rewards.essence*eased), seedNow=Math.floor(rewards.seeds*eased);
+        state.sap=startSap+sapNow; state.runSap=startRun+sapNow; state.lifetimeSap=startLife+sapNow;
+        state.essence=startEss+essNow; state.totalEssence=startTotalEss+essNow;
+        state.worldSeeds=startSeeds+seedNow; state.totalWorldSeeds=startTotalSeeds+seedNow;
+        setRewardFlow(ids.sap,startSap,sapNow); setRewardFlow(ids.essence,startEss,essNow); setRewardFlow(ids.seeds,startSeeds,seedNow);
+        const bar=document.getElementById(progressId); if(bar) bar.style.width=`${t*100}%`;
+        const note=document.getElementById(noteId); if(note) note.textContent=t<1?'Applying offline rewards…':'Rewards collected.';
+        updateStats(); updateNodeStates();
+        if(t<1) requestAnimationFrame(frame); else resolve();
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  function finishLoading(){
+    setLoading('Offline rewards ready',100);
+    const button=document.getElementById('loading-continue');
+    button.classList.add('show');
+    button.onclick=async()=>{
+      button.disabled=true; button.textContent='Collecting…';
+      await animateRewardCollection(pendingStartupRewards,{sap:'offline-sap-reward',essence:'offline-essence-reward',seeds:'offline-world-reward'},'loading-progress','loading-note');
+      state.offlinePrestigeDebt+=pendingStartupRewards.essence;
+      state.offlineAscendDebt+=pendingStartupRewards.seeds;
+      await saveImmediately();
+      document.getElementById('loading-screen').classList.add('hidden');
+    };
+  }
+
+  function calculateOfflineRewards(seconds){
+    seconds=Math.max(0,Math.min(Number(seconds)||0,8*3600));
+    const result={seconds,sap:0,essence:0,seeds:0};
+    if(seconds<=1 || !state.settings?.offlineGain) return result;
+    recalcTotals();
+    const beforePrestigeGross=prestigeGrossAt(state.runSap);
+    const beforeAscendGross=ascensionGrossAt(state.essence);
+    result.sap=currentRate()*seconds;
+    const afterPrestigeGross=prestigeGrossAt(state.runSap+result.sap);
+    if((state.prestiges>0||state.totalEssence>0) && afterPrestigeGross>beforePrestigeGross){
+      result.essence=Math.floor((afterPrestigeGross-beforePrestigeGross)*0.20);
+    }
+    const afterAscendGross=ascensionGrossAt(state.essence+result.essence);
+    if((state.totalWorldSeeds>0||state.worldSeeds>0) && afterAscendGross>beforeAscendGross){
+      result.seeds=Math.floor((afterAscendGross-beforeAscendGross)*0.10);
+    }
+    return result;
+  }
+
+  function applyOfflineRewardsInstant(rewards){
+    if(rewards.sap>0) addSap(rewards.sap);
+    if(rewards.essence>0){ state.essence+=rewards.essence; state.totalEssence+=rewards.essence; state.offlinePrestigeDebt+=rewards.essence; }
+    if(rewards.seeds>0){ state.worldSeeds+=rewards.seeds; state.totalWorldSeeds+=rewards.seeds; state.offlineAscendDebt+=rewards.seeds; }
+  }
+
+  async function showReturnOverlay(rewards){
+    const overlay=document.getElementById('return-overlay');
+    if(!overlay) return;
+    overlay.classList.add('show');
+    const continueButton=document.getElementById('return-continue');
+    continueButton.classList.add('show'); continueButton.disabled=false; continueButton.textContent='Collect and continue';
+    document.getElementById('return-offline-time').textContent=formatDuration(rewards.seconds);
+    document.getElementById('return-progress-bar').style.width='0%';
+    document.getElementById('return-note').textContent=state.settings?.offlineGain ? 'Review your rewards, then collect them.' : 'Offline gain is disabled in Settings.';
+    const badge=document.getElementById('return-harvest-badge'); if(badge) badge.textContent=harvestLabel(rewards.seconds);
+    setRewardFlow('return-sap-reward',state.sap,rewards.sap);
+    setRewardFlow('return-essence-reward',state.essence,rewards.essence);
+    setRewardFlow('return-world-reward',state.worldSeeds,rewards.seeds);
+    return new Promise(resolve=>{
+      continueButton.onclick=async()=>{
+        continueButton.disabled=true; continueButton.textContent='Collecting…';
+        await animateRewardCollection(rewards,{sap:'return-sap-reward',essence:'return-essence-reward',seeds:'return-world-reward'},'return-progress-bar','return-note');
+        state.offlinePrestigeDebt+=rewards.essence;
+        state.offlineAscendDebt+=rewards.seeds;
+        await saveImmediately();
+        overlay.classList.remove('show');
+        continueButton.classList.remove('show');
+        resolve();
+      };
+    });
+  }
+
+  async function load(){
+    setLoading('Preparing interface…',8);
+    recalcTotals(); buildSvg(); updateNodeStates(); updateStats();
+    let offlineSeconds=0, offlineSap=0, offlineEssence=0, offlineSeeds=0;
+    try{
+      setLoading('Reading save…',20);
+      const savedValue = await storageGet();
+      if(savedValue){
+        const loaded = JSON.parse(savedValue);
+        state = Object.assign({ version:11, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true}, lastUpdate: Date.now() }, loaded);
+        state.version = 11;
+        state.totalEssence = Math.max(Number(state.totalEssence)||0, Number(state.essence)||0);
+        state.essenceUpgrades = Object.assign({}, state.essenceUpgrades || {});
+        state.worldSeeds=Math.max(0,Number(state.worldSeeds)||0); state.totalWorldSeeds=Math.max(state.worldSeeds,Number(state.totalWorldSeeds)||0); state.worldUpgrades=Object.assign({},state.worldUpgrades||{});
+        state.purchased = Object.assign({seed:true}, state.purchased || {});
+        state.activeChallenge = challengeById[state.activeChallenge] ? state.activeChallenge : null;
+        state.completedChallenges = Object.assign({}, state.completedChallenges || {});
+        state.settings = Object.assign({offlineGain:true}, state.settings || {});
+        state.offlinePrestigeDebt=Math.max(0,Number(state.offlinePrestigeDebt)||0);
+        state.offlineAscendDebt=Math.max(0,Number(state.offlineAscendDebt)||0);
+
+        const elapsedMs = Math.max(0,Date.now()-(state.lastUpdate||Date.now()));
+        offlineSeconds=Math.min(elapsedMs/1000,8*3600);
+        setOfflineSummary(offlineSeconds,0,0,0);
+        setLoading(`Calculating ${formatDuration(offlineSeconds)} of offline growth…`,45);
+        const startupRewards=calculateOfflineRewards(offlineSeconds);
+        offlineSap=startupRewards.sap; offlineEssence=startupRewards.essence; offlineSeeds=startupRewards.seeds;
+        pendingStartupRewards=startupRewards;
+        setOfflineSummary(offlineSeconds,offlineSap,offlineEssence,offlineSeeds);
+      }else{
+        setLoading('Starting a new forest…',70);
+      }
+    }catch(e){
+      console.error('Load failed',e);
+      document.getElementById('loading-note').textContent='The save could not be read, so a fresh session was loaded. Your browser console may contain more details.';
+    }
+    setLoading('Rendering upgrades…',82);
+    ensureSettings(); recalcTotals(); buildSvg(); updateNodeStates(); updateStats(); updateSettingsUI();
+    state.lastUpdate=Date.now();
+    finishLoading();
+  }
+
+  load().then(() => {
+    lastTick = performance.now();
+    checkAchievements();
+    renderAchievements();
+    requestAnimationFrame(loop);
+    setInterval(save, 5000);
+  });
+
+  let tabHiddenAt=null;
+  let handlingTabReturn=false;
+  document.addEventListener('visibilitychange',async()=>{
+    if(document.hidden){
+      tabHiddenAt=Date.now();
+      await saveImmediately();
+      return;
+    }
+    if(!tabHiddenAt || handlingTabReturn) return;
+    const elapsed=Math.min((Date.now()-tabHiddenAt)/1000,8*3600);
+    tabHiddenAt=null;
+    lastTick=performance.now();
+    if(elapsed<2) return;
+    handlingTabReturn=true;
+    const rewards=calculateOfflineRewards(elapsed);
+    await showReturnOverlay(rewards);
+    state.lastUpdate=Date.now();
+    handlingTabReturn=false;
+  });
+
+  window.addEventListener('beforeunload', saveImmediately);
+</script>
+<script>
+function exportSave(){
+  const json = JSON.stringify(state);
+  const encoded = btoa(unescape(encodeURIComponent(json)));
+  navigator.clipboard.writeText(encoded).then(() => showToast('Save copied to clipboard')).catch(() => showToast('Clipboard access was blocked'));
+}
+</script></body>
+</html>
