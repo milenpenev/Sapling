@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sapling v1.7.24 — Cross-Browser itch.io Scroll Fix</title>
+<title>Sapling v1.7.25 — GitHub Pages Scroll Fix</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1066,6 +1066,74 @@
 
   body.itch-embedded .side-dashboard{
     max-height:calc(100vh - 90px)!important;
+  }
+
+
+  /* v1.7.25 reliable standalone and embedded page scrolling */
+  html{
+    height:auto!important;
+    min-height:100%!important;
+    overflow-x:hidden!important;
+    overflow-y:scroll!important;
+    scroll-behavior:smooth;
+  }
+
+  body{
+    height:auto!important;
+    min-height:100vh!important;
+    overflow-x:hidden!important;
+    overflow-y:visible!important;
+    overscroll-behavior-y:auto!important;
+    touch-action:auto!important;
+  }
+
+  .game-shell{
+    height:auto!important;
+    min-height:100vh;
+    overflow:visible!important;
+  }
+
+  .workspace,
+  .main-stage,
+  .page,
+  #tree-page{
+    height:auto!important;
+    max-height:none!important;
+    overflow-y:visible!important;
+  }
+
+  .tree-panel{
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    overscroll-behavior:auto!important;
+    touch-action:auto!important;
+  }
+
+  /* Only narrow screens need horizontal scrolling for the wide SVG tree. */
+  @media(max-width:850px){
+    .tree-panel{
+      overflow-x:auto!important;
+      overflow-y:clip!important;
+      overscroll-behavior-x:contain!important;
+      touch-action:pan-x pan-y!important;
+      -webkit-overflow-scrolling:touch;
+    }
+  }
+
+  /* Embedded itch.io version keeps its own viewport scroller. */
+  body.itch-embedded{
+    height:100vh!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+
+  body.itch-embedded .game-shell{
+    height:100vh!important;
+    min-height:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    overscroll-behavior-y:contain!important;
   }
 
 </style>
@@ -3904,6 +3972,28 @@ document.addEventListener('DOMContentLoaded',()=>{ updateEssenceBonusDisplays();
 
     if(embedded){
       document.body.classList.add('itch-embedded');
+    }
+  })();
+
+</script>
+<script>
+
+  // v1.7.25 normalize scrolling on GitHub Pages and other standalone hosts
+  (() => {
+    let embedded=false;
+    try{ embedded=window.self!==window.top; }
+    catch(error){ embedded=true; }
+
+    if(!embedded){
+      document.body.classList.remove('itch-embedded');
+      document.documentElement.style.overflowY='scroll';
+      document.body.style.overflowY='visible';
+
+      const shell=document.querySelector('.game-shell');
+      if(shell){
+        shell.style.height='auto';
+        shell.style.overflow='visible';
+      }
     }
   })();
 
