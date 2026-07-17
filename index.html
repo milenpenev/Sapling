@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sapling v1.7.25 — GitHub Pages Scroll Fix</title>
+<title>Sapling v1.7.27 — Fixed Header</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1134,6 +1134,89 @@
     overflow-x:hidden!important;
     overflow-y:auto!important;
     overscroll-behavior-y:contain!important;
+  }
+
+
+  /* v1.7.26 persistent top header */
+  .command-bar{
+    position:sticky!important;
+    top:0!important;
+    z-index:1000!important;
+    margin-top:0!important;
+    isolation:isolate;
+    box-shadow:0 10px 30px rgba(0,0,0,.42)!important;
+  }
+
+  /* Keep anchored content visible below the sticky header. */
+  .page,
+  .tree-panel,
+  .essence-page,
+  .challenge-page,
+  .statistics-page,
+  .automation-page{
+    scroll-margin-top:96px;
+  }
+
+  /* The independently scrolling itch.io shell also uses the same sticky header. */
+  body.itch-embedded .command-bar{
+    position:sticky!important;
+    top:0!important;
+  }
+
+  @media(max-width:1250px){
+    .page,
+    .tree-panel,
+    .essence-page,
+    .challenge-page,
+    .statistics-page,
+    .automation-page{
+      scroll-margin-top:150px;
+    }
+  }
+
+
+  /* v1.7.27 true fixed header */
+  :root{
+    --fixed-header-height:80px;
+  }
+
+  .game-shell{
+    padding-top:calc(var(--fixed-header-height) + 10px)!important;
+  }
+
+  .command-bar{
+    position:fixed!important;
+    top:6px!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+    width:min(calc(100% - 12px),1688px)!important;
+    max-width:1688px!important;
+    z-index:10000!important;
+    margin:0!important;
+    isolation:isolate;
+    box-shadow:0 12px 34px rgba(0,0,0,.5)!important;
+  }
+
+  body.itch-embedded .command-bar{
+    position:fixed!important;
+    top:4px!important;
+  }
+
+  body.itch-embedded .game-shell{
+    padding-top:calc(var(--fixed-header-height) + 8px)!important;
+  }
+
+  @media(max-width:1250px){
+    :root{
+      --fixed-header-height:145px;
+    }
+  }
+
+  @media(max-width:850px){
+    .command-bar{
+      top:3px!important;
+      width:calc(100% - 6px)!important;
+    }
   }
 
 </style>
@@ -3995,6 +4078,33 @@ document.addEventListener('DOMContentLoaded',()=>{ updateEssenceBonusDisplays();
         shell.style.overflow='visible';
       }
     }
+  })();
+
+</script>
+<script>
+
+  // v1.7.27 keep page content below the real fixed-header height
+  (() => {
+    const updateFixedHeaderHeight=()=>{
+      const header=document.querySelector('.command-bar');
+      if(!header) return;
+      const height=Math.ceil(header.getBoundingClientRect().height);
+      document.documentElement.style.setProperty('--fixed-header-height',`${height}px`);
+    };
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      updateFixedHeaderHeight();
+
+      const header=document.querySelector('.command-bar');
+      if(header && 'ResizeObserver' in window){
+        const observer=new ResizeObserver(updateFixedHeaderHeight);
+        observer.observe(header);
+      }
+
+      window.addEventListener('resize',updateFixedHeaderHeight,{passive:true});
+      setTimeout(updateFixedHeaderHeight,100);
+      setTimeout(updateFixedHeaderHeight,500);
+    });
   })();
 
 </script>
