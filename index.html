@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sapling v1.7.1 — Progressive Sap Tree Reveal</title>
+<title>Sapling v1.7.23 — Import Save Fix</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -344,7 +344,7 @@
   .brand-block{min-width:145px}.title{font-size:28px}.subtitle{font-size:11px}.resource-strip{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1.25fr) repeat(3,minmax(0,1fr));border:1px solid #173427;border-radius:8px;overflow:hidden;min-width:0}.resource-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-right:1px solid #173427;min-height:64px;min-width:0;overflow:hidden;background:rgba(255,255,255,.015)}.resource-item:last-child{border-right:0}.resource-icon{font-size:clamp(20px,1.7vw,25px);flex:0 0 auto}.resource-item div{display:flex;flex:1 1 auto;flex-direction:column;min-width:0;overflow:hidden}.resource-item small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#8fa398;font-size:10px;text-transform:uppercase;letter-spacing:.06em}.resource-item strong{display:block;width:100%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 clamp(15px,1.35vw,19px) 'Fraunces',serif;color:#e8b54d}.resource-item em{display:block;max-width:100%;font-style:normal;color:#6f8e7d;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sap-resource strong,.sap-resource em{color:#7cffb2}.essence-resource strong{color:#8bb9ff}.world-resource strong{color:#d9a0ff}.amber-resource strong{color:#ffb347}
   .command-actions{display:flex;gap:5px;align-items:stretch;flex-wrap:nowrap;min-width:0}.action-stack{display:flex;flex-direction:column;gap:4px;min-width:185px}.action-stack>button{width:100%;flex:1}.action-next{display:flex;align-items:center;justify-content:center;height:30px;min-height:30px;max-height:30px;padding:4px 7px;border:1px solid #243f33;border-radius:6px;background:#08120d;color:#8fa398;font-size:9px;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.action-next strong{color:#e8b54d;font-weight:600}.gather-btn,.prestige-btn,.ascend-top-btn{border-radius:7px;min-height:58px;padding:8px 14px;font:600 13px 'Inter',sans-serif;box-shadow:none}.icon-btn{border-radius:7px;width:42px;min-width:42px;height:42px;min-height:42px;padding:0;font:600 18px 'Inter',sans-serif;box-shadow:none;align-self:center;flex:0 0 42px}.gather-btn{display:flex;flex-direction:column;justify-content:center;min-width:145px}.gather-btn span{font-size:11px;font-weight:500;margin-top:3px}.prestige-btn{min-width:175px}.ascend-top-btn{border:1px solid #315243;background:#101a15;color:#9bb0a5;cursor:pointer}.icon-btn{background:#101a15;color:#d4ded8;border:1px solid #294237;font-size:18px;cursor:pointer}.icon-btn:hover,.ascend-top-btn:hover{border-color:#7cffb2;color:#7cffb2}
   .workspace{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:12px;align-items:start}.main-stage{min-width:0;background:rgba(7,16,11,.75);border:1px solid #19382b;border-radius:10px;overflow:hidden}.tab-nav{margin:0;padding:0 14px;border-bottom:1px solid #19382b;background:rgba(10,22,16,.94);gap:0}.tab-btn{border:0;border-radius:0;background:none;padding:15px 18px;border-bottom:2px solid transparent}.tab-btn.active{background:linear-gradient(180deg,rgba(124,255,178,.08),transparent);border-color:transparent;border-bottom-color:#7cffb2}.mini-open.tab-btn{padding:4px 9px;border:1px solid currentColor;border-radius:6px;font-size:10px}
-  .panel,.essence-page,.challenge-page{border:0;border-radius:0;background:linear-gradient(180deg,#08150f,#07110d);min-height:700px}.tree-panel{padding:0;overflow:auto;position:relative}.tree-watermark{position:absolute;inset:15% 20%;display:grid;place-items:center;font-size:420px;filter:grayscale(1);opacity:.025;pointer-events:none}.tree{min-width:850px;position:relative;z-index:1}.node-circle{r:24}.node-icon{font-size:21px}.node-label{font-size:11px}.node-cost{font-size:10px}.branch-path{stroke-width:4}
+  .panel,.essence-page,.challenge-page{border:0;border-radius:0;background:linear-gradient(180deg,#08150f,#07110d);min-height:700px}.tree-panel{padding:0;overflow-x:auto;overflow-y:visible;position:relative;overscroll-behavior-x:contain;overscroll-behavior-y:auto;touch-action:pan-x pan-y}.tree-watermark{position:absolute;inset:15% 20%;display:grid;place-items:center;font-size:420px;filter:grayscale(1);opacity:.025;pointer-events:none}.tree{min-width:850px;position:relative;z-index:1}.node-circle{r:24}.node-icon{font-size:21px}.node-label{font-size:11px}.node-cost{font-size:10px}.branch-path{stroke-width:4}
   .stage-footer{display:flex;justify-content:space-between;padding:9px 12px;color:#71877b;font-size:11px;border-top:1px solid #19382b;background:#08120d}
   .side-dashboard{display:grid;gap:12px;position:sticky;top:96px}.dashboard-card{border:1px solid #243f33;border-radius:9px;background:linear-gradient(180deg,rgba(16,29,22,.97),rgba(8,16,12,.97));overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18)}.dashboard-title{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;font:600 17px 'Fraunces',serif;border-bottom:1px solid #243f33}.dashboard-card p{margin:0;padding:10px 14px 0;color:#8fa398;font-size:11px}.essence-card{border-color:#244c6c}.essence-card .dashboard-title{color:#83b8ff;background:rgba(37,102,158,.09)}.challenge-card-side{border-color:#633322}.challenge-card-side .dashboard-title{color:#ff7d61;background:rgba(128,55,31,.1)}.world-card{border-color:#49316a}.world-card .dashboard-title{color:#b897ff;background:rgba(85,47,132,.11)}.amber-card{border-color:#6b4a1a}.amber-card .dashboard-title{color:#ffb347;background:rgba(180,120,30,.11)}.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px}.mini-stats span{border:1px solid #243f33;border-radius:7px;padding:8px;color:#8fa398;font-size:10px;text-transform:uppercase}.mini-stats strong{display:block;color:#e8b54d;font:600 18px 'Fraunces',serif;margin-top:3px}.mini-upgrade-list{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 14px 14px}.mini-upgrade-list span{border:1px solid #244c6c;border-radius:7px;padding:8px;font-size:10px;text-align:center;color:#b9d6f5}.challenge-dots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:12px 14px 8px}.challenge-dot{aspect-ratio:1;border:1px solid #573829;border-radius:8px;display:grid;place-items:center;font-size:20px;opacity:.55;cursor:pointer;position:relative;background:rgba(255,255,255,.018);transition:transform .14s ease,opacity .14s ease,border-color .14s ease,box-shadow .14s ease,background .14s ease}.challenge-dot:hover{transform:translateY(-2px);opacity:.9;border-color:#ff9a7e}.challenge-dot.locked{opacity:.25;cursor:not-allowed;filter:grayscale(1)}.challenge-dot.active{opacity:1;border-color:var(--gold);background:rgba(232,181,77,.12);box-shadow:0 0 14px rgba(232,181,77,.2)}.challenge-dot.active::after{content:'';position:absolute;right:4px;top:4px;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}.challenge-dot.ready{opacity:1;border-color:var(--leaf);background:rgba(124,255,178,.16);box-shadow:0 0 18px rgba(124,255,178,.38);animation:challengeReadyPulse 1.3s ease-in-out infinite}.challenge-dot.ready::after{content:'✓';position:absolute;right:3px;top:1px;color:var(--leaf);font-size:11px;font-weight:800}.challenge-dot.complete{opacity:1;border-color:#4b8266;background:rgba(124,255,178,.07);box-shadow:0 0 10px rgba(124,255,178,.12)}@keyframes challengeReadyPulse{0%,100%{box-shadow:0 0 10px rgba(124,255,178,.22)}50%{box-shadow:0 0 23px rgba(124,255,178,.58)}}.side-progress{display:flex;justify-content:space-between;padding:0 14px 14px;color:#8fa398;font-size:11px}.side-progress strong{color:#ff9a7e}.world-lock-note{margin:0 14px 14px;border:1px solid #49316a;border-radius:7px;padding:10px;text-align:center;color:#ae94dc;font-size:11px}
   .essence-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.challenge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.world-page-panel .essence-upgrade{border-color:#49316a}
@@ -551,11 +551,498 @@
     to{opacity:1;stroke-dasharray:none;}
   }
 
+
+  /* v1.7.2 contextual tutorial */
+  .tutorial-popup{position:fixed;left:18px;top:92px;width:min(370px,calc(100vw - 36px));z-index:12000;border:1px solid var(--leaf-dim);border-radius:14px;padding:15px;background:rgba(8,20,13,.97);box-shadow:0 20px 55px rgba(0,0,0,.55);transform:translateY(-10px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .24s ease,transform .24s ease,left .18s ease,top .18s ease}
+  .tutorial-popup.show{transform:translateY(0);opacity:1;visibility:visible;pointer-events:auto}
+  .tutorial-pointer{position:absolute;top:-9px;left:28px;width:16px;height:16px;background:rgba(8,20,13,.97);border-left:1px solid var(--leaf-dim);border-top:1px solid var(--leaf-dim);transform:rotate(45deg);pointer-events:none}
+  .tutorial-target{outline:2px solid var(--leaf);outline-offset:-2px;box-shadow:0 0 16px rgba(124,255,178,.35);position:relative;z-index:21}
+  .tutorial-kicker{color:var(--gold);font-size:9px;text-transform:uppercase;letter-spacing:.1em}
+  .tutorial-head{display:flex;align-items:center;gap:10px;margin:7px 0}.tutorial-icon{font-size:30px}.tutorial-head strong{font:600 20px 'Fraunces',serif;color:var(--leaf)}
+  .tutorial-popup p{margin:0;color:var(--text-dim);font-size:12px;line-height:1.55;white-space:pre-line}
+  .tutorial-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:13px}.tutorial-actions button{border-radius:8px;padding:8px 12px;font:700 11px 'Inter',sans-serif;cursor:pointer}
+  .tutorial-guide-btn{background:none;border:1px solid var(--line);color:var(--text-dim)}.tutorial-got-it{border:0;background:linear-gradient(180deg,#98ffc4,var(--leaf));color:#07110d}
+  .guide-list{display:grid;gap:8px;max-height:46vh;overflow:auto;margin-top:12px}.guide-entry{border:1px solid var(--line);border-radius:10px;padding:11px;background:rgba(255,255,255,.018);text-align:left;color:var(--text);cursor:pointer}.guide-entry:hover{border-color:var(--leaf-dim)}.guide-entry.locked{opacity:.45;cursor:not-allowed}.guide-entry strong{display:block;color:var(--leaf);font-family:'Fraunces',serif;font-size:15px}.guide-entry span{display:block;margin-top:3px;color:var(--text-dim);font-size:10px}.guide-detail{display:none;margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:13px;background:rgba(124,255,178,.035)}.guide-detail.show{display:block}.guide-detail h3{margin:0 0 6px;font:600 19px 'Fraunces',serif;color:var(--leaf)}.guide-detail p{margin:0!important;white-space:pre-line}
+  @media(max-width:600px){.tutorial-popup{left:10px!important;right:10px;top:auto!important;bottom:10px;width:auto}.tutorial-pointer{display:none}}
+
+
+
+  /* v1.7.6 vertical scroll fix */
+  #tree-page,.main-stage,.workspace{overflow-y:visible}
+  .tree-panel{max-height:none;height:auto}
+
+  /* v1.7.7 visible themes, static tree, purchase effects and expanded stats */
+  :root{--theme-accent:#7CFFB2;--theme-accent-dim:#2f5b45;--theme-bg:#0b1310;--theme-panel:#101c16}
+  body[data-theme="nature"]{--theme-accent:#7CFFB2;--theme-accent-dim:#2f5b45;--theme-bg:#0b1310}
+  body[data-theme="autumn"]{--theme-accent:#ffb05c;--theme-accent-dim:#6f4528;--theme-bg:#17100b}
+  body[data-theme="winter"]{--theme-accent:#9ed8ff;--theme-accent-dim:#31536b;--theme-bg:#09131b}
+  body[data-theme="amber"]{--theme-accent:#ffd06b;--theme-accent-dim:#6b4a1a;--theme-bg:#151006}
+  body[data-theme="world"]{--theme-accent:#d9a0ff;--theme-accent-dim:#49316a;--theme-bg:#100a17}
+  body[data-theme]{background:radial-gradient(circle at 50% -10%,color-mix(in srgb,var(--theme-accent) 17%,#183527) 0,var(--theme-bg) 52%,#040906 100%)}
+  body[data-theme] .tab-btn.active{border-bottom-color:var(--theme-accent);color:var(--theme-accent)}
+  body[data-theme] .gather-btn{background:linear-gradient(180deg,color-mix(in srgb,var(--theme-accent) 75%,white),var(--theme-accent))}
+  .theme-picker{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
+  .theme-choice{border:1px solid var(--line);border-radius:8px;background:#0b1510;color:var(--text-dim);padding:9px 6px;cursor:pointer;font:600 11px 'Inter',sans-serif}
+  .theme-choice.active{border-color:var(--theme-accent);color:var(--theme-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--theme-accent) 14%,transparent) inset}
+  .theme-choice:disabled{opacity:.35;cursor:not-allowed}
+  .theme-picker-note{margin:9px 0 0!important;font-size:10px!important;color:var(--text-dim)!important}
+  .node-purchase-flash{pointer-events:none;animation:nodePurchaseFlash .65s ease-out both}
+  @keyframes nodePurchaseFlash{0%{filter:drop-shadow(0 0 0 rgba(124,255,178,0));transform:scale(.88)}45%{filter:drop-shadow(0 0 18px var(--theme-accent));transform:scale(1.12)}100%{filter:drop-shadow(0 0 0 rgba(124,255,178,0));transform:scale(1)}}
+  .branch-energy{stroke-dasharray:10 7;animation:branchEnergy .75s linear both}
+  @keyframes branchEnergy{from{stroke-dashoffset:36;filter:drop-shadow(0 0 7px var(--theme-accent))}to{stroke-dashoffset:0;filter:none}}
+  @media(prefers-reduced-motion:reduce){.node-purchase-flash,.branch-energy{animation:none}}
+  @media(max-width:700px){.theme-picker{grid-template-columns:repeat(2,1fr)}}
+
+
+
+  /* v1.7.8 definitive Sap Tree scroll fix
+     Avoid mixing overflow-x:auto with overflow-y:visible: CSS computes the
+     visible axis as auto, creating an unwanted nested vertical scroller. */
+  .tree-panel{
+    overflow:visible!important;
+    overscroll-behavior:auto!important;
+    touch-action:auto!important;
+    max-height:none!important;
+    height:auto!important;
+  }
+  @media(max-width:850px){
+    .tree-panel{
+      overflow-x:auto!important;
+      overflow-y:hidden!important;
+      overscroll-behavior-x:contain!important;
+      overscroll-behavior-y:auto!important;
+      touch-action:pan-x pan-y!important;
+      -webkit-overflow-scrolling:touch;
+    }
+  }
+
+
+  /* v1.7.11 fail-safe offline reward controls */
+  .offline-close-btn{position:absolute;top:10px;right:12px;width:34px;height:34px;border:1px solid var(--line);border-radius:9px;background:#0d1713;color:var(--text-dim);font:700 20px/1 Inter,sans-serif;cursor:pointer;z-index:3}
+  .offline-close-btn:hover{border-color:var(--leaf);color:var(--leaf);background:rgba(124,255,178,.07)}
+  .loading-card,.return-card{position:relative}
+
+
+  /* v1.7.12 compact Gather Sap button and wider resource strip */
+  @media (min-width:1251px){
+    .command-bar{
+      grid-template-columns:auto minmax(610px,1fr) auto;
+      gap:10px;
+    }
+    .command-actions{
+      gap:4px;
+    }
+    .gather-btn{
+      min-width:102px!important;
+      width:102px;
+      min-height:48px!important;
+      height:48px;
+      padding:6px 9px!important;
+      font-size:11px!important;
+      line-height:1.1;
+      flex:0 0 102px;
+      align-self:center;
+    }
+    .gather-btn span{
+      margin-top:2px!important;
+      font-size:9px!important;
+    }
+    .action-stack{
+      min-width:150px;
+    }
+    .prestige-btn{
+      min-width:150px;
+    }
+    .resource-strip{
+      grid-template-columns:minmax(0,1.35fr) minmax(0,1.35fr) repeat(3,minmax(0,1fr));
+    }
+  }
+
+  @media (max-width:1450px) and (min-width:1251px){
+    .command-bar{
+      grid-template-columns:auto minmax(560px,1fr) auto;
+    }
+    .gather-btn{
+      min-width:92px!important;
+      width:92px;
+      flex-basis:92px;
+      padding-inline:7px!important;
+      font-size:10px!important;
+    }
+    .action-stack{
+      min-width:142px;
+    }
+    .prestige-btn{
+      min-width:142px;
+    }
+  }
+
+  @media (max-width:850px){
+    .gather-btn{
+      min-height:46px!important;
+      padding:7px 10px!important;
+      font-size:12px!important;
+    }
+  }
+
+
+  /* v1.7.13 clean command bar layout */
+  @media (min-width:1251px){
+    .command-bar{
+      grid-template-columns:auto minmax(620px,1fr) auto!important;
+      gap:14px!important;
+      align-items:center;
+    }
+    .brand-block{display:block!important;min-width:145px}
+    .resource-strip{
+      min-width:0;
+      grid-template-columns:minmax(150px,1.28fr) minmax(150px,1.28fr)
+                            repeat(3,minmax(125px,1fr))!important;
+    }
+    .command-actions{
+      display:grid!important;
+      grid-template-columns:150px 230px 260px repeat(4,42px);
+      align-items:center!important;
+      gap:6px!important;
+      min-width:0;
+    }
+    .command-actions .gather-btn{
+      width:150px!important;
+      min-width:150px!important;
+      height:58px!important;
+      min-height:58px!important;
+      padding:8px 12px!important;
+      font-size:13px!important;
+      line-height:1.15!important;
+      align-self:start!important;
+      overflow:hidden;
+    }
+    .command-actions .gather-btn span{
+      display:block;
+      max-width:100%;
+      margin-top:4px!important;
+      font-size:10px!important;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .command-actions .action-stack{
+      width:100%;
+      min-width:0!important;
+      height:92px;
+    }
+    .command-actions .action-stack > button{
+      min-width:0!important;
+      min-height:58px!important;
+      height:58px;
+      padding:8px 10px!important;
+      white-space:normal;
+      line-height:1.25;
+    }
+    .command-actions .action-next{
+      width:100%;
+      min-width:0;
+      height:28px;
+      min-height:28px;
+      max-height:28px;
+      padding:4px 7px;
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+    .command-actions .icon-btn,
+    .command-actions .support-icon-btn{
+      width:42px!important;
+      min-width:42px!important;
+      height:42px!important;
+      min-height:42px!important;
+      flex-basis:42px!important;
+      align-self:start!important;
+      margin-top:8px;
+    }
+  }
+
+  @media (max-width:1750px) and (min-width:1251px){
+    .command-bar{
+      grid-template-columns:1fr!important;
+    }
+    .command-actions{
+      grid-template-columns:150px minmax(210px,1fr) minmax(230px,1.15fr) repeat(4,42px);
+      width:100%;
+    }
+    .resource-strip{
+      width:100%;
+    }
+  }
+
+  @media (max-width:1050px){
+    .command-actions .gather-btn span{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+  }
+
+
+  /* v1.7.15 compact single-row header with inline branding */
+  .brand-block{display:none!important}
+
+  @media (min-width:1251px){
+    .game-shell{padding:6px}
+    .command-bar{
+      grid-template-columns:minmax(0,1fr) auto!important;
+      gap:8px!important;
+      padding:6px 8px!important;
+      margin-bottom:7px!important;
+      align-items:center!important;
+    }
+    .resource-strip{
+      grid-template-columns:
+        minmax(128px,.9fr)
+        minmax(118px,1fr)
+        minmax(128px,1.08fr)
+        repeat(3,minmax(100px,.86fr))!important;
+      min-height:54px;
+    }
+    .resource-item{
+      min-height:54px!important;
+      padding:5px 8px!important;
+      gap:6px!important;
+    }
+    .brand-resource{
+      padding-left:11px!important;
+      background:linear-gradient(135deg,rgba(124,255,178,.055),rgba(255,255,255,.012));
+    }
+    .brand-resource div{
+      justify-content:center;
+      overflow:visible;
+    }
+    .brand-inline-title{
+      color:var(--text)!important;
+      font:600 21px 'Fraunces',serif!important;
+      letter-spacing:-.015em;
+      text-overflow:clip!important;
+      overflow:visible!important;
+    }
+    .brand-inline-title .dot{color:var(--theme-accent,var(--leaf))}
+    .brand-inline-subtitle{
+      color:var(--text-dim)!important;
+      font-size:8px!important;
+      letter-spacing:.015em;
+      line-height:1.2;
+    }
+    .resource-icon{font-size:19px!important}
+    .resource-item small{font-size:8px!important}
+    .resource-item strong{font-size:16px!important;line-height:1.1}
+    .resource-item em{font-size:8px!important;line-height:1.15}
+
+    .command-actions{
+      grid-template-columns:126px 186px 210px repeat(4,36px)!important;
+      gap:4px!important;
+      align-items:center!important;
+    }
+    .command-actions .gather-btn{
+      width:126px!important;
+      min-width:126px!important;
+      height:48px!important;
+      min-height:48px!important;
+      padding:5px 8px!important;
+      font-size:11px!important;
+      border-radius:7px!important;
+    }
+    .command-actions .gather-btn span{margin-top:2px!important;font-size:8px!important}
+    .command-actions .action-stack{height:76px!important;gap:3px!important}
+    .command-actions .action-stack>button{
+      height:48px!important;
+      min-height:48px!important;
+      padding:5px 8px!important;
+      font-size:11px!important;
+      line-height:1.15!important;
+    }
+    .command-actions .action-next{
+      height:25px!important;
+      min-height:25px!important;
+      max-height:25px!important;
+      padding:3px 5px!important;
+      font-size:8px!important;
+    }
+    .command-actions .icon-btn,
+    .command-actions .support-icon-btn{
+      width:36px!important;
+      min-width:36px!important;
+      height:36px!important;
+      min-height:36px!important;
+      flex-basis:36px!important;
+      font-size:15px!important;
+      margin-top:5px!important;
+    }
+    .side-dashboard{top:78px!important}
+  }
+
+  @media (max-width:1700px) and (min-width:1251px){
+    .command-bar{grid-template-columns:1fr!important}
+    .command-actions{
+      width:100%;
+      grid-template-columns:126px minmax(175px,1fr) minmax(195px,1.12fr) repeat(4,36px)!important;
+    }
+  }
+
+  @media (max-width:1250px){
+    .brand-resource{grid-column:1/-1;min-height:48px!important}
+    .brand-inline-title{font-size:20px!important}
+    .brand-inline-subtitle{font-size:9px!important}
+  }
+
+  @media (max-width:850px){
+    .resource-strip{grid-template-columns:repeat(2,1fr)!important}
+    .brand-resource{grid-column:1/-1}
+  }
+
+
+  /* v1.7.16 independent side dashboard scroll + hide option */
+  @media (min-width:1251px){
+    .workspace{
+      align-items:start!important;
+    }
+    .side-dashboard{
+      position:sticky!important;
+      top:78px!important;
+      max-height:calc(100vh - 90px)!important;
+      overflow-y:auto!important;
+      overflow-x:hidden!important;
+      padding-right:4px;
+      overscroll-behavior:contain;
+      scrollbar-gutter:stable;
+    }
+    .side-dashboard::-webkit-scrollbar{width:8px}
+    .side-dashboard::-webkit-scrollbar-track{background:#08120d;border-radius:999px}
+    .side-dashboard::-webkit-scrollbar-thumb{background:#294237;border-radius:999px}
+    .side-dashboard::-webkit-scrollbar-thumb:hover{background:#3b5f4d}
+
+    body.sidebar-hidden .workspace{
+      grid-template-columns:minmax(0,1fr)!important;
+    }
+    body.sidebar-hidden .side-dashboard{
+      display:none!important;
+    }
+  }
+
+  .settings-toggle-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-top:12px;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:rgba(255,255,255,.018);
+  }
+  .settings-toggle-row>div{min-width:0}
+  .settings-toggle-row strong{
+    display:block;
+    color:var(--text);
+    font-size:12px;
+  }
+  .settings-toggle-row span{
+    display:block;
+    margin-top:3px;
+    color:var(--text-dim);
+    font-size:10px;
+    line-height:1.35;
+  }
+  .settings-switch{
+    flex:0 0 auto;
+    min-width:72px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 10px;
+    background:#101a15;
+    color:var(--text-dim);
+    font:700 11px 'Inter',sans-serif;
+    cursor:pointer;
+  }
+  .settings-switch.on{
+    border-color:var(--leaf);
+    color:var(--leaf);
+    background:rgba(124,255,178,.09);
+  }
+
+
+  /* v1.7.17 clearer Essence bonus and purchase requirements */
+  .essence-balance-detailed small{display:block;margin-top:4px;color:var(--text-dim);font-size:9px;line-height:1.25}
+  .essence-balance-detailed #essence-production-bonus{color:var(--leaf);font-weight:600}
+  .essence-upgrade .purchase-reason{min-height:14px;font-size:10px;color:var(--gold)}
+  .essence-upgrade.locked .purchase-reason{color:var(--text-dim)}
+  .essence-buy.can-afford{box-shadow:0 0 0 2px rgba(232,181,77,.12) inset}
+
+
+  /* v1.7.18 settings row alignment */
+  .prestige-preview .settings-switch{
+    min-width:92px;
+    padding:6px 10px;
+  }
+
+
+  /* v1.7.20 first Sap onboarding */
+  #gather-btn.tutorial-target{
+    outline:3px solid var(--leaf);
+    outline-offset:3px;
+    box-shadow:0 0 0 5px rgba(124,255,178,.13),0 0 24px rgba(124,255,178,.6)!important;
+    animation:firstSapTutorialPulse 1.25s ease-in-out infinite;
+    position:relative;
+    z-index:22;
+  }
+  @keyframes firstSapTutorialPulse{
+    0%,100%{filter:brightness(1);transform:translateY(0)}
+    50%{filter:brightness(1.12);transform:translateY(-2px)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #gather-btn.tutorial-target{animation:none}
+  }
+
+
+  /* v1.7.21 itch.io iframe scrolling */
+  html{
+    min-height:100%;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    scrollbar-gutter:stable;
+  }
+  body{
+    min-height:100vh;
+    overflow-x:hidden!important;
+    overflow-y:visible;
+    overscroll-behavior-y:contain;
+  }
+  body.itch-embedded{
+    min-height:calc(100vh + 1px);
+  }
+  body.itch-embedded .game-shell{
+    min-height:100vh;
+  }
+
+
+  /* v1.7.22 Firefox click stability */
+  button,
+  [role="button"],
+  .tab-btn,
+  .challenge-dot,
+  .node[data-clickable="true"]{
+    touch-action:manipulation;
+  }
+  button{
+    -moz-user-select:none;
+    user-select:none;
+  }
+
 </style>
 </head>
 <body>
 <div class="loading-screen" id="loading-screen">
   <div class="loading-card">
+    <button class="offline-close-btn" id="loading-close" type="button" aria-label="Collect rewards and close">×</button>
     <div class="loading-logo">Sapling<span>.</span></div>
     <div class="loading-subtitle">Restoring the forest and calculating offline growth</div>
     <div class="loading-status"><span id="loading-step">Reading save…</span><strong id="offline-time-label">Offline: 0s</strong></div>
@@ -566,12 +1053,13 @@
       <div class="offline-reward world"><small>Offline World Seeds</small><strong class="reward-flow" id="offline-world-reward"><span class="before">0</span><span class="arrow">→</span><span class="after">0</span><span class="gain">(+0)</span></strong></div>
     </div>
     <div class="harvest-badge" id="loading-harvest-badge">Fresh growth</div><p class="loading-note" id="loading-note">Offline Sap is granted at full passive rate. Previously unlocked reset currencies receive a reduced 20% / 10% conversion from newly reached offline thresholds, without double-counting your next reset.</p>
-    <button class="loading-continue" id="loading-continue">Collect and enter</button>
+    <button class="loading-continue" id="loading-continue">Collect &amp; Close</button>
   </div>
 </div>
 
 <div class="return-overlay" id="return-overlay" aria-live="polite">
   <div class="return-card">
+    <button class="offline-close-btn" id="return-close" type="button" aria-label="Collect rewards and close">×</button>
     <div class="return-title">Welcome <span>back</span></div>
     <div class="return-time">Tab inactive for <strong id="return-offline-time">0s</strong></div>
     <div class="offline-summary">
@@ -581,20 +1069,22 @@
     </div>
     <div class="harvest-badge" id="return-harvest-badge">Fresh growth</div><div class="return-progress"><div id="return-progress-bar"></div></div>
     <p class="return-note" id="return-note">Applying offline progress…</p>
-    <button class="return-continue" id="return-continue">Collect and continue</button>
+    <button class="return-continue" id="return-continue">Collect &amp; Close</button>
   </div>
 </div>
 
 <div class="game-shell">
   <header class="command-bar">
-    <div class="brand-block">
-      <div class="title">Sapling<span class="dot">.</span></div>
-      <div class="subtitle">from seed to world tree</div>
-    </div>
-    <div class="resource-strip">
+<div class="resource-strip">
+      <div class="resource-item brand-resource">
+        <div>
+          <strong class="brand-inline-title">Sapling<span class="dot">.</span></strong>
+          <em class="brand-inline-subtitle">from seed to world tree</em>
+        </div>
+      </div>
       <div class="resource-item sap-resource"><span class="resource-icon">💧</span><div><small>Sap</small><strong id="stat-sap">0</strong><em id="stat-rate">0/s</em></div></div>
       <div class="resource-item"><span class="resource-icon">🖐️</span><div><small>Sap / Click</small><strong id="stat-click">1</strong><em>manual harvest</em></div></div>
-      <div class="resource-item essence-resource"><span class="resource-icon">💠</span><div><small>Tree Essence</small><strong id="stat-essence">0</strong><em title="Each Tree Essence earned gives +5% Sap production">+5% per Essence</em></div></div>
+      <div class="resource-item essence-resource"><span class="resource-icon">💠</span><div><small>Tree Essence</small><strong id="stat-essence">0</strong><em id="stat-essence-bonus" title="Lifetime Tree Essence increases passive Sap production by 5% each">×1.00 production</em></div></div>
       <div class="resource-item world-resource"><span class="resource-icon">🌰</span><div><small>World Seeds</small><strong id="stat-world-seeds">0</strong><em>highest layer</em></div></div>
       <div class="resource-item amber-resource"><span class="resource-icon">🟠</span><div><small>Amber</small><strong id="stat-amber">0</strong><em>from milestones &amp; ascension</em></div></div>
     </div>
@@ -649,7 +1139,12 @@
                   <option value="price-desc">Price: high to low</option>
                 </select>
               </label>
-              <div class="essence-balance"><span>Available Essence</span><strong id="essence-page-balance">0</strong></div>
+              <div class="essence-balance essence-balance-detailed">
+                <span>Available Essence</span>
+                <strong id="essence-page-balance">0</strong>
+                <small id="essence-lifetime-display">0 lifetime Essence</small>
+                <small id="essence-production-bonus">×1.00 passive Sap</small>
+              </div>
             </div>
           </div>
           <div class="auto-buy-bar" id="auto-buy-bar"><div><strong>Automatic Growth</strong><span id="auto-buy-status">Locked — purchase Root Reflexes</span></div><button class="reset-btn" id="auto-buy-toggle" disabled>Auto-buy: OFF</button></div>
@@ -728,6 +1223,11 @@
               <div class="stat-row"><span>Manual gathers</span><strong id="stats-clicks">0</strong></div>
               <div class="stat-row"><span>Sap Tree upgrades bought</span><strong id="stats-sap-upgrades">0</strong></div>
               <div class="stat-row"><span>Essence upgrades bought</span><strong id="stats-essence-upgrades">0</strong></div>
+              <div class="stat-row"><span>Fastest Prestige</span><strong id="stats-fastest-prestige">—</strong></div>
+              <div class="stat-row"><span>Fastest Ascension</span><strong id="stats-fastest-ascend">—</strong></div>
+              <div class="stat-row"><span>Challenges mastered</span><strong id="stats-challenges-mastered">0 / 8</strong></div>
+              <div class="stat-row"><span>Challenge levels completed</span><strong id="stats-challenge-levels">0 / 40</strong></div>
+              <div class="stat-row"><span>Tree evolutions reached</span><strong id="stats-tree-evolutions">1 / 6</strong></div>
               <div class="stat-row"><span>World upgrades bought</span><strong id="stats-world-upgrades">0</strong></div>
               <div class="stat-row"><span>Challenges completed</span><strong id="stats-challenges">0 / 8</strong></div>
               <div class="stat-row"><span>Achievements completed</span><strong id="stats-achievements">0 / 130</strong></div>
@@ -834,7 +1334,17 @@
       <div class="preview-row"><span>Offline sap gain</span><button class="reset-btn" id="offline-gain-toggle">Offline gain: ON</button></div>
       <div class="preview-row"><span>Prestige confirmation</span><button class="reset-btn" id="prestige-confirm-toggle">Confirmation: ON</button></div>
       <div class="preview-row"><span>World Tree confirmation</span><button class="reset-btn" id="ascend-confirm-toggle">Confirmation: ON</button></div>
+      <div class="preview-row"><span>Forest Guide</span><button class="reset-btn" id="forest-guide-open">Open guide</button></div>
+      <div class="preview-row">
+        <span>Right dashboard</span>
+        <button type="button" class="reset-btn settings-switch on" id="sidebar-visibility-toggle">Shown</button>
+      </div>
       <div class="preview-row"><span>Offline progress cap</span><strong id="offline-cap-display">8 hours</strong></div>
+    </div>
+    <div class="prestige-preview" aria-labelledby="theme-picker-title">
+      <div class="preview-row"><span id="theme-picker-title">Cosmetic theme</span><strong>Visual only</strong></div>
+      <div class="theme-picker" id="theme-picker"></div>
+      <p class="theme-picker-note">Additional themes unlock through total Essence, World Seeds and Amber earned.</p>
     </div>
     <p id="offline-gain-note">When enabled, passive sap production is calculated when you return.</p>
     <section class="support-panel" aria-labelledby="support-title">
@@ -842,10 +1352,29 @@
       <p>Sapling is free to play. If you enjoy the game and would like to support future updates, you can buy me a coffee. Thank you! ❤️</p>
       <a class="support-link" href="https://ko-fi.com/milenpenev" target="_blank" rel="noopener noreferrer">☕ Support on Ko-fi</a>
     </section>
-    <div class="modal-actions">
+<div class="modal-actions">
       <button type="button" class="cancel-btn" id="settings-close">Close</button>
       <button type="button" class="reset-btn" id="settings-reset">Reset save</button>
     </div>
+  </div>
+</div>
+
+
+<div class="tutorial-popup" id="tutorial-popup" role="dialog" aria-live="polite" aria-labelledby="tutorial-title">
+  <span class="tutorial-pointer" id="tutorial-pointer" aria-hidden="true"></span>
+  <div class="tutorial-kicker">New feature unlocked</div>
+  <div class="tutorial-head"><span class="tutorial-icon" id="tutorial-icon">🌱</span><strong id="tutorial-title">Sap Tree</strong></div>
+  <p id="tutorial-text"></p>
+  <div class="tutorial-actions"><button type="button" class="tutorial-guide-btn" id="tutorial-open-guide">Forest Guide</button><button type="button" class="tutorial-got-it" id="tutorial-got-it">Got it</button></div>
+</div>
+
+<div class="modal-backdrop" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+  <div class="modal">
+    <h2 id="guide-title">📖 Forest Guide</h2>
+    <p>Review the systems you have discovered so far.</p>
+    <div class="guide-list" id="guide-list"></div>
+    <div class="guide-detail" id="guide-detail"><h3 id="guide-detail-title"></h3><p id="guide-detail-text"></p></div>
+    <div class="modal-actions"><button type="button" class="cancel-btn" id="guide-close">Close</button></div>
   </div>
 </div>
 
@@ -1209,11 +1738,80 @@
   ];
   const achievementById=Object.fromEntries(ACHIEVEMENTS.map(a=>[a.id,a]));
   function achievementRewardText(r){const parts=[];if(r.prod)parts.push('×'+r.prod.toFixed(2)+' production');if(r.click)parts.push('×'+r.click.toFixed(2)+' gathering');if(r.essence)parts.push('×'+r.essence.toFixed(2)+' Essence gain');if(r.world)parts.push('×'+r.world.toFixed(2)+' World Seed gain');return parts.join(' • ')}
+  function validAchievementIds(){ return new Set(ACHIEVEMENTS.map(a=>a.id)); }
+  function sanitizeAchievements(){
+    const valid=validAchievementIds();
+    const cleaned={};
+    for(const [id,value] of Object.entries(state.achievements||{})) if(valid.has(id)) cleaned[id]=value;
+    state.achievements=cleaned;
+    return Object.keys(cleaned).length;
+  }
+  function unlockedAchievementCount(){
+    const valid=validAchievementIds();
+    return Object.keys(state.achievements||{}).filter(id=>valid.has(id)).length;
+  }
   function achievementBonuses(){let prod=1,click=1,essence=1,world=1;for(const id of Object.keys(state.achievements||{})){const r=achievementById[id]?.reward||{};prod*=r.prod||1;click*=r.click||1;essence*=r.essence||1;world*=r.world||1}return{prod,click,essence,world}}
   let achievementPopupTimer;
   function showAchievementPopup(a){const el=document.getElementById('achievement-popup');if(!el)return;el.querySelector('strong').textContent=a.icon+' '+a.name;el.querySelector('span').textContent=achievementRewardText(a.reward);el.classList.add('show');clearTimeout(achievementPopupTimer);achievementPopupTimer=setTimeout(()=>el.classList.remove('show'),4200)}
-  function checkAchievements(){state.achievements=state.achievements||{};let changed=false;let ambered=0;for(const a of ACHIEVEMENTS){if(state.achievements[a.id])continue;let ok=false;try{ok=!!a.check()}catch(e){}if(ok){state.achievements[a.id]=Date.now();changed=true;ambered+=0.1;showAchievementPopup(a)}}if(changed){grantAmber(ambered,'Achievements');renderAchievements();renderAmberUpgrades();recalcTotals();save()}}
-  function renderAchievements(){const root=document.getElementById('achievement-list');if(!root)return;const unlocked=Object.keys(state.achievements||{}).length;document.getElementById('achievement-page-count').textContent=unlocked+' / '+ACHIEVEMENTS.length;document.getElementById('achievement-unlocked').textContent=unlocked;document.getElementById('achievement-percent').textContent=Math.floor(unlocked/ACHIEVEMENTS.length*100)+'%';document.getElementById('achievement-progress-fill').style.width=(unlocked/ACHIEVEMENTS.length*100)+'%';const b=achievementBonuses();document.getElementById('achievement-bonus').textContent='×'+b.prod.toFixed(2);root.innerHTML='';for(const category of [...new Set(ACHIEVEMENTS.map(a=>a.category))]){const h=document.createElement('h3');h.className='achievement-category';h.textContent=category;root.appendChild(h);const grid=document.createElement('div');grid.className='achievement-grid';for(const a of ACHIEVEMENTS.filter(x=>x.category===category)){const unlockedNow=!!state.achievements?.[a.id];const card=document.createElement('article');card.className='achievement-card'+(unlockedNow?' unlocked':'');card.innerHTML=`<div class="achievement-icon">${unlockedNow?a.icon:'🔒'}</div><div><h3>${a.name}</h3><p>${a.desc}</p><div class="achievement-reward">${unlockedNow?'Unlocked • ':'Reward: '}${achievementRewardText(a.reward)}</div></div>`;grid.appendChild(card)}root.appendChild(grid)}}
+  function checkAchievements(){
+    state.achievements=state.achievements||{};
+    let changed=false;
+    let ambered=0;
+    const unlockedNow=[];
+
+    for(const a of ACHIEVEMENTS){
+      if(state.achievements[a.id]) continue;
+
+      let ok=false;
+      try{
+        ok=!!a.check();
+      }catch(error){
+        console.warn(`Achievement check failed: ${a.id}`,error);
+        continue;
+      }
+
+      if(!ok) continue;
+
+      state.achievements[a.id]=Date.now();
+      changed=true;
+      ambered+=0.1;
+      unlockedNow.push(a);
+
+      try{ showAchievementPopup(a); }
+      catch(error){ console.warn(`Achievement popup failed: ${a.id}`,error); }
+    }
+
+    if(!changed) return false;
+
+    // Persist the unlocked achievements before optional reward/UI work,
+    // so a rendering problem can never lose the unlock.
+    try{ save(); }
+    catch(error){ console.warn('Achievement save failed',error); }
+
+    try{
+      if(ambered>0) grantAmber(ambered,'Achievements');
+    }catch(error){
+      console.warn('Achievement Amber reward failed',error);
+    }
+
+    try{ recalcTotals(); }
+    catch(error){ console.warn('Achievement total recalculation failed',error); }
+
+    try{ renderAchievements(); }
+    catch(error){ console.warn('Achievement render failed',error); }
+
+    try{ renderAmberUpgrades(); }
+    catch(error){ console.warn('Amber render after achievement failed',error); }
+
+    try{ updateStats(); }
+    catch(error){ console.warn('Statistics refresh after achievement failed',error); }
+
+    try{ save(); }
+    catch(error){ console.warn('Final achievement save failed',error); }
+
+    return true;
+  }
+  function renderAchievements(){const root=document.getElementById('achievement-list');if(!root)return;const unlocked=unlockedAchievementCount();document.getElementById('achievement-page-count').textContent=unlocked+' / '+ACHIEVEMENTS.length;document.getElementById('achievement-unlocked').textContent=unlocked;document.getElementById('achievement-percent').textContent=Math.floor(unlocked/ACHIEVEMENTS.length*100)+'%';document.getElementById('achievement-progress-fill').style.width=(unlocked/ACHIEVEMENTS.length*100)+'%';const b=achievementBonuses();document.getElementById('achievement-bonus').textContent='×'+b.prod.toFixed(2);root.innerHTML='';for(const category of [...new Set(ACHIEVEMENTS.map(a=>a.category))]){const h=document.createElement('h3');h.className='achievement-category';h.textContent=category;root.appendChild(h);const grid=document.createElement('div');grid.className='achievement-grid';for(const a of ACHIEVEMENTS.filter(x=>x.category===category)){const unlockedNow=!!state.achievements?.[a.id];const card=document.createElement('article');card.className='achievement-card'+(unlockedNow?' unlocked':'');card.innerHTML=`<div class="achievement-icon">${unlockedNow?a.icon:'🔒'}</div><div><h3>${a.name}</h3><p>${a.desc}</p><div class="achievement-reward">${unlockedNow?'Unlocked • ':'Reward: '}${achievementRewardText(a.reward)}</div></div>`;grid.appendChild(card)}root.appendChild(grid)}}
 
 
 
@@ -1384,6 +1982,29 @@
   }
   function activeChallenge(){ return state.activeChallenge ? challengeById[state.activeChallenge] : null; }
 
+  
+  function updateEssenceBonusDisplays(){
+    const lifetimeEssence=Math.max(0,Number(state.totalEssence)||0);
+    const productionMultiplier=1+lifetimeEssence*ESSENCE_BONUS_PER;
+    const stripBonus=document.getElementById('stat-essence-bonus');
+    if(stripBonus){
+      stripBonus.textContent=`×${productionMultiplier.toFixed(2)} production`;
+      stripBonus.title=`${fmt(lifetimeEssence)} lifetime Essence = ${Math.round((productionMultiplier-1)*100)}% passive Sap bonus`;
+    }
+    const lifetimeDisplay=document.getElementById('essence-lifetime-display');
+    if(lifetimeDisplay) lifetimeDisplay.textContent=`${fmt(lifetimeEssence)} lifetime Essence`;
+    const productionBonus=document.getElementById('essence-production-bonus');
+    if(productionBonus) productionBonus.textContent=`×${productionMultiplier.toFixed(2)} passive Sap (${Math.round((productionMultiplier-1)*100)}% bonus)`;
+  }
+
+  function scrollToGameTop(){
+    requestAnimationFrame(()=>{
+      window.scrollTo({top:0,left:0,behavior:'smooth'});
+      const side=document.querySelector('.side-dashboard');
+      if(side) side.scrollTop=0;
+    });
+  }
+
   function prestigeMultiplier(){ return 1 + state.totalEssence * ESSENCE_BONUS_PER; }
   function currentRate(){
     const rewards=challengeRewardTotals();
@@ -1494,9 +2115,13 @@
     buildSvg();
     updateNodeStates();
     updateStats();
+    updateEssenceBonusDisplays();
+    renderEssenceUpgrades();
     closePrestigeModal();
-    showToast(`The tree awakened — gained ${fmt(gain)} Tree Essence.`);
+    showToast(`The tree awakened — gained ${fmt(gain)} Tree Essence. Lifetime production is now ×${prestigeMultiplier().toFixed(2)}.`);
     save();
+    checkAchievements();
+    scrollToGameTop();
   }
 
   function getPrestigeStartingPurchases(){
@@ -1517,27 +2142,63 @@
     state.essenceUpgrades[id]=true;
     if(u.effect?.type==='unlock_challenges') state.challengeUnlocked=true;
     state.stats=state.stats||{}; state.stats.essenceUpgradesBought=(state.stats.essenceUpgradesBought||0)+1;
-    recalcTotals(); renderEssenceUpgrades(); updateStats(); save();
+    recalcTotals(); renderEssenceUpgrades(); updateStats(); updateEssenceBonusDisplays(); save();
     showToast(`Purchased ${u.name}.`);
+    checkAchievements();
   }
   function renderEssenceUpgrades(){
     const grid=document.getElementById('essence-grid');
     if(!grid) return;
-    document.getElementById('essence-page-balance').textContent=fmt(state.essence);
-    const essenceSort=document.getElementById('essence-sort-select'); if(essenceSort) essenceSort.value=state.settings?.essenceSort||'default';
+
+    const availableEssence=Math.max(0,Number(state.essence)||0);
+    updateEssenceBonusDisplays();
+
+    const balance=document.getElementById('essence-page-balance');
+    if(balance) balance.textContent=fmt(availableEssence);
+
+    const essenceSort=document.getElementById('essence-sort-select');
+    if(essenceSort) essenceSort.value=state.settings?.essenceSort||'default';
+
     updateAutoBuyUI();
     grid.innerHTML='';
+
     const sortMode=state.settings?.essenceSort||'default';
     const upgrades=ESSENCE_UPGRADES.map((u,index)=>({...u,_defaultIndex:index}));
     if(sortMode==='price-asc') upgrades.sort((a,b)=>a.cost-b.cost||a._defaultIndex-b._defaultIndex);
     if(sortMode==='price-desc') upgrades.sort((a,b)=>b.cost-a.cost||a._defaultIndex-b._defaultIndex);
+
     for(const u of upgrades){
       const bought=!!state.essenceUpgrades[u.id];
-      const unlocked=!u.requires || state.essenceUpgrades[u.requires];
+      const prerequisiteMet=!u.requires || !!state.essenceUpgrades[u.requires];
+      const affordable=availableEssence>=u.cost;
+      const canBuy=!bought && prerequisiteMet && affordable;
+
+      let requirementText='Available immediately';
+      let purchaseReason='';
+
+      if(bought){
+        requirementText='Purchased';
+      }else if(!prerequisiteMet){
+        const requiredUpgrade=essenceUpgradeById[u.requires];
+        requirementText=`Requires: ${requiredUpgrade?.name||'previous upgrade'}`;
+        purchaseReason='Unlock the prerequisite first.';
+      }else if(!affordable){
+        purchaseReason=`Need ${fmt(u.cost-availableEssence)} more available Essence.`;
+      }else{
+        purchaseReason='Ready to purchase.';
+      }
+
       const card=document.createElement('article');
-      card.className='essence-upgrade'+(bought?' purchased':(!unlocked?' locked':''));
-      const req=u.requires?`Requires: ${essenceUpgradeById[u.requires].name}`:'Available immediately';
-      card.innerHTML=`<h3>${u.name}</h3><p>${u.desc}</p><div class="requirement">${bought?'Purchased':req}</div><button class="essence-buy" ${bought||!canBuyEssenceUpgrade(u)?'disabled':''}>${bought?'Owned':`${u.cost} Essence`}</button>`;
+      card.className='essence-upgrade'+(bought?' purchased':(!prerequisiteMet?' locked':''));
+      card.innerHTML=`
+        <h3>${u.name}</h3>
+        <p>${u.desc}</p>
+        <div class="requirement">${requirementText}</div>
+        <div class="purchase-reason">${purchaseReason}</div>
+        <button class="essence-buy${canBuy?' can-afford':''}" ${canBuy?'':'disabled'}>
+          ${bought?'Owned':`${u.cost} Essence`}
+        </button>`;
+
       card.querySelector('button').addEventListener('click',()=>buyEssenceUpgrade(u.id));
       grid.appendChild(card);
     }
@@ -1572,7 +2233,7 @@
     if(!keepsChallenges){
       state.completedChallenges=Object.fromEntries(Object.entries(state.completedChallenges||{}).filter(([id])=>challengeById[id]?.layer==='world'));
     }
-    recalcTotals(); buildSvg(); updateNodeStates(); updateStats(); renderAmberUpgrades(); save(); showToast(`Ascended — gained ${gain} World Seeds and ${fmt(amberGain)} Amber.`);
+    recalcTotals(); buildSvg(); updateNodeStates(); updateStats(); updateEssenceBonusDisplays(); renderEssenceUpgrades(); renderAmberUpgrades(); save(); showToast(`Ascended — gained ${gain} World Seeds and ${fmt(amberGain)} Amber.`); scrollToGameTop();
   }
   function canBuyWorldUpgrade(u){ return !state.worldUpgrades?.[u.id] && (!u.requires||state.worldUpgrades?.[u.requires]) && state.worldSeeds>=u.cost; }
   function buyWorldUpgrade(id){ const u=worldUpgradeById[id]; if(!u||!canBuyWorldUpgrade(u))return; state.worldSeeds-=u.cost; state.worldUpgrades[id]=true; state.stats.worldUpgradesBought=(state.stats.worldUpgradesBought||0)+1; recalcTotals(); renderWorldLayer(); updateStats(); save(); showToast(`Purchased ${u.name}.`); }
@@ -1872,7 +2533,7 @@
   });
   document.getElementById('settings-reset').addEventListener('click', async () => {
     if(!confirm('Reset your save? This clears all progress.')) return;
-    state = { version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default'}, lastUpdate: Date.now() };
+    state = { version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{}}, lastUpdate: Date.now() };
     recalcTotals();
     buildSvg();
     updateNodeStates();
@@ -1987,6 +2648,114 @@
   }
 
 
+  const TUTORIALS={
+    'first-sap':{
+      icon:'💧',
+      title:'Gather your first Sap',
+      target:'#gather-btn',
+      text:'Welcome to Sapling!\n\nClick the Gather Sap button to collect your first Sap. Sap is the main resource used to purchase upgrades in the Sap Tree.\n\nKeep gathering until you can afford your first visible upgrade.'
+    },
+    'tree-page':{icon:'🌱',title:'Sap Tree',text:'Gather Sap manually or wait for passive production. Spend Sap on visible nodes to grow the tree and reveal new branches.'},
+    'essence-page':{icon:'💠',title:'Tree Essence',text:'Prestige resets the Sap Tree and grants Tree Essence. Essence upgrades are permanent through Prestige and make future runs faster.'},
+    'challenge-page':{icon:'⚔️',title:'Challenges',text:'Challenges restart a run with special restrictions. Each challenge has five levels and grants permanent bonuses plus Amber.'},
+    'world-page':{icon:'🌍',title:'World Tree',text:'Ascend by building enough available Essence. Ascension grants World Seeds for powerful long-term upgrades, but resets lower layers.'},
+    'amber-page':{icon:'🟠',title:'Amber Market',text:'Amber comes from achievements, challenge levels and ascensions. Amber upgrades are permanent, repeatable and never reset.'},
+    'automation-page':{icon:'🤖',title:'Automation',text:'Automation systems unlock as your forest develops. Each helper can be enabled or paused independently.'},
+    'achievement-page':{icon:'🏆',title:'Achievements',text:'Achievements track progress across every layer, grant permanent bonuses and award a small amount of Amber.'},
+    'statistics-page':{icon:'📊',title:'Statistics',text:'Statistics record your current run, lifetime progress, reset history and offline growth.'}
+  };
+  let tutorialQueue=[]; let tutorialActive=null; let tutorialBootstrapped=false;
+  function ensureTutorialState(){ state.settings=state.settings||{}; state.settings.tutorialSeen=Object.assign({},state.settings.tutorialSeen||{}); }
+  function queueTutorial(pageId){ ensureTutorialState(); if(!TUTORIALS[pageId]||state.settings.tutorialSeen[pageId]||tutorialQueue.includes(pageId)||tutorialActive===pageId) return; tutorialQueue.push(pageId); showNextTutorial(); }
+  function clearTutorialTarget(){ document.querySelectorAll('.tutorial-target').forEach(el=>el.classList.remove('tutorial-target')); }
+  function positionTutorialPopup(tutorialId){
+    const popup=document.getElementById('tutorial-popup');
+    const pointer=document.getElementById('tutorial-pointer');
+    const tutorial=TUTORIALS[tutorialId];
+    const target=tutorial?.target
+      ? document.querySelector(tutorial.target)
+      : document.querySelector(`.tab-nav .tab-btn[data-page="${tutorialId}"]`);
+
+    clearTutorialTarget();
+    if(!popup || !target || window.innerWidth<=600) return;
+
+    target.classList.add('tutorial-target');
+    const r=target.getBoundingClientRect();
+    const popupWidth=Math.min(370,window.innerWidth-36);
+
+    let left=Math.max(12,Math.min(
+      window.innerWidth-popupWidth-12,
+      r.left+r.width/2-popupWidth/2
+    ));
+
+    let top=r.bottom+12;
+    let pointerOnBottom=false;
+
+    if(top+popup.offsetHeight>window.innerHeight-12){
+      top=Math.max(12,r.top-popup.offsetHeight-12);
+      pointerOnBottom=true;
+    }
+
+    popup.style.left=`${left}px`;
+    popup.style.top=`${top}px`;
+    popup.style.bottom='auto';
+
+    if(pointer){
+      pointer.style.left=`${Math.max(18,Math.min(
+        popupWidth-34,
+        r.left+r.width/2-left-8
+      ))}px`;
+
+      if(pointerOnBottom){
+        pointer.style.top='auto';
+        pointer.style.bottom='-9px';
+        pointer.style.transform='rotate(225deg)';
+      }else{
+        pointer.style.top='-9px';
+        pointer.style.bottom='auto';
+        pointer.style.transform='rotate(45deg)';
+      }
+    }
+  }
+  function showNextTutorial(){
+    if(tutorialActive) return;
+    ensureTutorialState();
+    while(tutorialQueue.length){
+      const next=tutorialQueue.shift();
+      if(!TUTORIALS[next] || state.settings.tutorialSeen[next]) continue;
+      tutorialActive=next;
+      const t=TUTORIALS[tutorialActive];
+      document.getElementById('tutorial-icon').textContent=t.icon;
+      document.getElementById('tutorial-title').textContent=t.title;
+      document.getElementById('tutorial-text').textContent=t.text;
+      const popup=document.getElementById('tutorial-popup'); popup.classList.add('show');
+      requestAnimationFrame(()=>positionTutorialPopup(tutorialActive));
+      return;
+    }
+  }
+  function syncTutorialsWithLoadedState(){
+    ensureTutorialState();
+    tutorialQueue=tutorialQueue.filter(id=>TUTORIALS[id]&&!state.settings.tutorialSeen[id]);
+    if(tutorialActive && state.settings.tutorialSeen[tutorialActive]){
+      tutorialActive=null;
+      const popup=document.getElementById('tutorial-popup'); if(popup) popup.classList.remove('show');
+      clearTutorialTarget();
+    }
+    showNextTutorial();
+  }
+  async function dismissTutorial(){ if(!tutorialActive) return; ensureTutorialState(); const dismissed=tutorialActive; state.settings.tutorialSeen[dismissed]=true; tutorialActive=null; tutorialQueue=tutorialQueue.filter(id=>id!==dismissed); document.getElementById('tutorial-popup').classList.remove('show'); clearTutorialTarget(); try{ localStorage.setItem(SAVE_KEY,JSON.stringify({...state,lastUpdate:Date.now()})); }catch(e){} await saveImmediately(); setTimeout(showNextTutorial,180); }
+  window.addEventListener('resize',()=>{if(tutorialActive) positionTutorialPopup(tutorialActive)});
+  window.addEventListener('scroll',()=>{if(tutorialActive) positionTutorialPopup(tutorialActive)},{passive:true});
+  function renderForestGuide(){ ensureTutorialState(); const list=document.getElementById('guide-list'); list.innerHTML=''; Object.entries(TUTORIALS).forEach(([id,t])=>{ const available=(id==='first-sap') || pageUnlockInfo(id).unlocked || !!state.settings.tutorialSeen[id]; const b=document.createElement('button'); b.type='button'; b.className='guide-entry'+(available?'':' locked'); b.innerHTML=`<strong>${t.icon} ${t.title}</strong><span>${available?'Available':'Not discovered yet'}</span>`; b.disabled=!available; if(available) b.addEventListener('click',()=>{document.getElementById('guide-detail-title').textContent=`${t.icon} ${t.title}`; document.getElementById('guide-detail-text').textContent=t.text; document.getElementById('guide-detail').classList.add('show');}); list.appendChild(b); }); }
+  function openForestGuide(){ renderForestGuide(); document.getElementById('guide-modal').classList.add('show'); document.body.classList.add('modal-open'); }
+  function closeForestGuide(){ document.getElementById('guide-modal').classList.remove('show'); document.body.classList.remove('modal-open'); }
+  document.getElementById('tutorial-got-it').addEventListener('click',dismissTutorial);
+  document.getElementById('tutorial-open-guide').addEventListener('click',async()=>{await dismissTutorial();openForestGuide();});
+  document.getElementById('guide-close').addEventListener('click',closeForestGuide);
+  document.getElementById('guide-modal').addEventListener('click',e=>{if(e.target.id==='guide-modal') closeForestGuide();});
+  document.getElementById('forest-guide-open').addEventListener('click',()=>{closeSettings();openForestGuide();});
+
+
   function pageUnlockInfo(pageId){
     if(pageId==='essence-page'){
       const unlocked=(state.totalEssence||0)>=1 || (state.essence||0)>=1 || prestigeGain()>=1;
@@ -2009,15 +2778,24 @@
 
   function updateTabLocks(){
     document.querySelectorAll('.tab-btn[data-page]').forEach(btn=>{
-      const info=pageUnlockInfo(btn.dataset.page);
+      const pageId=btn.dataset.page;
+      const info=pageUnlockInfo(pageId);
+      const wasUnlocked=btn.dataset.wasUnlocked==='true';
       btn.classList.toggle('tab-locked',!info.unlocked);
       btn.disabled=!info.unlocked;
       btn.title=!info.unlocked ? info.reason : '';
       btn.setAttribute('aria-disabled',String(!info.unlocked));
+      btn.dataset.wasUnlocked=String(info.unlocked);
+      if(tutorialBootstrapped && info.unlocked && !wasUnlocked) queueTutorial(pageId);
     });
     const activeLocked=document.querySelector('.page.active');
     if(activeLocked && !pageUnlockInfo(activeLocked.id).unlocked){
       document.querySelector('.tab-btn[data-page="tree-page"]')?.click();
+    }
+    if(!tutorialBootstrapped){
+      tutorialBootstrapped=true;
+      queueTutorial('first-sap');
+      queueTutorial('tree-page');
     }
   }
 
@@ -2026,6 +2804,7 @@
     const targetPage=btn.dataset.page;
     const unlockInfo=pageUnlockInfo(targetPage);
     if(!unlockInfo.unlocked){ showToast(unlockInfo.reason); return; }
+    queueTutorial(targetPage);
     // Keep only the main navigation button active. Dashboard “Open” buttons still navigate,
     // but no longer steal the highlighted tab state.
     document.querySelectorAll('.tab-nav .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===targetPage));
@@ -2090,20 +2869,62 @@
   function closeImportModal(){ setModalOpen(importModal, false); }
 
   function decodeSaveString(encoded){
-    const clean = encoded.trim();
+    const clean=String(encoded||'').trim();
     if(!clean) throw new Error('Paste a save string first.');
-    const json = decodeURIComponent(escape(atob(clean)));
-    const loaded = JSON.parse(json);
-    if(!loaded || typeof loaded !== 'object') throw new Error('The save does not contain valid game data.');
-    if(!Number.isFinite(Number(loaded.sap)) || !loaded.purchased) throw new Error('The save is missing required fields.');
-    return loaded;
+
+    const validate=(loaded)=>{
+      if(!loaded || typeof loaded!=='object') throw new Error('The save does not contain valid game data.');
+      if(!Number.isFinite(Number(loaded.sap)) || !loaded.purchased) throw new Error('The save is missing required fields.');
+      return loaded;
+    };
+
+    // Allow plain JSON for easier testing and recovery.
+    if(clean.startsWith('{')){
+      return validate(JSON.parse(clean));
+    }
+
+    let decoded;
+    try{
+      decoded=atob(clean);
+    }catch(error){
+      throw new Error('The save is not valid Base64 or JSON.');
+    }
+
+    const candidates=[];
+
+    // Standard UTF-8 Base64 save used by exportSave().
+    try{
+      candidates.push(decodeURIComponent(escape(decoded)));
+    }catch(error){}
+
+    // Legacy/test saves that accidentally encoded the JSON as %7B...%7D.
+    try{
+      const utf8=decodeURIComponent(escape(decoded));
+      if(/^\s*%[0-9A-Fa-f]{2}/.test(utf8)){
+        candidates.push(decodeURIComponent(utf8));
+      }
+    }catch(error){}
+
+    // ASCII JSON fallback.
+    candidates.push(decoded);
+
+    let lastError=null;
+    for(const candidate of candidates){
+      try{
+        return validate(JSON.parse(candidate));
+      }catch(error){
+        lastError=error;
+      }
+    }
+
+    throw new Error(lastError?.message||'The save could not be decoded.');
   }
 
   async function importSave(){
     try{
       const loaded = decodeSaveString(importText.value);
-      state = Object.assign({ version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default'}, lastUpdate:Date.now() }, loaded);
-      state.version = 9;
+      state = Object.assign({ version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{}}, lastUpdate:Date.now() }, loaded);
+      state.version = 14;
       state.sap = Math.max(0, Number(state.sap) || 0);
       state.essence = Math.max(0, Number(state.essence) || 0);
       state.totalEssence = Math.max(state.essence, Number(state.totalEssence) || 0);
@@ -2122,13 +2943,15 @@
           const raw=state.completedChallenges[c.id];
           state.completedChallenges[c.id]=raw===true?1:Math.max(0,Math.min(CHALLENGE_MAX_LEVEL,Math.floor(Number(raw)||0)));
         }
-      state.achievements = Object.assign({}, state.achievements || {});
+      state.achievements = Object.assign({}, state.achievements || {}); sanitizeAchievements();
       ensureExtendedStats(); ensureAutomation();
       state.lastUpdate = Date.now();
       recalcTotals();
       buildSvg();
       updateNodeStates();
       updateStats();
+      if(typeof renderThemePicker === 'function') renderThemePicker();
+      if(typeof updateExpandedStats === 'function') updateExpandedStats();
       closeImportModal();
       await saveImmediately();
       showToast('Save imported successfully.');
@@ -2221,7 +3044,7 @@
     setText('stats-essence-upgrades',fmt(s.essenceUpgradesBought));
     setText('stats-world-upgrades',fmt(s.worldUpgradesBought));
     setText('stats-challenges',Object.values(state.completedChallenges||{}).filter(Boolean).length+' / '+CHALLENGES.length);
-    setText('stats-achievements',Object.keys(state.achievements||{}).length+' / '+ACHIEVEMENTS.length);
+    setText('stats-achievements',unlockedAchievementCount()+' / '+ACHIEVEMENTS.length);
     setText('side-playtime',formatDuration(s.totalPlaytime));
     setText('side-highest-rate',fmt(s.highestRate)+'/s');
   }
@@ -2445,17 +3268,17 @@
       const stacks=activeComboStacks();
       const click=currentClickBreakdown();
       const siphonText=click.siphon>0?` = ${fmt(click.direct)} + ${fmt(click.siphon)} Siphon (${totals.clickRateSeconds.toFixed(2)}s)`:'';
-      gatherAmount.textContent='+'+fmt(click.total)+siphonText+(totals.comboMax?` · Combo ${stacks}/${totals.comboMax}`:'');
-      gatherAmount.title=click.siphon>0
+      gatherAmount.textContent='+'+fmt(click.total)+(totals.comboMax?` · Combo ${stacks}/${totals.comboMax}`:'');
+      gatherAmount.title=(click.siphon>0
         ? `Direct gather: ${fmt(click.direct)} | Sap Siphon: ${fmt(click.siphon)} (${totals.clickRateSeconds.toFixed(2)}s of current Sap/sec)`
-        : `Direct gather: ${fmt(click.direct)}`;
+        : `Direct gather: ${fmt(click.direct)}`) + (totals.comboMax ? ` | Combo: ${stacks}/${totals.comboMax}` : '');
     }
     const sideEss=document.getElementById('side-essence'); if(sideEss) sideEss.textContent=fmt(state.essence);
     const sideEssenceGain=document.getElementById('side-essence-gain'); if(sideEssenceGain) sideEssenceGain.textContent='+'+fmt(prestigeGain());
     const sideSeeds=document.getElementById('side-world-seeds'); if(sideSeeds) sideSeeds.textContent=fmt(state.worldSeeds||0);
     const sideGain=document.getElementById('side-world-gain'); if(sideGain) sideGain.textContent=fmt(ascensionGain());
     const sideStatus=document.getElementById('side-world-status'); if(sideStatus) sideStatus.textContent=state.essence>=ASCENSION_BASE?'Ascension available based on available Essence':'Locked until '+fmt(ASCENSION_BASE)+' available Essence';
-    const achievementCount=Object.keys(state.achievements||{}).length; const sideAchievements=document.getElementById('side-achievements'); if(sideAchievements) sideAchievements.textContent=achievementCount+' / '+ACHIEVEMENTS.length; const sideAchievementBonus=document.getElementById('side-achievement-bonus'); if(sideAchievementBonus) sideAchievementBonus.textContent='×'+achievementBonuses().prod.toFixed(2);
+    const achievementCount=unlockedAchievementCount(); const sideAchievements=document.getElementById('side-achievements'); if(sideAchievements) sideAchievements.textContent=achievementCount+' / '+ACHIEVEMENTS.length; const sideAchievementBonus=document.getElementById('side-achievement-bonus'); if(sideAchievementBonus) sideAchievementBonus.textContent='×'+achievementBonuses().prod.toFixed(2);
     const completedLevels=CHALLENGES.reduce((sum,c)=>sum+challengeLevel(c.id),0);
     const sideChallenges=document.getElementById('side-challenges'); if(sideChallenges) sideChallenges.textContent=completedLevels+' / '+(CHALLENGES.length*CHALLENGE_MAX_LEVEL);
     const dots=document.getElementById('side-challenge-dots');
@@ -2492,13 +3315,33 @@
     const worldRemaining=Math.max(0,nextWorldRequirement-state.essence);
     const ascendTopNext=document.getElementById('ascend-top-next');
     if(ascendTopNext) ascendTopNext.innerHTML=`Next World Seed: <strong>${fmt(nextWorldRequirement)}</strong> available Essence • ${fmt(worldRemaining)} remaining`;
-    renderEssenceUpgrades();
-    renderChallenges();
-    renderWorldLayer();
     updatePrestigePreview();
-    renderAchievements();
-    renderStatistics();
     scheduleAutomationRender();
+  }
+
+
+  // v1.7.22 lightweight live panel updates.
+  // Do not rebuild interactive cards every animation frame: Firefox can lose
+  // the click target when the DOM node is replaced between pointerdown/up.
+  function updateLivePanelValues(){
+    const essenceBalance=document.getElementById('essence-page-balance');
+    if(essenceBalance) essenceBalance.textContent=fmt(state.essence);
+
+    const worldBalance=document.getElementById('world-seed-balance');
+    if(worldBalance) worldBalance.textContent=fmt(state.worldSeeds);
+
+    const amberBalance=document.getElementById('amber-page-balance');
+    if(amberBalance) amberBalance.textContent=fmt(state.amber);
+
+    const activeBanner=document.getElementById('active-challenge-banner');
+    if(activeBanner && state.activeChallenge){
+      const challenge=activeChallenge();
+      const level=challengeLevel(challenge.id);
+      const goal=challengeGoal(challenge,level);
+      const progress=Math.min(100,Math.max(0,(state.runSap/goal)*100));
+      const progressEl=activeBanner.querySelector('[data-live-challenge-progress]');
+      if(progressEl) progressEl.textContent=`${fmt(state.runSap)} / ${fmt(goal)} (${progress.toFixed(1)}%)`;
+    }
   }
 
   /* ---------- game loop ---------- */
@@ -2519,9 +3362,26 @@
     if(autoBuyAccumulator >= totals.autoBuyInterval){ autoBuyAccumulator=0; runAutoBuy(); }
     if(advancedAutomationAccumulator>=0.5){advancedAutomationAccumulator=0;runAdvancedAutomation();}
     updateStats();
+    updateLivePanelValues();
     updateNodeStates();
     requestAnimationFrame(loop);
   }
+
+
+  // v1.7.18 independent achievement heartbeat
+  let achievementHeartbeatBusy=false;
+  setInterval(()=>{
+    if(achievementHeartbeatBusy) return;
+    achievementHeartbeatBusy=true;
+    try{
+      checkAchievements();
+    }catch(error){
+      console.error('Achievement heartbeat failed',error);
+    }finally{
+      achievementHeartbeatBusy=false;
+    }
+  },1000);
+
 
   /* ---------- storage compatibility ---------- */
   async function storageGet(){
@@ -2623,18 +3483,34 @@
       requestAnimationFrame(frame);
     });
   }
+  let startupRewardsCollected=false;
+  async function collectStartupRewardsAndClose(){
+    const overlay=document.getElementById('loading-screen');
+    const button=document.getElementById('loading-continue');
+    const closeButton=document.getElementById('loading-close');
+    if(startupRewardsCollected){ if(overlay) overlay.classList.add('hidden'); return; }
+    startupRewardsCollected=true;
+    if(button){ button.disabled=true; button.textContent='Collected'; }
+    if(closeButton) closeButton.disabled=true;
+    try{
+      applyOfflineRewardsInstant(pendingStartupRewards);
+      const bar=document.getElementById('loading-progress'); if(bar) bar.style.width='100%';
+      const note=document.getElementById('loading-note'); if(note) note.textContent='Rewards collected.';
+      setRewardFlow('offline-sap-reward',state.sap-(pendingStartupRewards.sap||0),pendingStartupRewards.sap||0);
+      setRewardFlow('offline-essence-reward',state.essence-(pendingStartupRewards.essence||0),pendingStartupRewards.essence||0);
+      setRewardFlow('offline-world-reward',state.worldSeeds-(pendingStartupRewards.seeds||0),pendingStartupRewards.seeds||0);
+      if(typeof renderThemePicker==='function') renderThemePicker();
+      updateStats(); updateNodeStates();
+      await saveImmediately();
+    }catch(e){ console.error('Offline reward collection failed',e); }
+    finally{ if(overlay) overlay.classList.add('hidden'); }
+  }
   function finishLoading(){
     setLoading('Offline rewards ready',100);
     const button=document.getElementById('loading-continue');
-    button.classList.add('show');
-    button.onclick=async()=>{
-      button.disabled=true; button.textContent='Collecting…';
-      await animateRewardCollection(pendingStartupRewards,{sap:'offline-sap-reward',essence:'offline-essence-reward',seeds:'offline-world-reward'},'loading-progress','loading-note');
-      state.offlinePrestigeDebt+=pendingStartupRewards.essence;
-      state.offlineAscendDebt+=pendingStartupRewards.seeds;
-      await saveImmediately();
-      document.getElementById('loading-screen').classList.add('hidden');
-    };
+    const closeButton=document.getElementById('loading-close');
+    if(button){ button.classList.add('show'); button.disabled=false; button.textContent='Collect & Close'; button.onclick=collectStartupRewardsAndClose; }
+    if(closeButton){ closeButton.disabled=false; closeButton.onclick=collectStartupRewardsAndClose; }
   }
 
   function calculateOfflineRewards(seconds){
@@ -2749,25 +3625,39 @@
     if(!overlay) return;
     overlay.classList.add('show');
     const continueButton=document.getElementById('return-continue');
-    continueButton.classList.add('show'); continueButton.disabled=false; continueButton.textContent='Collect and continue';
+    const closeButton=document.getElementById('return-close');
+    if(continueButton){ continueButton.classList.add('show'); continueButton.disabled=false; continueButton.textContent='Collect & Close'; }
+    if(closeButton) closeButton.disabled=false;
     document.getElementById('return-offline-time').textContent=formatDuration(rewards.seconds);
     document.getElementById('return-progress-bar').style.width='0%';
-    document.getElementById('return-note').textContent=state.settings?.offlineGain ? 'Review your rewards, then collect them.' : 'Offline gain is disabled in Settings.';
+    document.getElementById('return-note').textContent=state.settings?.offlineGain ? 'Rewards are ready. Close this panel to collect them.' : 'Offline gain is disabled in Settings.';
     const badge=document.getElementById('return-harvest-badge'); if(badge) badge.textContent=harvestLabel(rewards.seconds);
     setRewardFlow('return-sap-reward',state.sap,rewards.sap);
     setRewardFlow('return-essence-reward',state.essence,rewards.essence);
     setRewardFlow('return-world-reward',state.worldSeeds,rewards.seeds);
+    let collected=false;
     return new Promise(resolve=>{
-      continueButton.onclick=async()=>{
-        continueButton.disabled=true; continueButton.textContent='Collecting…';
-        await animateRewardCollection(rewards,{sap:'return-sap-reward',essence:'return-essence-reward',seeds:'return-world-reward'},'return-progress-bar','return-note');
-        state.offlinePrestigeDebt+=rewards.essence;
-        state.offlineAscendDebt+=rewards.seeds;
-        await saveImmediately();
-        overlay.classList.remove('show');
-        continueButton.classList.remove('show');
-        resolve();
+      const collectAndClose=async()=>{
+        if(collected){ overlay.classList.remove('show'); resolve(); return; }
+        collected=true;
+        if(continueButton){ continueButton.disabled=true; continueButton.textContent='Collected'; }
+        if(closeButton) closeButton.disabled=true;
+        try{
+          applyOfflineRewardsInstant(rewards);
+          const bar=document.getElementById('return-progress-bar'); if(bar) bar.style.width='100%';
+          const note=document.getElementById('return-note'); if(note) note.textContent='Rewards collected.';
+          if(typeof renderThemePicker==='function') renderThemePicker();
+          updateStats(); updateNodeStates();
+          await saveImmediately();
+        }catch(e){ console.error('Return reward collection failed',e); }
+        finally{
+          overlay.classList.remove('show');
+          if(continueButton) continueButton.classList.remove('show');
+          resolve();
+        }
       };
+      if(continueButton) continueButton.onclick=collectAndClose;
+      if(closeButton) closeButton.onclick=collectAndClose;
     });
   }
 
@@ -2780,8 +3670,8 @@
       const savedValue = await storageGet();
       if(savedValue){
         const loaded = JSON.parse(savedValue);
-        state = Object.assign({ version:12, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default'}, lastUpdate: Date.now() }, loaded);
-        state.version = 12;
+        state = Object.assign({ version:13, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{}}, lastUpdate: Date.now() }, loaded);
+        state.version = 13;
         state.totalEssence = Math.max(Number(state.totalEssence)||0, Number(state.essence)||0);
         state.essenceUpgrades = Object.assign({}, state.essenceUpgrades || {});
       state.challengeUnlocked = !!state.challengeUnlocked || !!state.essenceUpgrades.trial_roots;
@@ -2790,7 +3680,7 @@
         state.purchased = Object.assign({seed:true}, state.purchased || {});
         state.activeChallenge = challengeById[state.activeChallenge] ? state.activeChallenge : null;
         state.completedChallenges = Object.assign({}, state.completedChallenges || {});
-        state.settings = Object.assign({offlineGain:true,essenceSort:'default'}, state.settings || {}); ensureExtendedStats(); ensureAutomation();
+        state.settings = Object.assign({offlineGain:true,essenceSort:'default',tutorialSeen:{}}, state.settings || {}); sanitizeAchievements(); syncTutorialsWithLoadedState(); ensureExtendedStats(); ensureAutomation();
         state.offlinePrestigeDebt=Math.max(0,Number(state.offlinePrestigeDebt)||0);
         state.offlineAscendDebt=Math.max(0,Number(state.offlineAscendDebt)||0);
         recalcTotals();
@@ -2854,5 +3744,198 @@ function exportSave(){
   const encoded = btoa(unescape(encodeURIComponent(json)));
   navigator.clipboard.writeText(encoded).then(() => showToast('Save copied to clipboard')).catch(() => showToast('Clipboard access was blocked'));
 }
-</script></body>
+
+
+// v1.7.7 cosmetic themes, static tree, purchase effects and expanded statistics
+const THEME_DEFS = [
+  {id:'nature', icon:'🌿', name:'Nature', unlocked:()=>true},
+  {id:'autumn', icon:'🍁', name:'Autumn', unlocked:()=>Number(state.totalEssence||0)>=50},
+  {id:'winter', icon:'❄️', name:'Winter', unlocked:()=>Number(state.totalEssence||0)>=250},
+  {id:'world', icon:'🌌', name:'World', unlocked:()=>Number(state.totalWorldSeeds||0)>=5},
+  {id:'amber', icon:'🟠', name:'Amber', unlocked:()=>Number(state.totalAmber||0)>=25}
+];
+function ensureV175State(){
+  state.selectedTheme = typeof state.selectedTheme==='string' ? state.selectedTheme : 'nature';
+  state.fastestPrestige = Number(state.fastestPrestige)||0;
+  state.fastestAscend = Number(state.fastestAscend)||0;
+}
+function renderThemePicker(){
+  ensureV175State();
+  const box=document.getElementById('theme-picker'); if(!box) return;
+  const selectedAllowed=THEME_DEFS.some(t=>t.id===state.selectedTheme&&t.unlocked());
+  if(!selectedAllowed) state.selectedTheme='nature';
+  document.body.dataset.theme=state.selectedTheme;
+  box.innerHTML=THEME_DEFS.map(t=>{const open=t.unlocked();return `<button type="button" class="theme-choice ${state.selectedTheme===t.id?'active':''}" data-theme-choice="${t.id}" ${open?'':'disabled'} title="${open?'Cosmetic theme':themeUnlockText(t.id)}">${t.icon} ${t.name}${open?'':' 🔒'}</button>`}).join('');
+  box.querySelectorAll('[data-theme-choice]').forEach(b=>b.addEventListener('click',()=>{state.selectedTheme=b.dataset.themeChoice;document.body.dataset.theme=state.selectedTheme;renderThemePicker();saveGame();}));
+}
+function themeUnlockText(id){
+  return ({autumn:'Earn 50 total Essence',winter:'Earn 250 total Essence',world:'Earn 5 total World Seeds',amber:'Earn 25 total Amber'})[id]||'';
+}
+function flashPurchasedNode(id){
+  const node=document.querySelector(`#tree-svg .node[data-id="${id}"], #tree-svg .node[data-node-id="${id}"]`); if(!node) return;
+  node.classList.remove('node-purchase-flash'); void node.getBoundingClientRect(); node.classList.add('node-purchase-flash');
+  setTimeout(()=>node.classList.remove('node-purchase-flash'),700);
+  document.querySelectorAll(`#tree-svg .branch-path[data-to="${id}"], #tree-svg .branch-path[data-child="${id}"]`).forEach(p=>{p.classList.add('branch-energy');setTimeout(()=>p.classList.remove('branch-energy'),800)});
+}
+function updateExpandedStats(){
+  ensureV175State();
+  const levels=typeof totalChallengeLevelsCompleted==='function'?totalChallengeLevelsCompleted():Object.values(state.challengeLevels||{}).reduce((a,b)=>a+(Number(b)||0),0);
+  const mastered=Object.values(state.challengeLevels||{}).filter(v=>Number(v)>=5).length;
+  const evo=typeof getTreeEvolution==='function'?getTreeEvolution():null;
+  const evoIndex=evo&&Number.isFinite(evo.index)?evo.index:(Number(document.getElementById('tree-panel')?.dataset.evolution)||0);
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};
+  set('stats-fastest-prestige',state.fastestPrestige>0?formatTime(state.fastestPrestige):'—');
+  set('stats-fastest-ascend',state.fastestAscend>0?formatTime(state.fastestAscend):'—');
+  set('stats-challenges-mastered',`${mastered} / 8`);set('stats-challenge-levels',`${levels} / 40`);set('stats-tree-evolutions',`${Math.min(6,evoIndex+1)} / 6`);
+}
+// Wrap existing functions without changing their core balance logic.
+const _v175RenderAll = typeof renderAll==='function' ? renderAll : null;
+if(_v175RenderAll){renderAll=function(){const r=_v175RenderAll.apply(this,arguments);renderThemePicker();updateExpandedStats();return r;};}
+const _v175BuyNode = typeof buyNode==='function' ? buyNode : null;
+if(_v175BuyNode){buyNode=function(id){const before=Array.isArray(state.purchased)?state.purchased.includes(id):!!state.purchased?.[id];const r=_v175BuyNode.apply(this,arguments);const after=Array.isArray(state.purchased)?state.purchased.includes(id):!!state.purchased?.[id];if(!before&&after)requestAnimationFrame(()=>flashPurchasedNode(id));return r;};}
+const _v175Prestige = typeof doPrestige==='function'?doPrestige:(typeof prestige==='function'?prestige:null);
+if(_v175Prestige){const wrapped=function(){const elapsed=Number(state.runTime)||0;const result=_v175Prestige.apply(this,arguments);if(elapsed>0&&(state.fastestPrestige===0||elapsed<state.fastestPrestige))state.fastestPrestige=elapsed;saveGame();return result;};if(typeof doPrestige==='function')doPrestige=wrapped;else prestige=wrapped;}
+const _v175Ascend = typeof ascend==='function'?ascend:null;
+if(_v175Ascend){ascend=function(){const elapsed=Number(state.runTime)||0;const result=_v175Ascend.apply(this,arguments);if(elapsed>0&&(state.fastestAscend===0||elapsed<state.fastestAscend))state.fastestAscend=elapsed;saveGame();return result;};}
+ensureV175State(); document.body.dataset.theme=state.selectedTheme; setTimeout(()=>{renderThemePicker();updateExpandedStats();},0);
+// v1.7.9: Keep cosmetic theme locks synchronized with imported and newly earned lifetime currencies.
+const _v179UpdateStats = typeof updateStats === 'function' ? updateStats : null;
+if(_v179UpdateStats){
+  updateStats=function(){
+    const result=_v179UpdateStats.apply(this,arguments);
+    if(typeof updateExpandedStats==='function') updateExpandedStats();
+    return result;
+  };
+}
+
+
+</script><script>
+
+  // v1.7.16 sidebar visibility and Escape handling
+  const SIDEBAR_VISIBILITY_KEY = 'sapling_sidebar_visible';
+
+  function getSidebarVisible(){
+    const saved = localStorage.getItem(SIDEBAR_VISIBILITY_KEY);
+    return saved === null ? true : saved !== 'false';
+  }
+
+  function applySidebarVisibility(visible){
+    document.body.classList.toggle('sidebar-hidden', !visible);
+    const btn = document.getElementById('sidebar-visibility-toggle');
+    if(btn){
+      btn.classList.toggle('on', visible);
+      btn.textContent = visible ? 'Shown' : 'Hidden';
+      btn.setAttribute('aria-pressed', String(visible));
+    }
+  }
+
+  function setSidebarVisible(visible){
+    localStorage.setItem(SIDEBAR_VISIBILITY_KEY, String(visible));
+    applySidebarVisibility(visible);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    applySidebarVisibility(getSidebarVisible());
+
+    const sidebarToggle = document.getElementById('sidebar-visibility-toggle');
+    if(sidebarToggle){
+      sidebarToggle.addEventListener('click', () => {
+        setSidebarVisible(!getSidebarVisible());
+      });
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if(event.key !== 'Escape') return;
+
+    const settingsModal = document.getElementById('settings-modal');
+    if(settingsModal && settingsModal.classList.contains('show')){
+      event.preventDefault();
+      settingsModal.classList.remove('show');
+      document.body.classList.remove('modal-open');
+    }
+  });
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{ updateEssenceBonusDisplays(); });
+</script>
+<script>
+
+  // v1.7.21 keep wheel/touch scrolling inside itch.io's iframe
+  (() => {
+    let embedded=false;
+    try{ embedded=window.self!==window.top; }catch(error){ embedded=true; }
+    if(!embedded) return;
+
+    document.body.classList.add('itch-embedded');
+
+    const isScrollableElement=(element)=>{
+      let node=element instanceof Element ? element : null;
+      while(node && node!==document.body){
+        const style=getComputedStyle(node);
+        const canScrollY=/(auto|scroll|overlay)/.test(style.overflowY)
+          && node.scrollHeight>node.clientHeight+1;
+        if(canScrollY) return node;
+        node=node.parentElement;
+      }
+      return null;
+    };
+
+    window.addEventListener('wheel',(event)=>{
+      if(event.ctrlKey || event.metaKey || event.defaultPrevented) return;
+
+      const nestedScroller=isScrollableElement(event.target);
+      if(nestedScroller){
+        const atTop=nestedScroller.scrollTop<=0;
+        const atBottom=nestedScroller.scrollTop+nestedScroller.clientHeight>=nestedScroller.scrollHeight-1;
+        const canMove=(event.deltaY<0 && !atTop)||(event.deltaY>0 && !atBottom);
+        if(canMove) return;
+      }
+
+      const root=document.scrollingElement||document.documentElement;
+      const maxScroll=Math.max(0,root.scrollHeight-window.innerHeight);
+      if(maxScroll<=0) return;
+
+      const before=root.scrollTop;
+      const next=Math.max(0,Math.min(maxScroll,before+event.deltaY));
+
+      if(next!==before){
+        event.preventDefault();
+        root.scrollTop=next;
+      }
+    },{passive:false,capture:true});
+
+    let touchY=null;
+    window.addEventListener('touchstart',(event)=>{
+      if(event.touches.length===1) touchY=event.touches[0].clientY;
+    },{passive:true});
+
+    window.addEventListener('touchmove',(event)=>{
+      if(touchY===null || event.touches.length!==1) return;
+      const currentY=event.touches[0].clientY;
+      const deltaY=touchY-currentY;
+      touchY=currentY;
+
+      const nestedScroller=isScrollableElement(event.target);
+      if(nestedScroller) return;
+
+      const root=document.scrollingElement||document.documentElement;
+      const maxScroll=Math.max(0,root.scrollHeight-window.innerHeight);
+      if(maxScroll<=0) return;
+
+      const before=root.scrollTop;
+      const next=Math.max(0,Math.min(maxScroll,before+deltaY));
+      if(next!==before){
+        event.preventDefault();
+        root.scrollTop=next;
+      }
+    },{passive:false,capture:true});
+
+    window.addEventListener('touchend',()=>{ touchY=null; },{passive:true});
+    window.addEventListener('touchcancel',()=>{ touchY=null; },{passive:true});
+  })();
+
+</script>
+</body>
 </html>
