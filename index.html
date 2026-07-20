@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sapling v1.7.27 — Fixed Header</title>
+<title>Sapling v1.8.9 — Coffee Secret Achievement</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1219,6 +1219,41 @@
     }
   }
 
+
+  /* v1.8.1 Daily Objectives & Secrets */
+  .daily-page{min-height:700px;padding:22px;background:radial-gradient(circle at 85% 0%,rgba(232,181,77,.075),transparent 34%),linear-gradient(180deg,#08150f,#07110d)}
+  .daily-header,.secret-header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+  .daily-header h2,.secret-header h2{margin:0 0 5px;font:600 28px 'Fraunces',serif}.daily-header p,.secret-header p{margin:0;max-width:720px;color:var(--text-dim);font-size:13px;line-height:1.5}
+  .daily-reset-box,.secret-count{min-width:150px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;text-align:right;background:rgba(255,255,255,.02)}
+  .daily-reset-box span,.secret-count span,.daily-summary span{display:block;color:var(--text-dim);font-size:9px;text-transform:uppercase;letter-spacing:.07em}
+  .daily-reset-box strong,.secret-count strong{display:block;margin-top:4px;color:var(--gold);font:600 21px 'Fraunces',serif}
+  .daily-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}.daily-summary>div{padding:11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.018)}.daily-summary strong{display:block;margin-top:4px;color:var(--leaf);font:600 19px 'Fraunces',serif}
+  .daily-objective-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.daily-objective{display:flex;flex-direction:column;min-height:225px;padding:15px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018)}.daily-objective.complete{border-color:var(--leaf-dim);background:rgba(124,255,178,.05)}.daily-objective.claimed{border-color:#5a4930;background:rgba(232,181,77,.055)}
+  .daily-objective-icon{font-size:27px}.daily-objective h3{margin:8px 0 5px;font:600 18px 'Fraunces',serif;color:var(--gold)}.daily-objective p{margin:0;color:var(--text-dim);font-size:11px;line-height:1.45;flex:1}.daily-progress-label{display:flex;justify-content:space-between;gap:8px;margin-top:12px;color:var(--text-dim);font-size:10px}
+  .daily-progress{height:8px;margin:6px 0 10px;overflow:hidden;border:1px solid var(--line);border-radius:999px;background:#050c08}.daily-progress>div{height:100%;background:linear-gradient(90deg,var(--leaf-dim),var(--leaf));transition:width .25s ease}.daily-reward{margin-bottom:9px;color:var(--gold);font-size:10px}
+  .daily-objective button,.daily-completion-card button{min-height:40px;border:1px solid var(--line);border-radius:8px;background:#101a15;color:var(--text);font:700 11px 'Inter',sans-serif;cursor:pointer}.daily-objective button:disabled,.daily-completion-card button:disabled{opacity:.42;cursor:not-allowed}
+  .daily-completion-card{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:14px;padding:14px;border:1px solid #5a4930;border-radius:12px;background:linear-gradient(135deg,rgba(232,181,77,.08),rgba(124,255,178,.025))}.daily-completion-card small{display:block;color:var(--gold);font-size:9px;text-transform:uppercase}.daily-completion-card strong{display:block;margin-top:3px;font:600 17px 'Fraunces',serif}.daily-completion-card span{display:block;margin-top:3px;color:var(--text-dim);font-size:10px}.daily-completion-card button{min-width:150px;padding:9px 12px}
+  .secret-section{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.secret-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.secret-card{min-height:150px;padding:13px;border:1px dashed #30453a;border-radius:11px;background:rgba(255,255,255,.012);text-align:center;opacity:.6}.secret-card.unlocked{opacity:1;border-style:solid;border-color:var(--gold);background:linear-gradient(145deg,rgba(232,181,77,.09),rgba(124,255,178,.035))}.secret-icon{font-size:29px}.secret-card h3{margin:7px 0 4px;font:600 15px 'Fraunces',serif;color:var(--text-dim)}.secret-card.unlocked h3{color:var(--gold)}.secret-card p{margin:0;color:var(--text-dim);font-size:10px;line-height:1.4}.secret-reward{margin-top:8px;color:var(--gold);font-size:9px}
+  @media(max-width:1000px){.daily-objective-grid{grid-template-columns:1fr}.secret-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.daily-summary,.secret-grid{grid-template-columns:1fr}.daily-completion-card{align-items:stretch;flex-direction:column}.daily-completion-card button{width:100%}}
+
+
+  /* v1.8.2 reliable Daily reward actions */
+  .daily-objective button[aria-disabled="true"],
+  #daily-bonus-claim[aria-disabled="true"]{
+    opacity:.42;
+    cursor:not-allowed;
+  }
+  .daily-objective button.daily-claim-ready,
+  #daily-bonus-claim.daily-claim-ready{
+    opacity:1;
+    cursor:pointer;
+    border-color:var(--leaf);
+    color:var(--leaf);
+    background:rgba(124,255,178,.08);
+    box-shadow:0 0 14px rgba(124,255,178,.12);
+  }
+
+
 </style>
 </head>
 <body>
@@ -1296,6 +1331,7 @@
         <button class="tab-btn" data-page="world-page">🌍 World Tree</button>
         <button class="tab-btn" data-page="amber-page">🟠 Amber Market</button>
         <button class="tab-btn" data-page="automation-page">🤖 Automation</button>
+        <button class="tab-btn" data-page="daily-page">📅 Daily</button>
         <button class="tab-btn" data-page="achievement-page">🏆 Achievements</button>
         <button class="tab-btn" data-page="statistics-page">📊 Statistics</button>
       </nav>
@@ -1372,7 +1408,35 @@
       </section>
 
 
-      <section class="page" id="statistics-page">
+      
+      <section class="page" id="daily-page">
+        <div class="daily-page">
+          <div class="daily-header">
+            <div><h2>📅 Daily Objectives</h2><p>Complete three objectives before the local day resets. Claim each reward, then finish all three for a bonus.</p></div>
+            <div class="daily-reset-box"><span>Next reset</span><strong id="daily-reset-time">—</strong></div>
+          </div>
+          <div class="daily-summary">
+            <div><span>Completed</span><strong id="daily-completed-count">0 / 5</strong></div>
+            <div><span>Claimed</span><strong id="daily-claimed-count">0 / 5</strong></div>
+            <div><span>Daily streak</span><strong id="daily-streak">0 days</strong></div>
+            <div><span>Difficulty</span><strong id="daily-difficulty">Seedling</strong></div>
+          </div>
+          <div class="daily-objective-grid" id="daily-objective-grid"></div>
+          <div class="daily-completion-card">
+            <div><small>Daily completion bonus</small><strong>Complete all objectives</strong><span id="daily-completion-status">0 / 5 completed</span></div>
+            <button type="button" id="daily-bonus-claim" disabled>Claim +1 Amber</button>
+          </div>
+          <section class="secret-section">
+            <div class="secret-header">
+              <div><h2>🔎 Forest Secrets</h2><p>Secrets do not change the standard total of 130 achievements. Their exact conditions stay hidden until discovered.</p></div>
+              <div class="secret-count"><span>Discovered</span><strong id="secret-count">0 / 6</strong></div>
+            </div>
+            <div class="secret-grid" id="secret-grid"></div>
+          </section>
+        </div>
+      </section>
+
+<section class="page" id="statistics-page">
         <div class="statistics-page">
           <div class="essence-header"><div><h2>Statistics</h2><p>A complete record of the forest, the current run and your long-term progression.</p></div><div class="essence-balance"><span>Total playtime</span><strong id="stats-playtime-head">0s</strong></div></div>
           <div class="stats-hero">
@@ -1418,7 +1482,7 @@
         </div>
       </section>
 
-      <footer class="stage-footer"><span id="footer-note">Hover an upgrade to inspect it. Amber Market now has its own achievement category, and every upgrade takes a comparable number of Ascensions to max.</span><span>v1.6.6</span></footer>
+      <footer class="stage-footer"><span id="footer-note">Hover an upgrade to inspect it. Amber Market now has its own achievement category, and every upgrade takes a comparable number of Ascensions to max.</span><span>v1.8.9</span></footer>
     </main>
 
     <aside class="side-dashboard">
@@ -1515,6 +1579,7 @@
     <div class="prestige-preview">
       <div class="preview-row"><span>Offline sap gain</span><button class="reset-btn" id="offline-gain-toggle">Offline gain: ON</button></div>
       <div class="preview-row"><span>Prestige confirmation</span><button class="reset-btn" id="prestige-confirm-toggle">Confirmation: ON</button></div>
+      <div class="preview-row"><span>Return to top after Prestige</span><button type="button" class="reset-btn settings-switch on" id="prestige-scroll-toggle">Enabled</button></div>
       <div class="preview-row"><span>World Tree confirmation</span><button class="reset-btn" id="ascend-confirm-toggle">Confirmation: ON</button></div>
       <div class="preview-row"><span>Forest Guide</span><button class="reset-btn" id="forest-guide-open">Open guide</button></div>
       <div class="preview-row">
@@ -1716,6 +1781,7 @@
     const cost=amberUpgradeCost(u);
     state.amber-=cost;
     state.amberUpgrades[id]=amberLevel(id)+1;
+    recordDailyProgress('upgrades',1);
     recalcTotals(); renderAmberUpgrades(); updateStats(); save();
     showToast(`${u.name} raised to level ${amberLevel(id)} — ${cost} Amber spent.`);
   }
@@ -1934,7 +2000,7 @@
   }
   function achievementBonuses(){let prod=1,click=1,essence=1,world=1;for(const id of Object.keys(state.achievements||{})){const r=achievementById[id]?.reward||{};prod*=r.prod||1;click*=r.click||1;essence*=r.essence||1;world*=r.world||1}return{prod,click,essence,world}}
   let achievementPopupTimer;
-  function showAchievementPopup(a){const el=document.getElementById('achievement-popup');if(!el)return;el.querySelector('strong').textContent=a.icon+' '+a.name;el.querySelector('span').textContent=achievementRewardText(a.reward);el.classList.add('show');clearTimeout(achievementPopupTimer);achievementPopupTimer=setTimeout(()=>el.classList.remove('show'),4200)}
+  function showAchievementPopup(a){const el=document.getElementById('achievement-popup');if(!el)return;el.querySelector('strong').textContent=a.icon+' '+a.name;el.querySelector('span').textContent=a.secretRewardText||achievementRewardText(a.reward);el.classList.add('show');clearTimeout(achievementPopupTimer);achievementPopupTimer=setTimeout(()=>el.classList.remove('show'),4200)}
   function checkAchievements(){
     state.achievements=state.achievements||{};
     let changed=false;
@@ -2287,6 +2353,7 @@
     state.totalEssence += gain;
     state.offlinePrestigeDebt = 0;
     state.prestiges += 1;
+    recordDailyProgress('prestiges',1);
     state.stats.highestPrestigeGain=Math.max(state.stats.highestPrestigeGain||0,gain);
     state.stats.currentRunTime=0;
     state.sap = 0;
@@ -2303,7 +2370,10 @@
     showToast(`The tree awakened — gained ${fmt(gain)} Tree Essence. Lifetime production is now ×${prestigeMultiplier().toFixed(2)}.`);
     save();
     checkAchievements();
-    scrollToGameTop();
+    ensureSettings();
+    if(state.settings.scrollAfterPrestige){
+      scrollToGameTop();
+    }
   }
 
   function getPrestigeStartingPurchases(){
@@ -2324,6 +2394,7 @@
     state.essenceUpgrades[id]=true;
     if(u.effect?.type==='unlock_challenges') state.challengeUnlocked=true;
     state.stats=state.stats||{}; state.stats.essenceUpgradesBought=(state.stats.essenceUpgradesBought||0)+1;
+    recordDailyProgress('upgrades',1);
     recalcTotals(); renderEssenceUpgrades(); updateStats(); updateEssenceBonusDisplays(); save();
     showToast(`Purchased ${u.name}.`);
     checkAchievements();
@@ -2407,7 +2478,7 @@
     const keepsChallenges=!!state.worldUpgrades?.eternal_trials;
     const challengeResetText=keepsChallenges ? 'Completed challenges will be preserved.' : 'Lower-layer challenges will be reset.';
     if(state.settings.confirmAscend && !confirm(`Ascend for ${gain} World Seeds? This resets Sap, Tree Essence and Essence upgrades. ${challengeResetText}`)) return;
-    state.worldSeeds+=gain; state.totalWorldSeeds+=gain; state.stats.ascensions=(state.stats.ascensions||0)+1; state.stats.highestAscendGain=Math.max(state.stats.highestAscendGain||0,gain); state.stats.currentRunTime=0;
+    state.worldSeeds+=gain; state.totalWorldSeeds+=gain; state.stats.ascensions=(state.stats.ascensions||0)+1; recordDailyProgress('ascensions',1); state.stats.highestAscendGain=Math.max(state.stats.highestAscendGain||0,gain); state.stats.currentRunTime=0;
     const amberGain=grantAmber(10,null);
     state.offlineAscendDebt=0; state.offlinePrestigeDebt=0;
     state.sap=0; state.runSap=0; state.essence=totals.startEssence||0; state.totalEssence=state.essence; state.prestiges=0;
@@ -2418,7 +2489,7 @@
     recalcTotals(); buildSvg(); updateNodeStates(); updateStats(); updateEssenceBonusDisplays(); renderEssenceUpgrades(); renderAmberUpgrades(); save(); showToast(`Ascended — gained ${gain} World Seeds and ${fmt(amberGain)} Amber.`); scrollToGameTop();
   }
   function canBuyWorldUpgrade(u){ return !state.worldUpgrades?.[u.id] && (!u.requires||state.worldUpgrades?.[u.requires]) && state.worldSeeds>=u.cost; }
-  function buyWorldUpgrade(id){ const u=worldUpgradeById[id]; if(!u||!canBuyWorldUpgrade(u))return; state.worldSeeds-=u.cost; state.worldUpgrades[id]=true; state.stats.worldUpgradesBought=(state.stats.worldUpgradesBought||0)+1; recalcTotals(); renderWorldLayer(); updateStats(); save(); showToast(`Purchased ${u.name}.`); }
+  function buyWorldUpgrade(id){ const u=worldUpgradeById[id]; if(!u||!canBuyWorldUpgrade(u))return; state.worldSeeds-=u.cost; state.worldUpgrades[id]=true; state.stats.worldUpgradesBought=(state.stats.worldUpgradesBought||0)+1; recordDailyProgress('upgrades',1); recalcTotals(); renderWorldLayer(); updateStats(); save(); showToast(`Purchased ${u.name}.`); }
   function renderWorldLayer(){
     const grid=document.getElementById('world-upgrade-grid'); if(!grid)return;
     document.getElementById('world-seed-balance').textContent=fmt(state.worldSeeds);
@@ -2585,6 +2656,9 @@
   let autoBuyAccumulator = 0;
   function updateAutoBuyUI(){
     ensureAutomation();
+    state.autoBuyEnabled=!!state.autoBuyEnabled;
+    state.automation.sapUpgrades=!!state.automation.sapUpgrades;
+
     if(state.autoBuyEnabled!==state.automation.sapUpgrades){
       const unified=!!(state.autoBuyEnabled || state.automation.sapUpgrades);
       state.autoBuyEnabled=unified;
@@ -2607,10 +2681,19 @@
       const available=NODES.filter(n=>n.cost>0 && isPurchasable(n)).sort((a,b)=>nodeCost(a)-nodeCost(b));
       if(!available.length) break;
       const n=available[0];
-      state.sap-=nodeCost(n); state.purchased[n.id]=true; state.stats.sapUpgradesBought=(state.stats.sapUpgradesBought||0)+1; bought++;
+      state.sap-=nodeCost(n);
+      state.purchased[n.id]=true;
+      state.stats.sapUpgradesBought=
+        (state.stats.sapUpgradesBought||0)+1;
+      bought++;
       recalcTotals();
     }
-    if(bought){ updateNodeStates(); updateStats(); save(); }
+    if(bought){
+      recordDailyProgress('upgrades',bought);
+      updateNodeStates();
+      updateStats();
+      save();
+    }
   }
 
   /* ---------- interactions ---------- */
@@ -2620,6 +2703,7 @@
     state.sap -= nodeCost(n);
     state.purchased[id] = true;
     state.stats.sapUpgradesBought=(state.stats.sapUpgradesBought||0)+1;
+    recordDailyProgress('upgrades',1);
     recalcTotals();
     updateNodeStates();
     updateStats();
@@ -2638,7 +2722,12 @@
       else manualComboStacks=1;
       lastManualGatherAt=now;
     }
-    addSap(currentClickGain());
+    const gatheredAmount=currentClickGain();
+    addSap(gatheredAmount);
+    recordDailyProgress('gathers',1);
+    recordDailyProgress('sap',gatheredAmount);
+    secretSessionGathers++;
+    if(secretSessionGathers>=100)unlockSecret('restless_roots');
     updateStats();
     updateNodeStates();
   });
@@ -2670,17 +2759,28 @@
 
   const settingsModal = document.getElementById('settings-modal');
   function ensureSettings(){
-    state.settings = Object.assign({ offlineGain:true, confirmPrestige:true, confirmAscend:true }, state.settings || {});
+    state.settings = Object.assign({
+      offlineGain:true,
+      confirmPrestige:true,
+      confirmAscend:true,
+      scrollAfterPrestige:true
+    },state.settings||{});
   }
   function updateSettingsUI(){
     ensureSettings();
     const toggle=document.getElementById('offline-gain-toggle');
     const prestigeToggle=document.getElementById('prestige-confirm-toggle');
     const ascendToggle=document.getElementById('ascend-confirm-toggle');
+    const prestigeScrollToggle=document.getElementById('prestige-scroll-toggle');
     const note=document.getElementById('offline-gain-note');
     if(toggle) toggle.textContent=`Offline gain: ${state.settings.offlineGain ? 'ON' : 'OFF'}`;
     if(prestigeToggle) prestigeToggle.textContent=`Confirmation: ${state.settings.confirmPrestige ? 'ON' : 'OFF'}`;
     if(ascendToggle) ascendToggle.textContent=`Confirmation: ${state.settings.confirmAscend ? 'ON' : 'OFF'}`;
+    if(prestigeScrollToggle){
+      prestigeScrollToggle.textContent=state.settings.scrollAfterPrestige?'Enabled':'Disabled';
+      prestigeScrollToggle.classList.toggle('on',state.settings.scrollAfterPrestige);
+      prestigeScrollToggle.setAttribute('aria-pressed',String(state.settings.scrollAfterPrestige));
+    }
     if(note) note.textContent=state.settings.offlineGain
       ? 'When enabled, passive sap production is calculated when you return.'
       : 'Offline production is disabled. No sap will be gained while the game is closed.';
@@ -2713,9 +2813,16 @@
     save();
     showToast(`World Tree confirmation ${state.settings.confirmAscend ? 'enabled' : 'disabled'}.`);
   });
+  document.getElementById('prestige-scroll-toggle')?.addEventListener('click',()=>{
+    ensureSettings();
+    state.settings.scrollAfterPrestige=!state.settings.scrollAfterPrestige;
+    updateSettingsUI();
+    save();
+    showToast(`Return to top after Prestige ${state.settings.scrollAfterPrestige?'enabled':'disabled'}.`);
+  });
   document.getElementById('settings-reset').addEventListener('click', async () => {
     if(!confirm('Reset your save? This clears all progress.')) return;
-    state = { version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{}}, lastUpdate: Date.now() };
+    state = { version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{},scrollAfterPrestige:true}, lastUpdate: Date.now() };
     recalcTotals();
     buildSvg();
     updateNodeStates();
@@ -2763,6 +2870,7 @@
     const newLevel=Math.min(CHALLENGE_MAX_LEVEL,currentLevel+1);
     state.completedChallenges[c.id]=newLevel;
     state.activeChallenge=null;
+    recordDailyProgress('challenges',1);
     const amberGain=grantAmber(5,null);
     resetCurrentRun(); renderChallenges(); renderAmberUpgrades(); save();
     const mastered=newLevel>=CHALLENGE_MAX_LEVEL?' Challenge mastered!':'';
@@ -2843,6 +2951,7 @@
     'world-page':{icon:'🌍',title:'World Tree',text:'Ascend by building enough available Essence. Ascension grants World Seeds for powerful long-term upgrades, but resets lower layers.'},
     'amber-page':{icon:'🟠',title:'Amber Market',text:'Amber comes from achievements, challenge levels and ascensions. Amber upgrades are permanent, repeatable and never reset.'},
     'automation-page':{icon:'🤖',title:'Automation',text:'Automation systems unlock as your forest develops. Each helper can be enabled or paused independently.'},
+    'daily-page':{icon:'📅',title:'Daily Objectives',text:'Complete three objectives each day, claim their Amber rewards and discover hidden Forest Secrets.'},
     'achievement-page':{icon:'🏆',title:'Achievements',text:'Achievements track progress across every layer, grant permanent bonuses and award a small amount of Amber.'},
     'statistics-page':{icon:'📊',title:'Statistics',text:'Statistics record your current run, lifetime progress, reset history and offline growth.'}
   };
@@ -2997,6 +3106,13 @@
     if(targetPage==='world-page') renderWorldLayer();
     if(targetPage==='amber-page') renderAmberUpgrades();
     if(targetPage==='automation-page') scheduleAutomationRender(true);
+    if(targetPage==='daily-page'){
+      renderDailySystems();
+      requestAnimationFrame(()=>{
+        try{ renderSecrets(); }
+        catch(error){ console.warn('Forest Secrets refresh failed:',error); }
+      });
+    }
   }));
 
   /* ---------- prestige ---------- */
@@ -3105,7 +3221,7 @@
   async function importSave(){
     try{
       const loaded = decodeSaveString(importText.value);
-      state = Object.assign({ version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{}}, lastUpdate:Date.now() }, loaded);
+      state = Object.assign({ version:9, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{},scrollAfterPrestige:true}, lastUpdate:Date.now() }, loaded);
       state.version = 14;
       state.sap = Math.max(0, Number(state.sap) || 0);
       state.essence = Math.max(0, Number(state.essence) || 0);
@@ -3179,6 +3295,441 @@
   }
 
 
+
+  /* ---------- v1.8.1 Daily Objectives & Secrets ---------- */
+  const DAILY_POOL=[
+    {
+      id:'gathers',icon:'🖐️',name:'Active Harvester',
+      desc:t=>`Gather Sap manually ${fmt(t)} times.`,
+      eligible:()=>true,
+      rewardByTier:[.15,.25,.4,.6],
+      targetsByTier:[[10,20],[25,40],[50,75],[100,150]]
+    },
+    {
+      id:'sap',icon:'💧',name:'Daily Growth',
+      desc:t=>`Produce ${fmt(t)} Sap today.`,
+      eligible:()=>true,
+      rewardByTier:[.15,.25,.4,.6],
+      targetForTier:tier=>{
+        const rate=Math.max(1,currentRate());
+        const lifetime=Math.max(0,Number(state.lifetimeSap)||0);
+        const seconds=[180,420,900,1800][tier];
+        return Math.max(
+          [500,5000,1e6,1e9][tier],
+          Math.ceil(rate*seconds),
+          Math.ceil(lifetime*[.001,.002,.003,.005][tier])
+        );
+      }
+    },
+    {
+      id:'upgrades',icon:'🌿',name:'Tend the Grove',
+      desc:t=>`Purchase ${fmt(t)} upgrades from any progression layer.`,
+      eligible:()=>true,
+      rewardByTier:[.15,.25,.4,.6],
+      targetsByTier:[[1,2],[3,4],[5,7],[8,12]]
+    },
+    {
+      id:'prestiges',icon:'💠',name:'Cycle of Renewal',
+      desc:t=>`Prestige ${fmt(t)} time${t===1?'':'s'}.`,
+      eligible:()=>prestigeGain()>=1||(state.totalEssence||0)>0,
+      rewardByTier:[.25,.4,.65,1],
+      targetsByTier:[[1],[1,2],[2,3],[4,6]]
+    },
+    {
+      id:'challenges',icon:'⚔️',name:'Trial Keeper',
+      desc:t=>`Complete ${fmt(t)} Challenge level${t===1?'':'s'}.`,
+      eligible:()=>{const unlocked=!!state.challengeUnlocked||!!state.essenceUpgrades?.trial_roots;const allMaxed=CHALLENGES.every(challenge=>(Number(state.completedChallenges?.[challenge.id])||0)>=CHALLENGE_MAX_LEVEL);return unlocked&&!allMaxed;},
+      rewardByTier:[.35,.55,.8,1.2],
+      targetsByTier:[[1],[1],[1,2],[2,3]]
+    },
+    {
+      id:'ascensions',icon:'🌍',name:'Worldly Ambition',
+      desc:t=>`Ascend ${fmt(t)} time${t===1?'':'s'}.`,
+      eligible:()=>ascensionGain()>=1||(state.totalWorldSeeds||0)>0,
+      rewardByTier:[.5,.75,1.1,1.5],
+      targetsByTier:[[1],[1],[1,2],[2]]
+    }
+  ];
+
+  const SECRET_DEFS=[
+    {id:'knock_wood',icon:'🪵',name:'Knock on Wood',desc:'You listened closely to the name of the forest.',hint:'Something in the header may be listening.',reward:.25},
+    {id:'many_seasons',icon:'🎨',name:'Many Seasons',desc:'You changed the forest theme ten times.',hint:'The forest remembers every season.',reward:.25},
+    {id:'restless_roots',icon:'⚡',name:'Restless Roots',desc:'You gathered Sap manually 100 times in one session.',hint:'Some roots never stop moving.',reward:.25},
+    {id:'grand_tour',icon:'🧭',name:'The Grand Tour',desc:'You visited every main tab in one session.',hint:'Explore every corner of the interface.',reward:.25},
+    {id:'patient_seed',icon:'🌙',name:'Patient Seed',desc:'You returned after at least one hour away.',hint:'Sometimes the forest rewards patience.',reward:.25},
+    {id:'cup_of_sap',icon:'☕',name:'A Cup of Sap',desc:'You discovered a way to support the forest keeper.',hint:'Sometimes the forest keeper needs a warm drink.',reward:.25}
+  ];
+  const secretById=Object.fromEntries(SECRET_DEFS.map(x=>[x.id,x]));
+  let secretSessionGathers=0;
+  const secretVisitedPages=new Set();
+
+
+  function dailyDifficultyTier(){
+    const essence=Math.max(0,Number(state.totalEssence)||0);
+    const seeds=Math.max(0,Number(state.totalWorldSeeds)||0);
+    const amber=Math.max(0,Number(state.totalAmber)||0);
+
+    if(seeds>=10 || amber>=50 || essence>=10000) return 3;
+    if(seeds>=1 || amber>=10 || essence>=500) return 2;
+    if(essence>=25 || state.challengeUnlocked) return 1;
+    return 0;
+  }
+
+  function dailyDifficultyName(tier){
+    return ['Seedling','Growing','Ancient','Worldbound'][Math.max(0,Math.min(3,tier))];
+  }
+
+  function totalChallengeLevels(){
+    return Object.values(state.completedChallenges||{})
+      .reduce((sum,value)=>sum+(Number(value)||0),0);
+  }
+
+  function totalPurchasedUpgrades(){
+    const sap=Math.max(0,Number(state.stats?.sapUpgradesBought)||0);
+    const essence=Math.max(0,Number(state.stats?.essenceUpgradesBought)||0);
+    const world=Math.max(0,Number(state.stats?.worldUpgradesBought)||0);
+    const amber=Object.values(state.amberUpgrades||{})
+      .reduce((sum,value)=>sum+(Number(value)||0),0);
+    return sap+essence+world+amber;
+  }
+
+  function dailyMetricValue(id){
+    switch(id){
+      case 'gathers':
+        return Math.max(0,Number(state.stats?.totalClicks)||0);
+      case 'sap':
+        return Math.max(0,Number(state.lifetimeSap)||0);
+      case 'upgrades':
+        return totalPurchasedUpgrades();
+      case 'prestiges':
+        return Math.max(0,Number(state.prestiges)||0);
+      case 'challenges':
+        return totalChallengeLevels();
+      case 'ascensions':
+        return Math.max(0,Number(state.stats?.ascensions)||0);
+      default:
+        return 0;
+    }
+  }
+
+  function dailyTargetFor(definition,tier,seed,index){
+    if(typeof definition.targetForTier==='function'){
+      return Math.max(1,Number(definition.targetForTier(tier))||1);
+    }
+    const tierTargets=definition.targetsByTier?.[tier]||[1];
+    return Math.max(1,Number(tierTargets[(seed+index)%tierTargets.length])||1);
+  }
+
+  function dailyDayKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+  function dailyHash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+  function ensureSecretState(){state.secrets=state.secrets&&typeof state.secrets==='object'?state.secrets:{};state.secretCounters=Object.assign({headerClicks:0,themeChanges:0},state.secretCounters||{})}
+  function makeDaily(day){
+    const tier=dailyDifficultyTier();
+    let choices=DAILY_POOL.filter(definition=>{
+      try{return definition.eligible()}
+      catch(error){return false}
+    });
+    if(choices.length<5) choices=DAILY_POOL.slice(0,5);
+
+    let seed=dailyHash(`${day}:${tier}`);
+    const picked=[];
+    while(picked.length<5){
+      seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+      const definition=choices[seed%choices.length];
+      if(!picked.includes(definition)) picked.push(definition);
+    }
+
+    return {
+      version:2,
+      date:day,
+      tier,
+      objectives:picked.map((definition,index)=>({
+        id:definition.id,
+        target:dailyTargetFor(definition,tier,seed,index),
+        reward:Number(definition.rewardByTier?.[tier])||.25,
+        baseline:dailyMetricValue(definition.id),
+        carriedProgress:0,
+        claimed:false
+      })),
+      counters:{gathers:0,sap:0,upgrades:0,prestiges:0,challenges:0,ascensions:0},
+      bonusClaimed:false,
+      completedDay:false
+    };
+  }
+
+  function migrateDailyObjective(objective){
+    if(!objective||typeof objective!=='object') return objective;
+
+    const legacyCounter=Math.max(
+      0,
+      Number(state.daily?.counters?.[objective.id])||0
+    );
+
+    if(!Number.isFinite(Number(objective.baseline))){
+      // Preserve progress from the old counter-based implementation.
+      objective.baseline=Math.max(
+        0,
+        dailyMetricValue(objective.id)-legacyCounter
+      );
+    }
+
+    objective.carriedProgress=Math.max(
+      legacyCounter,
+      Number(objective.carriedProgress)||0
+    );
+    objective.target=Math.max(1,Number(objective.target)||1);
+    objective.reward=Math.max(0,Number(objective.reward)||.25);
+    objective.claimed=!!objective.claimed;
+    return objective;
+  }
+
+  function ensureDailyState(){
+    ensureSecretState();
+    const today=dailyDayKey();
+
+    if(
+      !state.daily ||
+      state.daily.date!==today ||
+      !Array.isArray(state.daily.objectives)
+    ){
+      const previousCompleted=!!state.daily?.completedDay;
+      state.daily=makeDaily(today);
+      state.dailyStreak=previousCompleted
+        ? (Number(state.dailyStreak)||0)+1
+        : 0;
+      save();
+    }
+
+    state.daily.counters=Object.assign(
+      {gathers:0,sap:0,upgrades:0,prestiges:0,challenges:0,ascensions:0},
+      state.daily.counters||{}
+    );
+    state.daily.tier=Number.isFinite(Number(state.daily.tier))
+      ? Math.max(0,Math.min(3,Number(state.daily.tier)))
+      : dailyDifficultyTier();
+    state.daily.objectives=state.daily.objectives
+      .map(migrateDailyObjective)
+      .filter(objective=>
+        objective &&
+        typeof objective.id==='string' &&
+        dailyDef(objective.id)
+      );
+
+    // Rebuild only if an old or malformed save does not contain three usable
+    // objectives. Claimed rewards from valid objectives remain untouched.
+    if(state.daily.objectives.length!==5){
+      const replacement=makeDaily(today);
+      const validById=Object.fromEntries(
+        state.daily.objectives.map(objective=>[objective.id,objective])
+      );
+      replacement.objectives=replacement.objectives.map(objective=>
+        validById[objective.id]||objective
+      );
+      replacement.bonusClaimed=!!state.daily.bonusClaimed;
+      replacement.completedDay=!!state.daily.completedDay;
+      state.daily=replacement;
+    }
+
+    state.daily.version=3;
+    state.dailyStreak=Math.max(0,Number(state.dailyStreak)||0);
+  }
+
+  function dailyDef(id){
+    return DAILY_POOL.find(definition=>definition.id===id);
+  }
+
+  function dailyProgress(objective){
+    ensureDailyState();
+    if(!objective) return 0;
+
+    const metricProgress=Math.max(
+      0,
+      dailyMetricValue(objective.id)-(Number(objective.baseline)||0)
+    );
+    const carried=Math.max(0,Number(objective.carriedProgress)||0);
+    const legacy=Math.max(
+      0,
+      Number(state.daily.counters?.[objective.id])||0
+    );
+
+    return Math.max(metricProgress,carried,legacy);
+  }
+
+  function dailyObjectiveComplete(objective){
+    if(!objective) return false;
+    const progress=dailyProgress(objective);
+    const target=Math.max(1,Number(objective.target)||1);
+    return progress>=target-1e-7;
+  }
+
+  function recordDailyProgress(type,amount=1){
+    try{
+      ensureDailyState();
+      if(!state.daily?.counters || !(type in state.daily.counters)) return;
+
+      const numeric=Math.max(0,Number(amount)||0);
+      if(numeric<=0) return;
+
+      state.daily.counters[type]=
+        (Number(state.daily.counters[type])||0)+numeric;
+
+      const objective=state.daily.objectives.find(
+        item=>item && item.id===type
+      );
+      if(objective){
+        objective.carriedProgress=Math.max(
+          Number(objective.carriedProgress)||0,
+          Number(state.daily.counters[type])||0
+        );
+      }
+    }catch(error){
+      // Daily objectives must never stop production, automation or the UI.
+      console.warn('Daily progress update skipped safely:',error);
+    }
+  }
+
+
+  function dailyResetSeconds(){const n=new Date(),next=new Date(n);next.setHours(24,0,0,0);return Math.max(0,(next-n)/1000)}
+  function updateDailyComplete(){
+    ensureDailyState();
+    state.daily.completedDay=state.daily.objectives.every(dailyObjectiveComplete);
+  }
+  function claimDaily(index){
+    ensureDailyState();
+
+    const objective=state.daily.objectives[Number(index)];
+    if(!objective){
+      showToast('Daily objective could not be found.');
+      return;
+    }
+    if(objective.claimed){
+      showToast('This daily reward has already been claimed.');
+      return;
+    }
+    if(!dailyObjectiveComplete(objective)){
+      showToast('This daily objective is not complete yet.');
+      renderDailyObjectives();
+      return;
+    }
+
+    // Mark and save the claim before rendering, so a rebuilt button cannot
+    // trigger the same reward twice.
+    objective.claimed=true;
+    const rewardAmount=Math.max(0,Number(objective.reward)||0);
+    const beforeAmber=Math.max(0,Number(state.amber)||0);
+    const grantResult=grantAmber(rewardAmount,null);
+    const afterAmber=Math.max(0,Number(state.amber)||0);
+    const gain=Number.isFinite(Number(grantResult))
+      ? Number(grantResult)
+      : Math.max(0,afterAmber-beforeAmber);
+    updateDailyComplete();
+    updateStats();
+    renderDailySystems();
+    saveImmediately();
+    showToast(`Daily objective reward claimed — +${fmt(gain)} Amber.`);
+  }
+  function claimDailyBonus(){
+    ensureDailyState();
+    updateDailyComplete();
+
+    if(state.daily.bonusClaimed){
+      showToast('The daily completion bonus has already been claimed.');
+      return;
+    }
+    if(!state.daily.completedDay){
+      showToast('Complete all five daily objectives first.');
+      renderDailyObjectives();
+      return;
+    }
+
+    state.daily.bonusClaimed=true;
+    const beforeAmber=Math.max(0,Number(state.amber)||0);
+    const grantResult=grantAmber(1,null);
+    const afterAmber=Math.max(0,Number(state.amber)||0);
+    const gain=Number.isFinite(Number(grantResult))
+      ? Number(grantResult)
+      : Math.max(0,afterAmber-beforeAmber);
+    updateStats();
+    renderDailySystems();
+    saveImmediately();
+    showToast(`Daily completion bonus claimed — +${fmt(gain)} Amber.`);
+  }
+  function renderDailyObjectives(){
+    ensureDailyState();const grid=document.getElementById('daily-objective-grid');if(!grid)return;
+    const completed=state.daily.objectives.filter(dailyObjectiveComplete).length,claimed=state.daily.objectives.filter(o=>o.claimed).length;
+    setText('daily-completed-count',`${completed} / 5`);
+    setText('daily-claimed-count',`${claimed} / 5`);
+    setText('daily-streak',`${state.dailyStreak} day${state.dailyStreak===1?'':'s'}`);
+    setText('daily-difficulty',dailyDifficultyName(state.daily.tier));
+    setText('daily-reset-time',formatDuration(dailyResetSeconds()));
+    grid.innerHTML='';
+    state.daily.objectives.forEach((o,i)=>{const d=dailyDef(o.id),p=dailyProgress(o),done=dailyObjectiveComplete(o),pct=Math.max(0,Math.min(100,p/o.target*100)),card=document.createElement('article');card.className=`daily-objective${done?' complete':''}${o.claimed?' claimed':''}`;card.innerHTML=`
+        <div class="daily-objective-icon">${d.icon}</div>
+        <h3>${d.name}</h3>
+        <p>${d.desc(o.target)}</p>
+        <div class="daily-progress-label">
+          <span>Progress</span>
+          <strong>${fmt(Math.min(p,o.target))} / ${fmt(o.target)}</strong>
+        </div>
+        <div class="daily-progress"><div style="width:${pct}%"></div></div>
+        <div class="daily-reward">
+          ${dailyDifficultyName(state.daily.tier)} reward: +${fmt(o.reward)} Amber
+        </div>
+        <button
+          type="button"
+          data-daily-claim="${i}"
+          aria-disabled="${String(!done||o.claimed)}"
+          class="${done&&!o.claimed?'daily-claim-ready':''}">
+          ${o.claimed?'Claimed':done?'Claim reward':'In progress'}
+        </button>`;
+      grid.appendChild(card);
+    });
+
+    grid.querySelectorAll('[data-daily-claim]').forEach(button=>{
+      button.onclick=event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        claimDaily(Number(button.dataset.dailyClaim));
+      };
+    });
+    updateDailyComplete();const b=document.getElementById('daily-bonus-claim');if(b){
+      const unavailable=!state.daily.completedDay||state.daily.bonusClaimed;
+      b.disabled=false;
+      b.setAttribute('aria-disabled',String(unavailable));
+      b.classList.toggle('daily-claim-ready',!unavailable);
+      b.textContent=state.daily.bonusClaimed?'Daily bonus claimed':'Claim +1 Amber';
+    }setText('daily-completion-status',state.daily.bonusClaimed?'Daily bonus claimed':`${completed} / 5 completed`);
+  }
+  function unlockSecret(id){
+    ensureSecretState();const s=secretById[id];if(!s||state.secrets[id])return false;state.secrets[id]=Date.now();const gain=grantAmber(s.reward,null);
+    showAchievementPopup({icon:s.icon,name:`Secret: ${s.name}`,reward:{},secretRewardText:`+${fmt(gain)} Amber`});showToast(`Secret discovered — ${s.name}.`);renderSecrets();save();return true;
+  }
+  function renderSecrets(){ensureSecretState();const grid=document.getElementById('secret-grid');if(!grid)return;const found=SECRET_DEFS.filter(s=>state.secrets[s.id]).length;setText('secret-count',`${found} / ${SECRET_DEFS.length}`);grid.innerHTML='';for(const s of SECRET_DEFS){const open=!!state.secrets[s.id],card=document.createElement('article');card.className=`secret-card${open?' unlocked':''}`;card.innerHTML=`<div class="secret-icon">${open?s.icon:'❔'}</div><h3>${open?s.name:'Undiscovered Secret'}</h3><p>${open?s.desc:s.hint}</p><div class="secret-reward">${open?`Found • +${fmt(s.reward)} Amber`:'Condition hidden'}</div>`;grid.appendChild(card)}}
+  function renderDailySystems(){renderDailyObjectives();renderSecrets()}
+  function checkSecretConditions(){ensureSecretState();if((state.stats?.longestOfflineTime||0)>=3600)unlockSecret('patient_seed')}
+
+  function handleDailyRewardAction(event){
+    const claimButton=event.target.closest?.('[data-daily-claim]');
+    if(claimButton){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      claimDaily(Number(claimButton.dataset.dailyClaim));
+      return;
+    }
+
+    const bonusButton=event.target.closest?.('#daily-bonus-claim');
+    if(bonusButton){
+      event.preventDefault();
+      event.stopPropagation();
+      claimDailyBonus();
+    }
+  }
+
+  document.addEventListener('click',handleDailyRewardAction,true);
+  document.querySelector('.brand-block,.title')?.addEventListener('click',()=>{ensureSecretState();state.secretCounters.headerClicks++;if(state.secretCounters.headerClicks>=25)unlockSecret('knock_wood');save()});
+  document.querySelectorAll('a[href*="ko-fi.com/milenpenev"]').forEach(link=>link.addEventListener('click',()=>unlockSecret('cup_of_sap')));
+  document.querySelectorAll('.tab-nav .tab-btn[data-page]').forEach(b=>b.addEventListener('click',()=>{secretVisitedPages.add(b.dataset.page);const pages=[...document.querySelectorAll('.tab-nav .tab-btn[data-page]')].map(x=>x.dataset.page);if(pages.every(x=>secretVisitedPages.has(x)))unlockSecret('grand_tour')}));
+
   function ensureExtendedStats(){
     state.stats=Object.assign({
       totalClicks:0,totalPlaytime:0,currentRunTime:0,totalOfflineTime:0,longestOfflineTime:0,
@@ -3189,7 +3740,7 @@
   function ensureAutomation(){
     state.automation=Object.assign({
       sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,
-      claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null
+      claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null,lastAutoResetAt:0
     },state.automation||{});
   }
   function setText(id,value){const el=document.getElementById(id);if(el)el.textContent=value}
@@ -3350,12 +3901,15 @@
     }
     const ascendTarget=Math.max(1,state.automation.ascendMin||1);
     const prestigeTarget=Math.max(1,state.automation.prestigeMin||1);
+    const cooldownRemaining=AUTO_RESET_COOLDOWN_MS-(Date.now()-(state.automation.lastAutoResetAt||0));
     if(state.automation.ascend){
       const gain=ascensionGain();
+      if(gain>=ascendTarget && cooldownRemaining>0) return `<strong>Next action:</strong> Ascend for ${fmt(gain)} World Seeds (in ${(cooldownRemaining/1000).toFixed(1)}s — letting other automation spend first).`;
       if(gain>=ascendTarget) return `<strong>Next action:</strong> Ascend for ${fmt(gain)} World Seeds.`;
     }
     if(state.automation.prestige){
       const gain=prestigeGain();
+      if(gain>=prestigeTarget && cooldownRemaining>0) return `<strong>Next action:</strong> Prestige for ${fmt(gain)} Essence (in ${(cooldownRemaining/1000).toFixed(1)}s — letting other automation spend first).`;
       if(gain>=prestigeTarget) return `<strong>Next action:</strong> Prestige for ${fmt(gain)} Essence.`;
     }
     const waiting=[];
@@ -3366,8 +3920,22 @@
       : '<strong>Idle:</strong> enable an automation system to begin.';
   }
   let advancedAutomationAccumulator=0;
+  // Auto Prestige / Auto Ascend reset Sap (and the Sap Tree) to zero. Without
+  // safeguards, a low "minimum gain" combined with high production can let them
+  // fire on almost every 0.5s automation tick — wiping Sap before Auto Sap Tree
+  // (or Auto Essence/World upgrades) ever get a chance to spend it, which can
+  // permanently stall Sap/sec at 0. Two safeguards keep every auto-buyer usable
+  // alongside Auto Prestige/Ascend: a minimum time between resets, and (when
+  // Auto Sap Tree is on) requiring passive production to be re-established.
+  const AUTO_RESET_COOLDOWN_MS = 3000;
+  function sapTreeRecoveredForReset(){
+    if(!state.automation.sapUpgrades) return true;
+    return currentRate() > 0;
+  }
+
   function runAdvancedAutomation(){
     ensureAutomation();
+    recalcTotals();
     for(const a of AUTOMATIONS)if(!automationUnlocked(a))state.automation[a.id]=false;
     if(state.automation.sapUpgrades && state.essenceUpgrades?.root_reflexes){
       if(totals.autoBuyUnlocked){
@@ -3383,9 +3951,16 @@
       if(c&&state.runSap>=challengeGoal(c))completeChallenge();
     }
     if(!state.activeChallenge){
+      const cooldownReady = (Date.now()-(state.automation.lastAutoResetAt||0)) >= AUTO_RESET_COOLDOWN_MS && sapTreeRecoveredForReset();
       // Ascension has priority because Prestige would reset the current run and could indefinitely delay it.
-      if(state.automation.ascend && ascensionGain()>=Math.max(1,state.automation.ascendMin||1))ascend();
-      else if(state.automation.prestige && prestigeGain()>=Math.max(1,state.automation.prestigeMin||1))prestige();
+      if(cooldownReady && state.automation.ascend && ascensionGain()>=Math.max(1,state.automation.ascendMin||1)){
+        state.automation.lastAutoResetAt=Date.now();
+        ascend();
+      }
+      else if(cooldownReady && state.automation.prestige && prestigeGain()>=Math.max(1,state.automation.prestigeMin||1)){
+        state.automation.lastAutoResetAt=Date.now();
+        prestige();
+      }
       else if(state.automation.restartChallenge && state.automation.lastChallenge && !state.completedChallenges?.[state.automation.lastChallenge]){
         const c=challengeById[state.automation.lastChallenge];
         if(c && !(c.layer==='world'&&state.totalWorldSeeds<1))startChallenge(c.id);
@@ -3393,6 +3968,26 @@
     }
   }
 
+
+
+  // v1.8.4 independent Sap Tree automation recovery heartbeat
+  setInterval(()=>{
+    try{
+      ensureAutomation();
+      recalcTotals();
+
+      if(
+        state.automation.sapUpgrades &&
+        state.essenceUpgrades?.root_reflexes &&
+        totals.autoBuyUnlocked
+      ){
+        state.autoBuyEnabled=true;
+        runAutoBuy();
+      }
+    }catch(error){
+      console.warn('Sap Tree automation recovery step skipped:',error);
+    }
+  },1000);
 
   /* ---------- stats ---------- */
   const TREE_EVOLUTION_STAGES=[
@@ -3526,27 +4121,127 @@
     }
   }
 
+
+  /* ---------- v1.8.5 lightweight realtime resource UI ---------- */
+  function updateRealtimeResourceDisplay(){
+    try{
+      const sap=Math.max(0,Number(state.sap)||0);
+      const rate=Math.max(0,Number(currentRate())||0);
+      const click=Math.max(0,Number(currentClickGain())||0);
+
+      const sapEl=document.getElementById('stat-sap');
+      if(sapEl){
+        sapEl.textContent=fmt(sap);
+        sapEl.title=sap.toLocaleString(undefined,{maximumFractionDigits:2});
+      }
+
+      const rateEl=document.getElementById('stat-rate');
+      if(rateEl){
+        rateEl.textContent=`${fmt(rate)}/s`;
+        rateEl.title=`${rate.toLocaleString(undefined,{maximumFractionDigits:2})}/s`;
+      }
+
+      const clickEl=document.getElementById('stat-click');
+      if(clickEl){
+        clickEl.textContent=fmt(click);
+        clickEl.title=click.toLocaleString(undefined,{maximumFractionDigits:2});
+      }
+
+      const sideSap=document.getElementById('side-sap');
+      if(sideSap) sideSap.textContent=fmt(sap);
+
+      const sideRate=document.getElementById('side-rate');
+      if(sideRate) sideRate.textContent=`${fmt(rate)}/s`;
+    }catch(error){
+      // Never allow display formatting to affect production.
+      console.warn('Realtime resource display skipped:',error);
+    }
+  }
+
+  let realtimeUiLastFrame=0;
+  function realtimeUiLoop(now){
+    try{
+      // Roughly 20 updates per second: visually realtime without rebuilding
+      // the full interface on every browser frame.
+      if(now-realtimeUiLastFrame>=50){
+        realtimeUiLastFrame=now;
+        updateRealtimeResourceDisplay();
+      }
+    }finally{
+      requestAnimationFrame(realtimeUiLoop);
+    }
+  }
+
   /* ---------- game loop ---------- */
   let lastTick = performance.now();
   let achievementCheckAccumulator=0;
+  let dailyUpdateAccumulator=0;
+  let dailySapAccumulator=0;
+  let heavyUiAccumulator=0;
   function loop(now){
-    const dt = Math.min((now - lastTick) / 1000, 1);
-    lastTick = now;
-    ensureExtendedStats(); ensureAutomation();
-    state.stats.totalPlaytime += dt; state.stats.currentRunTime += dt;
-    state.stats.highestRate=Math.max(state.stats.highestRate||0,currentRate());
-    state.stats.highestClick=Math.max(state.stats.highestClick||0,currentClickGain());
-    addSap(currentRate() * dt);
-    autoBuyAccumulator += dt;
-    advancedAutomationAccumulator += dt;
-    achievementCheckAccumulator += dt;
-    if(achievementCheckAccumulator>=0.75){achievementCheckAccumulator=0;checkAchievements();}
-    if(autoBuyAccumulator >= totals.autoBuyInterval){ autoBuyAccumulator=0; runAutoBuy(); }
-    if(advancedAutomationAccumulator>=0.5){advancedAutomationAccumulator=0;runAdvancedAutomation();}
-    updateStats();
-    updateLivePanelValues();
-    updateNodeStates();
-    requestAnimationFrame(loop);
+    // The whole game (Sap generation, auto-buy, automation) depends on this
+    // function re-scheduling itself via requestAnimationFrame. If any step
+    // below throws, we must still keep the loop alive — otherwise a single
+    // bad frame (e.g. during an automated Prestige/Ascend) would silently
+    // freeze Sap/sec and every auto-buy system for the rest of the session.
+    try{
+      const dt = Math.min((now - lastTick) / 1000, 1);
+      lastTick = now;
+      ensureExtendedStats(); ensureAutomation();
+      state.stats.totalPlaytime += dt; state.stats.currentRunTime += dt;
+      state.stats.highestRate=Math.max(state.stats.highestRate||0,currentRate());
+      state.stats.highestClick=Math.max(state.stats.highestClick||0,currentClickGain());
+      const passiveGain=currentRate()*dt;
+      addSap(passiveGain);
+      dailySapAccumulator+=passiveGain;
+      autoBuyAccumulator += dt;
+      advancedAutomationAccumulator += dt;
+      achievementCheckAccumulator += dt;
+      dailyUpdateAccumulator += dt;
+      heavyUiAccumulator += dt;
+      if(achievementCheckAccumulator>=0.75){achievementCheckAccumulator=0;checkAchievements();}
+      if(autoBuyAccumulator >= totals.autoBuyInterval){ autoBuyAccumulator=0; runAutoBuy(); }
+      if(advancedAutomationAccumulator>=0.5){
+        advancedAutomationAccumulator=0;
+        try{ runAdvancedAutomation(); }
+        catch(error){ console.error('Advanced automation step failed (recovered, will retry next cycle):',error); }
+      }
+      // Heavy DOM work runs at 10 Hz. Sap, Sap/sec and Sap/click are updated
+      // independently at 20 Hz by realtimeUiLoop.
+      if(heavyUiAccumulator>=0.1){
+        heavyUiAccumulator=0;
+        updateStats();
+        updateLivePanelValues();
+        updateNodeStates();
+      }
+
+      // Daily tracking is deliberately last and isolated. A Daily failure can
+      // no longer interrupt Sap/sec, auto-buy or advanced automation.
+      if(dailyUpdateAccumulator>=1){
+        dailyUpdateAccumulator=0;
+        const accumulatedSap=dailySapAccumulator;
+        dailySapAccumulator=0;
+
+        try{
+          if(accumulatedSap>0) recordDailyProgress('sap',accumulatedSap);
+          checkSecretConditions();
+
+          if(document.getElementById('daily-page')?.classList.contains('active')){
+            try{ renderDailyObjectives(); }
+            catch(error){ console.warn('Daily objective refresh failed:',error); }
+
+            try{ renderSecrets(); }
+            catch(error){ console.warn('Forest Secrets refresh failed:',error); }
+          }
+        }catch(error){
+          console.warn('Daily heartbeat failed safely:',error);
+        }
+      }
+    }catch(error){
+      console.error('Game loop step failed (recovered):',error);
+    }finally{
+      requestAnimationFrame(loop);
+    }
   }
 
 
@@ -3697,7 +4392,7 @@
 
   function calculateOfflineRewards(seconds){
     seconds=Math.max(0,Math.min(Number(seconds)||0,offlineCapSeconds()));
-    const result={seconds,sap:0,essence:0,seeds:0};
+    const result={seconds,sap:0,essence:0,seeds:0,viaAutoPrestige:false};
     if(seconds<=1 || !state.settings?.offlineGain) return result;
     recalcTotals();
 
@@ -3712,6 +4407,8 @@
       const startingSeeds=Number(state.worldSeeds)||0;
       let remaining=seconds;
       let guard=0;
+      let simulatedPrestigeEvents=0;
+      let simulatedHighestGain=0;
 
       try{
         state=simulationState;
@@ -3768,12 +4465,25 @@
           state.runSap=0;
           state.purchased=getPrestigeStartingPurchases();
           recalcTotals();
+          simulatedPrestigeEvents++;
+          simulatedHighestGain=Math.max(simulatedHighestGain,gain);
         }
 
         if(remaining>0 && Number.isFinite(offlineSapRate())) addSap(offlineSapRate()*remaining);
         result.sap=Math.max(0,(Number(state.sap)||0)-startingSap);
         result.essence=Math.max(0,(Number(state.essence)||0)-startingEssence);
         result.seeds=Math.max(0,(Number(state.worldSeeds)||0)-startingSeeds);
+        // These gains come from fully simulated Prestige resets (identical to what
+        // actually happens online), not the 20%-of-theoretical heuristic below —
+        // so they must NOT be added to offlinePrestigeDebt, or the very next real
+        // Prestige would be silently cancelled out by that debt.
+        result.viaAutoPrestige=true;
+        result.prestigeEvents=simulatedPrestigeEvents;
+        if(simulatedPrestigeEvents>0){
+          originalState.prestiges=(Number(originalState.prestiges)||0)+simulatedPrestigeEvents;
+          originalState.stats=originalState.stats||{};
+          originalState.stats.highestPrestigeGain=Math.max(originalState.stats.highestPrestigeGain||0,simulatedHighestGain);
+        }
       } finally {
         state=originalState;
         recalcTotals();
@@ -3798,8 +4508,19 @@
 
   function applyOfflineRewardsInstant(rewards){
     if(rewards.sap>0) addSap(rewards.sap);
-    if(rewards.essence>0){ state.essence+=rewards.essence; state.totalEssence+=rewards.essence; state.offlinePrestigeDebt+=rewards.essence; }
-    if(rewards.seeds>0){ state.worldSeeds+=rewards.seeds; state.totalWorldSeeds+=rewards.seeds; state.offlineAscendDebt+=rewards.seeds; }
+    if(rewards.essence>0){
+      state.essence+=rewards.essence; state.totalEssence+=rewards.essence;
+      // Only the legacy "20% of theoretical gross" heuristic needs an offline
+      // debt safeguard (it grants Essence without actually resetting the Sap
+      // Tree, so it must be excluded from the next real Prestige's gain to
+      // avoid double-counting). Essence from a fully simulated Auto Prestige
+      // run already represents real, completed resets — no debt needed.
+      if(!rewards.viaAutoPrestige) state.offlinePrestigeDebt+=rewards.essence;
+    }
+    if(rewards.seeds>0){
+      state.worldSeeds+=rewards.seeds; state.totalWorldSeeds+=rewards.seeds;
+      if(!rewards.viaAutoPrestige) state.offlineAscendDebt+=rewards.seeds;
+    }
   }
 
   async function showReturnOverlay(rewards){
@@ -3852,8 +4573,10 @@
       const savedValue = await storageGet();
       if(savedValue){
         const loaded = JSON.parse(savedValue);
-        state = Object.assign({ version:13, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{}}, lastUpdate: Date.now() }, loaded);
-        state.version = 13;
+        state = Object.assign({ version:14, sap:0, essence:0, totalEssence:0, runSap:0, lifetimeSap:0, prestiges:0, purchased:{seed:true}, essenceUpgrades:{}, worldSeeds:0, totalWorldSeeds:0, worldUpgrades:{}, amber:0, totalAmber:0, amberUpgrades:{}, autoBuyEnabled:false, activeChallenge:null, challengeUnlocked:false, completedChallenges:{}, achievements:{}, stats:{totalClicks:0}, automation:{sapUpgrades:false,essenceUpgrades:false,worldUpgrades:false,prestige:false,ascend:false,claimChallenge:false,restartChallenge:false,prestigeMin:1,ascendMin:1,lastChallenge:null}, offlinePrestigeDebt:0, offlineAscendDebt:0, settings:{offlineGain:true,essenceSort:'default',tutorialSeen:{},scrollAfterPrestige:true}, lastUpdate: Date.now() }, loaded);
+        state.version = 14;
+        ensureDailyState();
+        ensureSecretState();
         state.totalEssence = Math.max(Number(state.totalEssence)||0, Number(state.essence)||0);
         state.essenceUpgrades = Object.assign({}, state.essenceUpgrades || {});
       state.challengeUnlocked = !!state.challengeUnlocked || !!state.essenceUpgrades.trial_roots;
@@ -3862,7 +4585,7 @@
         state.purchased = Object.assign({seed:true}, state.purchased || {});
         state.activeChallenge = challengeById[state.activeChallenge] ? state.activeChallenge : null;
         state.completedChallenges = Object.assign({}, state.completedChallenges || {});
-        state.settings = Object.assign({offlineGain:true,essenceSort:'default',tutorialSeen:{}}, state.settings || {}); sanitizeAchievements(); syncTutorialsWithLoadedState(); ensureExtendedStats(); ensureAutomation();
+        state.settings = Object.assign({offlineGain:true,essenceSort:'default',tutorialSeen:{},scrollAfterPrestige:true}, state.settings || {}); sanitizeAchievements(); syncTutorialsWithLoadedState(); ensureExtendedStats(); ensureAutomation();
         state.offlinePrestigeDebt=Math.max(0,Number(state.offlinePrestigeDebt)||0);
         state.offlineAscendDebt=Math.max(0,Number(state.offlineAscendDebt)||0);
         recalcTotals();
@@ -3890,9 +4613,16 @@
   }
 
   load().then(() => {
+    setTimeout(()=>{
+      try{ renderSecrets(); }
+      catch(error){ console.warn('Forest Secrets startup render failed:',error); }
+    },100);
+
+    requestAnimationFrame(realtimeUiLoop);
+
     lastTick = performance.now();
     checkAchievements();
-    renderAchievements(); renderStatistics(); renderAutomation();
+    renderAchievements(); renderStatistics(); renderAutomation(); renderDailySystems();
     requestAnimationFrame(loop);
     setInterval(save, 5000);
   });
@@ -3948,7 +4678,7 @@ function renderThemePicker(){
   if(!selectedAllowed) state.selectedTheme='nature';
   document.body.dataset.theme=state.selectedTheme;
   box.innerHTML=THEME_DEFS.map(t=>{const open=t.unlocked();return `<button type="button" class="theme-choice ${state.selectedTheme===t.id?'active':''}" data-theme-choice="${t.id}" ${open?'':'disabled'} title="${open?'Cosmetic theme':themeUnlockText(t.id)}">${t.icon} ${t.name}${open?'':' 🔒'}</button>`}).join('');
-  box.querySelectorAll('[data-theme-choice]').forEach(b=>b.addEventListener('click',()=>{state.selectedTheme=b.dataset.themeChoice;document.body.dataset.theme=state.selectedTheme;renderThemePicker();saveGame();}));
+  box.querySelectorAll('[data-theme-choice]').forEach(b=>b.addEventListener('click',()=>{state.selectedTheme=b.dataset.themeChoice;document.body.dataset.theme=state.selectedTheme;ensureSecretState();state.secretCounters.themeChanges++;if(state.secretCounters.themeChanges>=10)unlockSecret('many_seasons');renderThemePicker();save();}));
 }
 function themeUnlockText(id){
   return ({autumn:'Earn 50 total Essence',winter:'Earn 250 total Essence',world:'Earn 5 total World Seeds',amber:'Earn 25 total Amber'})[id]||'';
@@ -3976,9 +4706,9 @@ if(_v175RenderAll){renderAll=function(){const r=_v175RenderAll.apply(this,argume
 const _v175BuyNode = typeof buyNode==='function' ? buyNode : null;
 if(_v175BuyNode){buyNode=function(id){const before=Array.isArray(state.purchased)?state.purchased.includes(id):!!state.purchased?.[id];const r=_v175BuyNode.apply(this,arguments);const after=Array.isArray(state.purchased)?state.purchased.includes(id):!!state.purchased?.[id];if(!before&&after)requestAnimationFrame(()=>flashPurchasedNode(id));return r;};}
 const _v175Prestige = typeof doPrestige==='function'?doPrestige:(typeof prestige==='function'?prestige:null);
-if(_v175Prestige){const wrapped=function(){const elapsed=Number(state.runTime)||0;const result=_v175Prestige.apply(this,arguments);if(elapsed>0&&(state.fastestPrestige===0||elapsed<state.fastestPrestige))state.fastestPrestige=elapsed;saveGame();return result;};if(typeof doPrestige==='function')doPrestige=wrapped;else prestige=wrapped;}
+if(_v175Prestige){const wrapped=function(){const elapsed=Number(state.runTime)||0;const result=_v175Prestige.apply(this,arguments);if(elapsed>0&&(state.fastestPrestige===0||elapsed<state.fastestPrestige))state.fastestPrestige=elapsed;save();return result;};if(typeof doPrestige==='function')doPrestige=wrapped;else prestige=wrapped;}
 const _v175Ascend = typeof ascend==='function'?ascend:null;
-if(_v175Ascend){ascend=function(){const elapsed=Number(state.runTime)||0;const result=_v175Ascend.apply(this,arguments);if(elapsed>0&&(state.fastestAscend===0||elapsed<state.fastestAscend))state.fastestAscend=elapsed;saveGame();return result;};}
+if(_v175Ascend){ascend=function(){const elapsed=Number(state.runTime)||0;const result=_v175Ascend.apply(this,arguments);if(elapsed>0&&(state.fastestAscend===0||elapsed<state.fastestAscend))state.fastestAscend=elapsed;save();return result;};}
 ensureV175State(); document.body.dataset.theme=state.selectedTheme; setTimeout(()=>{renderThemePicker();updateExpandedStats();},0);
 // v1.7.9: Keep cosmetic theme locks synchronized with imported and newly earned lifetime currencies.
 const _v179UpdateStats = typeof updateStats === 'function' ? updateStats : null;
@@ -4108,5 +4838,470 @@ document.addEventListener('DOMContentLoaded',()=>{ updateEssenceBonusDisplays();
   })();
 
 </script>
-</body>
+<style>/* v1.8 Exploration & Research — addon CSS */
+.exploration-page,.research-page{padding:22px;background:linear-gradient(180deg,#08150f,#07110d);min-height:700px}
+.expedition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.expedition-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:rgba(255,255,255,.018);display:flex;flex-direction:column;gap:8px;min-height:172px}
+.expedition-card h3{font:600 18px 'Fraunces',serif;margin:0;color:var(--leaf)}
+.expedition-card p{margin:0;color:var(--text-dim);font-size:12px;line-height:1.45;flex:1}
+.expedition-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--text-dim)}
+.expedition-meta span{border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:rgba(0,0,0,.18)}
+.expedition-meta strong{color:var(--gold)}
+.exp-send{border:none;border-radius:8px;padding:9px 12px;background:linear-gradient(180deg,#98ffc4,var(--leaf));color:#07110d;font:700 12px 'Inter',sans-serif;cursor:pointer;transition:transform .08s ease}
+.exp-send:active{transform:translateY(2px)}
+.exp-send:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.4)}
+.stamina-bar-wrap{height:12px;border:1px solid var(--line);border-radius:999px;background:#08120d;overflow:hidden;margin:0 0 16px}
+.stamina-bar{height:100%;width:0;background:linear-gradient(90deg,#3e9a6c,#7cffb2);transition:width .3s ease}
+.expedition-active{border:1px solid var(--leaf-dim);border-radius:12px;padding:14px;margin-bottom:16px;background:rgba(124,255,178,.05)}
+.expedition-active strong{font:600 16px 'Fraunces',serif;color:var(--leaf)}
+.expedition-active .exp-progress{height:10px;border:1px solid var(--line);border-radius:999px;background:#08120d;overflow:hidden;margin-top:8px}
+.expedition-active .exp-progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--leaf-dim),var(--leaf));transition:width .2s linear}
+.research-grid{display:grid;gap:18px;margin-top:14px}
+.research-branch{border:1px solid var(--line);border-radius:12px;padding:16px;background:rgba(255,255,255,.015)}
+.research-branch h3{font:600 20px 'Fraunces',serif;margin:0 0 10px;color:var(--gold)}
+.research-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.research-card{border:1px solid var(--line);border-radius:10px;padding:13px;background:rgba(255,255,255,.018);display:flex;flex-direction:column;gap:6px}
+.research-card.completed{border-color:var(--leaf-dim);background:rgba(124,255,178,.06)}
+.research-card.active{border-color:var(--gold);background:rgba(232,181,77,.07)}
+.research-card.locked{opacity:.5}
+.research-card h4{font:600 15px 'Fraunces',serif;margin:0;color:var(--leaf)}
+.research-card p{margin:0;color:var(--text-dim);font-size:11px;line-height:1.4}
+.research-card .r-cost{font-size:11px;color:var(--gold)}
+.research-card .r-time{font-size:10px;color:var(--text-dim)}
+.research-btn{border:none;border-radius:7px;padding:8px 11px;background:linear-gradient(180deg,#ffd978,var(--gold));color:#211708;font:700 11px 'Inter',sans-serif;cursor:pointer;align-self:flex-start}
+.research-btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.4)}
+.research-btn.claim{background:linear-gradient(180deg,#98ffc4,var(--leaf));color:#07110d;animation:claimPulse 1.3s ease-in-out infinite}
+@keyframes claimPulse{0%,100%{box-shadow:0 0 0 0 rgba(124,255,178,0)}50%{box-shadow:0 0 0 4px rgba(124,255,178,.18)}}
+.research-active{border:1px solid var(--gold);border-radius:12px;padding:14px;margin-bottom:16px;background:rgba(232,181,77,.06)}
+.research-active .r-progress{height:10px;border:1px solid var(--line);border-radius:999px;background:#08120d;overflow:hidden;margin-top:8px}
+.research-active .r-progress>div{height:100%;width:0;background:linear-gradient(90deg,#8f6925,var(--gold));transition:width .2s linear}
+@media(max-width:700px){.expedition-grid,.research-cards{grid-template-columns:1fr}}</style><script>/* eslint-disable no-undef, no-unused-vars */
+/* =========================================================================
+   v1.8 — Exploration & Research expansion
+   Injects two new tabs + header resources and wires them into the existing
+   game. Exploration costs Stamina (regenerating currency) and returns
+   resources + Research Points. Research Points unlock timed studies whose
+   effects fold into `totals` via a wrapped recalcTotals.
+   ========================================================================= */
+(function(){
+  if(window.__sapling_v18) return; window.__sapling_v18=true;
+
+  const EXPEDITIONS=[
+    {id:'resource',name:'Resource Expedition',icon:'🌱',desc:'A short forage along the forest floor. Returns Sap.',duration:60,stamina:5,rp:3},
+    {id:'essence',name:'Essence Hunt',icon:'💠',desc:'Track lingering Essence through the grove.',duration:120,stamina:8,rp:5},
+    {id:'world',name:'World Expedition',icon:'🌍',desc:'A long journey seeking World Seeds.',duration:300,stamina:12,rp:8},
+    {id:'amber',name:'Amber Caravan',icon:'🟠',desc:'Escort a caravan carrying hardened Amber.',duration:180,stamina:10,rp:6},
+    {id:'library',name:'Ancient Library',icon:'📚',desc:'Study forgotten knowledge for many Research Points.',duration:240,stamina:15,rp:25},
+    {id:'unknown',name:'Unknown Forest',icon:'🌌',desc:'Venture into the unknown. Rewards are a surprise.',duration:200,stamina:12,rp:10},
+  ];
+
+  const RESEARCH=[
+    {id:'bio1',branch:'🌱 Biology',name:'Advanced Photosynthesis',desc:'+10% Sap/sec',cost:15,time:300,effect:{type:'bio_prod_mult',value:1.10},requires:null},
+    {id:'bio2',branch:'🌱 Biology',name:'Deep Taproots',desc:'+15% Sap/sec',cost:40,time:600,effect:{type:'bio_prod_mult',value:1.15},requires:'bio1'},
+    {id:'bio3',branch:'🌱 Biology',name:'Resonant Touch',desc:'+50% manual gather',cost:80,time:900,effect:{type:'bio_click_mult',value:1.5},requires:'bio2'},
+    {id:'bio4',branch:'🌱 Biology',name:'Evergreen Memory',desc:'+25% offline Sap',cost:150,time:1200,effect:{type:'bio_offline_mult',value:1.25},requires:'bio3'},
+
+    {id:'ess1',branch:'💠 Essence',name:'Essence Focus',desc:'+20% Essence from prestige',cost:20,time:400,effect:{type:'ess_gain_mult',value:1.2},requires:null},
+    {id:'ess2',branch:'💠 Essence',name:'Quickened Awakening',desc:'+25% Essence from prestige',cost:60,time:700,effect:{type:'ess_gain_mult',value:1.25},requires:'ess1'},
+    {id:'ess3',branch:'💠 Essence',name:'Spirit Resonance',desc:'+30% Essence from prestige',cost:120,time:1000,effect:{type:'ess_gain_mult',value:1.3},requires:'ess2'},
+
+    {id:'wld1',branch:'🌍 World',name:'World Sight',desc:'+25% World Seeds',cost:30,time:500,effect:{type:'world_seed_mult',value:1.25},requires:null},
+    {id:'wld2',branch:'🌍 World',name:'Cosmic Pull',desc:'+30% World Seeds',cost:90,time:900,effect:{type:'world_seed_mult',value:1.3},requires:'wld1'},
+
+    {id:'aut1',branch:'🤖 Automation',name:'Reflex Tuning',desc:'Auto-buy 50% faster',cost:25,time:450,effect:{type:'auto_speed_mult',value:0.66},requires:null},
+    {id:'aut2',branch:'🤖 Automation',name:'Batch Protocol',desc:'+2 auto-buy batch size',cost:70,time:800,effect:{type:'auto_batch_add',value:2},requires:'aut1'},
+
+    {id:'exp1',branch:'🧪 Exploration',name:'Swift Scouts',desc:'-20% expedition duration',cost:20,time:400,effect:{type:'exp_duration_mult',value:0.8},requires:null},
+    {id:'exp2',branch:'🧪 Exploration',name:'Keen Scholars',desc:'+30% RP from expeditions',cost:50,time:600,effect:{type:'exp_rp_mult',value:1.3},requires:'exp1'},
+    {id:'exp3',branch:'🧪 Exploration',name:'Enduring Stamina',desc:'+25 max Stamina',cost:80,time:750,effect:{type:'stamina_max_add',value:25},requires:'exp1'},
+    {id:'exp4',branch:'🧪 Exploration',name:'Lucky Find',desc:'+50% Amber from expeditions',cost:120,time:900,effect:{type:'exp_amber_mult',value:1.5},requires:'exp2'},
+  ];
+
+  function ensureExpState(){
+    if(typeof state!=='object'||state===null) return;
+    if(typeof state.stamina!=='number'||!isFinite(state.stamina)) state.stamina=0;
+    if(typeof state.researchPoints!=='number') state.researchPoints=0;
+    if(typeof state.lastStaminaUpdate!=='number'||!isFinite(state.lastStaminaUpdate)) state.lastStaminaUpdate=Date.now();
+    if(typeof state.expedition!=='object'||state.expedition===null) state.expedition=null;
+    if(typeof state.research!=='object'||state.research===null) state.research={completed:{},active:null};
+    state.research.completed=state.research.completed||{};
+    state.research.active=state.research.active||null;
+  }
+
+  function staminaMax(){ return 50 + (totals.staminaMaxAdd||0); }
+  function staminaRegenInterval(){ return 20; }
+  function expDuration(e){ return Math.max(5, Math.round(e.duration * (totals.expDurationMult||1))); }
+  function expRpReward(e){ return Math.max(1, Math.ceil(e.rp * (totals.expRpMult||1))); }
+  function expAmber(base){ return Math.max(1, Math.ceil(base * (totals.expAmberMult||1))); }
+
+  function computeExpeditionRewards(e){
+    const r={sap:0,essence:0,worldSeeds:0,amber:0,rp:expRpReward(e)};
+    const rate=Math.max(0,currentRate());
+    const dur=expDuration(e);
+    if(e.id==='resource'){ r.sap=rate*dur*1.5; }
+    else if(e.id==='essence'){ r.essence=Math.max(2,Math.floor(Math.sqrt(Math.max(0,state.totalEssence||0)+1)*2)); r.sap=rate*30; }
+    else if(e.id==='world'){ r.worldSeeds=1; if(Math.random()<0.15) r.worldSeeds=2; r.rp+=2; }
+    else if(e.id==='amber'){ r.amber=expAmber(3); r.rp+=1; }
+    else if(e.id==='library'){ r.amber=expAmber(1); }
+    else if(e.id==='unknown'){
+      const pool=['sap','essence','worldSeeds','amber'];
+      const pick=pool[Math.floor(Math.random()*pool.length)];
+      if(pick==='sap') r.sap=rate*dur*2;
+      else if(pick==='essence') r.essence=Math.max(3,Math.floor(Math.sqrt(Math.max(0,state.totalEssence||0)+1)*3));
+      else if(pick==='worldSeeds') r.worldSeeds=Math.random()<0.5?1:2;
+      else r.amber=expAmber(5);
+      r.rp=Math.ceil(r.rp*1.5);
+    }
+    return r;
+  }
+
+  function applyExpeditionRewards(r){
+    if(!r) return;
+    if(r.sap>0 && typeof addSap==='function') addSap(r.sap);
+    if(r.essence>0){ state.essence=(state.essence||0)+r.essence; state.totalEssence=(state.totalEssence||0)+r.essence; }
+    if(r.worldSeeds>0){ state.worldSeeds=(state.worldSeeds||0)+r.worldSeeds; state.totalWorldSeeds=(state.totalWorldSeeds||0)+r.worldSeeds; }
+    if(r.amber>0){ state.amber=(state.amber||0)+r.amber; state.totalAmber=(state.totalAmber||0)+r.amber; }
+    if(r.rp>0) state.researchPoints=(state.researchPoints||0)+r.rp;
+  }
+
+  function startExpedition(id){
+    ensureExpState();
+    if(state.expedition && state.expedition.active){ showToast('An expedition is already underway.'); return; }
+    const e=EXPEDITIONS.find(function(x){return x.id===id;}); if(!e) return;
+    if((state.stamina||0) < e.stamina){ showToast('Not enough stamina.'); return; }
+    state.stamina-=e.stamina;
+    state.expedition={id:id, startedAt:Date.now(), active:true};
+    showToast(e.icon+' '+e.name+' dispatched!');
+    save(); renderExplorationLive();
+  }
+
+  function startResearch(id){
+    ensureExpState();
+    if(state.research.active){ showToast('A research is already in progress.'); return; }
+    const r=RESEARCH.find(function(x){return x.id===id;}); if(!r) return;
+    if(state.research.completed[id]) return;
+    if(r.requires && !state.research.completed[r.requires]){ showToast('Complete the prerequisite research first.'); return; }
+    if((state.researchPoints||0) < r.cost){ showToast('Not enough Research Points.'); return; }
+    state.researchPoints-=r.cost;
+    state.research.active={id:id, startedAt:Date.now(), duration:r.time};
+    showToast(r.name+' research started.');
+    save(); renderResearch();
+  }
+
+  function claimResearch(){
+    ensureExpState();
+    const a=state.research.active; if(!a) return;
+    const r=RESEARCH.find(function(x){return x.id===a.id;}); if(!r) return;
+    if((Date.now()-a.startedAt)/1000 < a.duration){ showToast('Research is still in progress.'); return; }
+    state.research.completed[a.id]=true;
+    state.research.active=null;
+    recalcTotals(); renderResearch();
+    if(typeof updateStats==='function') updateStats();
+    save();
+    showToast(r.name+' complete!');
+  }
+
+  function injectUI(){
+    const nav=document.querySelector('.tab-nav');
+    if(!nav || document.getElementById('exploration-page')) return;
+    const expTab=document.createElement('button'); expTab.className='tab-btn'; expTab.dataset.page='exploration-page'; expTab.innerHTML='🗺️ Exploration';
+    const resTab=document.createElement('button'); resTab.className='tab-btn'; resTab.dataset.page='research-page'; resTab.innerHTML='🔬 Research Lab';
+    const amberTab=nav.querySelector('[data-page="amber-page"]');
+    if(amberTab && amberTab.parentNode){ amberTab.parentNode.insertBefore(resTab, amberTab.nextSibling); amberTab.parentNode.insertBefore(expTab, resTab); }
+    else { nav.appendChild(expTab); nav.appendChild(resTab); }
+
+    const stage=document.querySelector('.main-stage');
+    const expSec=document.createElement('section'); expSec.className='page'; expSec.id='exploration-page';
+    expSec.innerHTML='<div class="exploration-page">'+
+      '<div class="essence-header"><div><h2>Forest Exploration</h2><p>Send expeditions into the forest. They run in real time and continue while you are away, returning with resources and Research Points.</p></div>'+
+      '<div class="essence-balance"><span>⚡ Stamina</span><strong id="exp-stamina">0 / 50</strong></div></div>'+
+      '<div class="stamina-bar-wrap"><div class="stamina-bar" id="exp-stamina-bar"></div></div>'+
+      '<div class="expedition-active" id="expedition-active" style="display:none"></div>'+
+      '<div class="expedition-grid" id="expedition-grid"></div></div>';
+    const resSec=document.createElement('section'); resSec.className='page'; resSec.id='research-page';
+    resSec.innerHTML='<div class="research-page">'+
+      '<div class="essence-header"><div><h2>Research Laboratory</h2><p>Research Points unlock studies that take time to complete. Claim finished research to apply permanent bonuses across every layer.</p></div>'+
+      '<div class="essence-balance"><span>🔬 Research Points</span><strong id="rp-balance">0</strong></div></div>'+
+      '<div class="research-active" id="research-active" style="display:none"></div>'+
+      '<div id="research-grid"></div></div>';
+    const statsSec=document.getElementById('statistics-page');
+    if(statsSec && statsSec.parentNode){ statsSec.parentNode.insertBefore(expSec, statsSec); statsSec.parentNode.insertBefore(resSec, statsSec); }
+    else if(stage){ stage.appendChild(expSec); stage.appendChild(resSec); }
+
+    expTab.addEventListener('click',function(){ switchPage('exploration-page'); });
+    resTab.addEventListener('click',function(){ switchPage('research-page'); });
+
+    var strip=document.querySelector('.resource-strip');
+    if(strip && !document.getElementById('stat-stamina')){
+      var stam=document.createElement('div'); stam.className='resource-item';
+      stam.innerHTML='<span class="resource-icon">⚡</span><div><small>Stamina</small><strong id="stat-stamina">0/50</strong><em>+1 / 20s</em></div>';
+      var rpItem=document.createElement('div'); rpItem.className='resource-item';
+      rpItem.innerHTML='<span class="resource-icon">🔬</span><div><small>Research Pts</small><strong id="stat-rp">0</strong><em>from expeditions</em></div>';
+      strip.appendChild(stam); strip.appendChild(rpItem);
+    }
+  }
+
+  function switchPage(pageId){
+    const info=pageUnlockInfo(pageId);
+    if(!info.unlocked){ showToast(info.reason); return; }
+    document.querySelectorAll('.tab-nav .tab-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.page===pageId); });
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id===pageId); });
+    if(pageId==='exploration-page') renderExploration();
+    if(pageId==='research-page') renderResearch();
+  }
+
+  function renderHeaderLive(){
+    ensureExpState();
+    const maxStam=staminaMax();
+    const cur=Math.max(0,Math.min(maxStam,state.stamina||0));
+    setText('stat-stamina', cur.toFixed(0)+' / '+maxStam);
+    setText('stat-rp', fmt(state.researchPoints||0));
+  }
+
+  function renderExploration(){
+    ensureExpState();
+    const grid=document.getElementById('expedition-grid'); if(!grid) return;
+    grid.innerHTML='';
+    for(const e of EXPEDITIONS){
+      const card=document.createElement('article'); card.className='expedition-card';
+      card.innerHTML='<h3>'+e.icon+' '+e.name+'</h3><p>'+e.desc+'</p>'+
+        '<div class="expedition-meta"><span>⏱ <strong>'+formatDuration(expDuration(e))+'</strong></span><span>⚡ <strong>'+e.stamina+'</strong></span><span>🔬 <strong>~'+expRpReward(e)+' RP</strong></span></div>'+
+        '<button class="exp-send" data-exp="'+e.id+'">Send expedition</button>';
+      grid.appendChild(card);
+    }
+    grid.querySelectorAll('[data-exp]').forEach(function(b){ b.addEventListener('click', function(){ startExpedition(b.dataset.exp); }); });
+    renderExplorationLive();
+  }
+
+  function renderExplorationLive(){
+    ensureExpState();
+    const maxStam=staminaMax();
+    const cur=Math.max(0,Math.min(maxStam,state.stamina||0));
+    setText('exp-stamina', cur.toFixed(1)+' / '+maxStam);
+    const bar=document.getElementById('exp-stamina-bar'); if(bar) bar.style.width=(cur/maxStam*100)+'%';
+    const active=document.getElementById('expedition-active');
+    if(active){
+      if(state.expedition && state.expedition.active){
+        const e=EXPEDITIONS.find(function(x){ return x.id===state.expedition.id; });
+        if(e){
+          const dur=expDuration(e);
+          const elapsed=Math.min(dur,(Date.now()-state.expedition.startedAt)/1000);
+          active.style.display='block';
+          active.innerHTML='<strong>'+e.icon+' '+e.name+' in progress</strong>'+
+            '<div style="color:var(--text-dim);font-size:12px;margin-top:4px">Returns in '+formatDuration(Math.max(0,Math.ceil(dur-elapsed)))+'</div>'+
+            '<div class="exp-progress"><div style="width:'+(elapsed/dur*100)+'%"></div></div>';
+        }
+      }else{ active.style.display='none'; active.innerHTML=''; }
+    }
+    const busy=!!(state.expedition && state.expedition.active);
+    document.querySelectorAll('[data-exp]').forEach(function(b){
+      const e=EXPEDITIONS.find(function(x){ return x.id===b.dataset.exp; });
+      b.disabled=busy || (state.stamina||0) < (e?e.stamina:999);
+      b.textContent=busy?'Expedition active':'Send expedition';
+    });
+  }
+
+  function renderResearch(){
+    ensureExpState();
+    setText('rp-balance', fmt(state.researchPoints||0));
+    const grid=document.getElementById('research-grid'); if(!grid) return;
+    grid.innerHTML='';
+    const branches=[];
+    for(const r of RESEARCH){ if(branches.indexOf(r.branch)<0) branches.push(r.branch); }
+    for(const branch of branches){
+      const wrap=document.createElement('div'); wrap.className='research-branch';
+      wrap.innerHTML='<h3>'+branch+'</h3>';
+      const cards=document.createElement('div'); cards.className='research-cards';
+      for(const r of RESEARCH.filter(function(x){ return x.branch===branch; })){
+        const done=!!state.research.completed[r.id];
+        const isActive=state.research.active && state.research.active.id===r.id;
+        const locked=r.requires && !state.research.completed[r.requires];
+        const card=document.createElement('article');
+        card.className='research-card'+(done?' completed':'')+(isActive?' active':'')+(locked&&!done&&!isActive?' locked':'');
+        let btn='';
+        if(done) btn='<button class="research-btn" disabled>Completed</button>';
+        else if(isActive){
+          const elapsed=(Date.now()-state.research.active.startedAt)/1000;
+          if(elapsed>=state.research.active.duration) btn='<button class="research-btn claim" data-claim="1">Claim</button>';
+          else btn='<button class="research-btn" disabled>Researching…</button>';
+        }
+        else if(locked) btn='<button class="research-btn" disabled>Locked</button>';
+        else btn='<button class="research-btn" data-research="'+r.id+'">'+r.cost+' RP · '+formatDuration(r.time)+'</button>';
+        card.innerHTML='<h4>'+r.name+'</h4><p>'+r.desc+'</p><div class="r-cost">Cost: '+r.cost+' RP</div><div class="r-time">Time: '+formatDuration(r.time)+'</div>'+btn;
+        cards.appendChild(card);
+      }
+      wrap.appendChild(cards); grid.appendChild(wrap);
+    }
+    grid.querySelectorAll('[data-research]').forEach(function(b){ b.addEventListener('click', function(){ startResearch(b.dataset.research); }); });
+    grid.querySelectorAll('[data-claim]').forEach(function(b){ b.addEventListener('click', claimResearch); });
+    renderResearchLive();
+  }
+
+  function renderResearchLive(){
+    ensureExpState();
+    setText('rp-balance', fmt(state.researchPoints||0));
+    const active=document.getElementById('research-active');
+    if(active){
+      const a=state.research.active;
+      if(a){
+        const r=RESEARCH.find(function(x){ return x.id===a.id; });
+        if(r){
+          const elapsed=(Date.now()-a.startedAt)/1000;
+          const done=elapsed>=a.duration;
+          active.style.display='block';
+          if(done){
+            active.innerHTML='<strong>'+r.name+' complete</strong><div style="color:var(--text-dim);font-size:12px;margin-top:4px">Ready to claim.</div>';
+            const cb=document.createElement('button'); cb.className='research-btn claim'; cb.textContent='Claim'; cb.style.marginTop='8px';
+            cb.addEventListener('click', claimResearch);
+            active.appendChild(cb);
+          }else{
+            active.innerHTML='<strong>'+r.name+' researching…</strong><div style="color:var(--text-dim);font-size:12px;margin-top:4px">'+formatDuration(Math.ceil(a.duration-elapsed))+' remaining</div><div class="r-progress"><div style="width:'+(elapsed/a.duration*100)+'%"></div></div>';
+          }
+        }
+      }else{ active.style.display='none'; active.innerHTML=''; }
+    }
+    document.querySelectorAll('.research-card.active').forEach(function(card){
+      const btn=card.querySelector('button');
+      const a=state.research.active;
+      if(btn && a && (Date.now()-a.startedAt)/1000>=a.duration && !btn.classList.contains('claim')){
+        btn.classList.add('claim'); btn.disabled=false; btn.textContent='Claim';
+        btn.removeAttribute('data-research');
+        btn.addEventListener('click', claimResearch);
+      }
+    });
+  }
+
+  const _origRecalc=recalcTotals;
+  recalcTotals=function(){ _origRecalc.apply(this,arguments); ensureExpState();
+    let bioProd=1,bioClick=1,bioOffline=1,essGain=1,worldSeed=1,autoSpeed=1,autoBatch=0,expDur=1,expRp=1,expAmb=1,stamMax=0;
+    for(const r of RESEARCH){
+      if(!state.research.completed[r.id]) continue;
+      const f=r.effect;
+      if(f.type==='bio_prod_mult') bioProd*=f.value;
+      else if(f.type==='bio_click_mult') bioClick*=f.value;
+      else if(f.type==='bio_offline_mult') bioOffline*=f.value;
+      else if(f.type==='ess_gain_mult') essGain*=f.value;
+      else if(f.type==='world_seed_mult') worldSeed*=f.value;
+      else if(f.type==='auto_speed_mult') autoSpeed*=f.value;
+      else if(f.type==='auto_batch_add') autoBatch+=f.value;
+      else if(f.type==='exp_duration_mult') expDur*=f.value;
+      else if(f.type==='exp_rp_mult') expRp*=f.value;
+      else if(f.type==='exp_amber_mult') expAmb*=f.value;
+      else if(f.type==='stamina_max_add') stamMax+=f.value;
+    }
+    totals.prodMult*=bioProd;
+    totals.clickMult*=bioClick;
+    totals.essenceGainMult*=essGain;
+    totals.worldSeedMult*=worldSeed;
+    totals.autoBuyInterval=Math.max(0.05, totals.autoBuyInterval*autoSpeed);
+    totals.autoBuyBatch=totals.autoBuyBatch+autoBatch;
+    totals.bioOfflineMult=bioOffline;
+    totals.expDurationMult=expDur;
+    totals.expRpMult=expRp;
+    totals.expAmberMult=expAmb;
+    totals.staminaMaxAdd=stamMax;
+  };
+
+  if(typeof offlineSapRate==='function'){
+    const _origOSR=offlineSapRate;
+    offlineSapRate=function(){ return _origOSR.apply(this,arguments) * (totals.bioOfflineMult||1); };
+  }
+
+  if(typeof calculateOfflineRewards==='function'){
+    const _origCalc=calculateOfflineRewards;
+    calculateOfflineRewards=function(seconds){
+      ensureExpState();
+      const result=_origCalc.apply(this,arguments);
+      try{
+        const dt=Math.max(0,Number(seconds)||0);
+        const maxStam=staminaMax();
+        if(state.stamina<maxStam){
+          const regen=dt/staminaRegenInterval();
+          state.stamina=Math.min(maxStam,(state.stamina||0)+regen);
+        }
+        state.lastStaminaUpdate=Date.now();
+      }catch(e){}
+      return result;
+    };
+  }
+
+  const _origUnlock=pageUnlockInfo;
+  pageUnlockInfo=function(pageId){
+    if(pageId==='exploration-page'){
+      const unlocked=(state.totalEssence||0)>=1;
+      return {unlocked:unlocked, reason:'Prestige once to unlock Forest Exploration.'};
+    }
+    if(pageId==='research-page'){
+      const unlocked=(state.researchPoints||0)>=1 || Object.keys((state.research&&state.research.completed)||{}).length>=1;
+      return {unlocked:unlocked, reason:'Earn Research Points from an expedition to unlock the Laboratory.'};
+    }
+    return _origUnlock.apply(this,arguments);
+  };
+
+  const _origStats=updateStats;
+  updateStats=function(){ ensureExpState(); if(!state.lastStaminaUpdate) state.lastStaminaUpdate=Date.now(); _origStats.apply(this,arguments); renderHeaderLive(); };
+
+  /* Fix: the active-challenge "Claim level" button is rendered once in
+     renderChallenges() with its disabled state baked in, and the live update
+     loop only refreshes progress text — so the button stays disabled even
+     after runSap reaches the goal. Wrap updateLivePanelValues (called every
+     frame) to toggle the button's disabled state live. */
+  if(typeof updateLivePanelValues==='function'){
+    const _origULPV=updateLivePanelValues;
+    updateLivePanelValues=function(){
+      _origULPV.apply(this,arguments);
+      try{
+        const btn=document.getElementById('complete-challenge');
+        if(btn && state.activeChallenge){
+          const c=activeChallenge();
+          const level=challengeLevel(c.id);
+          const goal=challengeGoal(c,level);
+          btn.disabled = state.runSap < goal;
+        }
+      }catch(e){}
+    };
+  }
+
+  function init(){
+    ensureExpState();
+    injectUI();
+    renderExploration();
+    renderResearch();
+    renderHeaderLive();
+    setInterval(function(){
+      ensureExpState();
+      const now=Date.now();
+      const dt=(now-(state.lastStaminaUpdate||now))/1000;
+      state.lastStaminaUpdate=now;
+      if(dt>0 && state.stamina<staminaMax()){
+        state.stamina=Math.min(staminaMax(), state.stamina + dt/staminaRegenInterval());
+      }
+      if(state.expedition && state.expedition.active){
+        const e=EXPEDITIONS.find(function(x){ return x.id===state.expedition.id; });
+        if(e && (now-state.expedition.startedAt)/1000>=expDuration(e)){
+          const rewards=computeExpeditionRewards(e);
+          applyExpeditionRewards(rewards);
+          state.expedition=null;
+          const parts=[];
+          if(rewards.sap>0) parts.push(fmt(rewards.sap)+' Sap');
+          if(rewards.essence>0) parts.push(fmt(rewards.essence)+' Essence');
+          if(rewards.worldSeeds>0) parts.push(rewards.worldSeeds+' World Seed'+(rewards.worldSeeds>1?'s':''));
+          if(rewards.amber>0) parts.push(rewards.amber+' Amber');
+          if(rewards.rp>0) parts.push(rewards.rp+' RP');
+          showToast('Expedition returned: '+parts.join(', '));
+          recalcTotals();
+          if(typeof updateStats==='function') updateStats();
+          save();
+          renderExploration();
+        }
+      }
+      renderHeaderLive();
+      renderExplorationLive();
+      renderResearchLive();
+    },500);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else setTimeout(init, 300);
+})();</script></body>
 </html>
